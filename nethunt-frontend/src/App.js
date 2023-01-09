@@ -5,6 +5,7 @@ import SignUp from './Pages/Signup';
 import Quiz from './Pages/Quiz';
 import Question from './Pages/Question';
 
+
 function App() {
   return (
     <div>
@@ -14,6 +15,7 @@ function App() {
         <Route path="quiz" element={<Quiz/>}/>
         <Route path='question' element={<Question/>}/>
       </Routes>
+    
     </div>
   );
 }
