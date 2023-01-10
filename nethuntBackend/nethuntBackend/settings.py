@@ -31,8 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "college",
+    "user",
     "instruction",
-    "question",
     "quiz",
     "django.contrib.admin",
     "django.contrib.auth",
