@@ -1,10 +1,10 @@
-import { ArrowBackIosRounded, ArrowLeftRounded, DashboardRounded, Face2Rounded, Face3Rounded, FaceRounded, ForkLeftRounded, HelpCenterRounded, InboxRounded, LogoutOutlined, MenuRounded, ScoreboardRounded, SettingsOutlined } from "@mui/icons-material";
-import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, createTheme, CssBaseline } from "@mui/material";
+import { ArrowBackIosRounded, ArrowForwardRounded, ArrowLeftRounded, DashboardRounded, Face2Rounded, Face3Rounded, FaceRounded, ForkLeftRounded, HelpCenterRounded, InboxRounded, LogoutOutlined, MenuRounded, ScoreboardRounded, SettingsOutlined, StartRounded } from "@mui/icons-material";
+import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Paper, Grid, CardHeader, Card, CardContent } from "@mui/material";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { ThemeProvider } from "styled-components";
+import DashboardImg from "./../Images/Dashboard.svg";
 
-export default function Dashboard(props) {
+import { theme } from "./../Theme/LightTheme";
+export default function DashboardX(props) {
     const [anchorEl, setAnchorEl] = useState(null)
     const [openDrawer, setOpenDrawer] = useState(false)
     const openMenu = Boolean(anchorEl)
@@ -23,17 +23,12 @@ export default function Dashboard(props) {
             },
         },
     }));
-    const globalThemeData = useSelector((state) => state.global.theme);
-    const theme = createTheme({
-        palette: {
-            mode: "dark",
-        },
-    });
-    return (<>
+
+    return (
         <ThemeProvider theme={theme}>
-            <CssBaseline/>
-            <AppBar  position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-                
+            <CssBaseline />
+            <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+
                 <Toolbar>
                     <Box sx={{ display: "flex", width: "100%", alignItems: "center" }}>
                         <IconButton color="inherit" onClick={() => setOpenDrawer(openDrawer ? false : true)}>
@@ -112,6 +107,8 @@ export default function Dashboard(props) {
             <Toolbar />
             <Box>
                 <Drawer open={openDrawer} anchor="left"
+                    variant="persistent"
+                    onClose={() => { setOpenDrawer(false) }}
                     sx={{
                         width: 240,
                         flexShrink: 0,
@@ -157,10 +154,49 @@ export default function Dashboard(props) {
                         </ListItem>
                     </List>
                 </Drawer>
-                <Container sx={{ marginTop: 3 }}>
-                
+                <Container >
+                    <Paper elevation={16} sx={{ padding: 2 }}>
+                        <Grid container>
+                            <Grid item xs={4} sm={2} md={1}>
+                                <Container sx={{ display: "relative" }} elevation={0}>
+                                    <img src={DashboardImg} width="100%" />
+                                </Container>
+                            </Grid>
+                            <Grid item xs={8} sm={10} md={11}>
+                                <Container sx={{ display: "relative" }}>
+                                    <Typography variant="h5" component="p">
+                                        Welcome YOUR NAME,
+                                    </Typography>
+                                    <Typography variant="subtitle1" component="p">
+                                        Let's the HUNT begin
+                                    </Typography>
+                                    <Typography variant="h4" component="p" align="center" mt={3}>
+                                        ENDS IN
+                                    </Typography>
+                                    
+                                </Container>
+                            </Grid>
+                        </Grid>
+                    </Paper>
+                    <Grid container sx={{ marginTop: 3 }}  >
+                        <Grid item xs={12} sm={6} p={2}>
+                            <Paper sx={{padding:2}}>
+                                <Typography flexGrow={1}>Quiz</Typography>
+                                <IconButton>
+                                    <ArrowForwardRounded/>
+                                </IconButton>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12} sm={6} p={2}>
+                            <Paper  sx={{padding:2}}>
+                            <Typography flexGrow={1}>Leaderboard</Typography>
+                                <IconButton>
+                                    <ArrowForwardRounded/>
+                                </IconButton>
+                            </Paper>
+                        </Grid>
+                    </Grid>
                 </Container>
             </Box>
-        </ThemeProvider>
-    </>);
+        </ThemeProvider>);
 }

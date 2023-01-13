@@ -14,7 +14,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeTheme } from '../Store/globalStoreSlice';
-
+import {theme} from "./../Theme/LightTheme";
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -30,15 +30,8 @@ function Copyright(props) {
 
 
 export default function SignUp() {
-    const globalThemeData = useSelector((state)=>state.global.theme);
-    const theme = createTheme({
-        palette: {
-          mode: globalThemeData,
-        },
-      });
-    const dispatch = useDispatch();
-    console.log(globalThemeData);
-  const handleSubmit = (event) => {
+   
+   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
@@ -52,7 +45,7 @@ export default function SignUp() {
           <CssBaseline />
     
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
+        
         <Box
           sx={{
             marginTop: 8,
