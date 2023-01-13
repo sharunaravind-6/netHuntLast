@@ -1,6 +1,9 @@
 import { ArrowBackIosRounded, ArrowForwardRounded, ArrowLeftRounded, DashboardRounded, Face2Rounded, Face3Rounded, FaceRounded, ForkLeftRounded, HelpCenterRounded, InboxRounded, LogoutOutlined, MenuRounded, ScoreboardRounded, SettingsOutlined, StartRounded } from "@mui/icons-material";
-import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Paper, Grid, CardHeader, Card, CardContent } from "@mui/material";
+import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Paper, Grid, CardHeader, Card, CardContent, Switch } from "@mui/material";
 import { useState } from "react";
+import { Outlet, Route, Router, Routes } from "react-router-dom";
+import Help from "../Components/Help";
+import Home from "../Components/Home";
 import DashboardImg from "./../Images/Dashboard.svg";
 
 import { theme } from "./../Theme/LightTheme";
@@ -155,47 +158,7 @@ export default function DashboardX(props) {
                     </List>
                 </Drawer>
                 <Container >
-                    <Paper elevation={16} sx={{ padding: 2 }}>
-                        <Grid container>
-                            <Grid item xs={4} sm={2} md={1}>
-                                <Container sx={{ display: "relative" }} elevation={0}>
-                                    <img src={DashboardImg} width="100%" />
-                                </Container>
-                            </Grid>
-                            <Grid item xs={8} sm={10} md={11}>
-                                <Container sx={{ display: "relative" }}>
-                                    <Typography variant="h5" component="p">
-                                        Welcome YOUR NAME,
-                                    </Typography>
-                                    <Typography variant="subtitle1" component="p">
-                                        Let's the HUNT begin
-                                    </Typography>
-                                    <Typography variant="h4" component="p" align="center" mt={3}>
-                                        ENDS IN
-                                    </Typography>
-                                    
-                                </Container>
-                            </Grid>
-                        </Grid>
-                    </Paper>
-                    <Grid container sx={{ marginTop: 3 }}  >
-                        <Grid item xs={12} sm={6} p={2}>
-                            <Paper sx={{padding:2}}>
-                                <Typography flexGrow={1}>Quiz</Typography>
-                                <IconButton>
-                                    <ArrowForwardRounded/>
-                                </IconButton>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12} sm={6} p={2}>
-                            <Paper  sx={{padding:2}}>
-                            <Typography flexGrow={1}>Leaderboard</Typography>
-                                <IconButton>
-                                    <ArrowForwardRounded/>
-                                </IconButton>
-                            </Paper>
-                        </Grid>
-                    </Grid>
+                    <Outlet/>
                 </Container>
             </Box>
         </ThemeProvider>);
