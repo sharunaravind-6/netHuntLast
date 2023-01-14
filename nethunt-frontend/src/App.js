@@ -7,7 +7,7 @@ import Home from './Components/Home';
 import ScoreBoardX from './Components/Scoreboard';
 import ProfileX from './Components/Profile';
 import Questions from './Pages/Questions';
-
+import "./App.css";
 function App() {
   return (
     <div>
