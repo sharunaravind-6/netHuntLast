@@ -41,7 +41,7 @@ export default function ScoreBoardX() {
 
     return (
         <Paper sx={{ width: '100%', marginTop: 3 }}>
-            <Stack direction={"horizontal"} sx={{display:"flex",alignItems:"center",justifyContent:"center",width:"100%"}}>
+            <Stack sx={{display:"flex",alignItems:"center",flexDirection:"row",justifyContent:"center",width:"100%"}}>
                 <Box>
                     <img src={ScoreImg} width="100px"/>
                 </Box>
