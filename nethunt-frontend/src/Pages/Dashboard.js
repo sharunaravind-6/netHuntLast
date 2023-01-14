@@ -2,6 +2,7 @@ import { ArrowBackIosRounded, ArrowForwardRounded, ArrowLeftRounded, DashboardRo
 import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Paper, Grid, CardHeader, Card, CardContent, Switch } from "@mui/material";
 import { useState } from "react";
 import { Outlet, Route, Router, Routes } from "react-router-dom";
+import ContactUS from "../Components/ContactUs";
 import Help from "../Components/Help";
 import Home from "../Components/Home";
 import DashboardImg from "./../Images/Dashboard.svg";
@@ -161,5 +162,6 @@ export default function DashboardX(props) {
                     <Outlet/>
                 </Container>
             </Box>
+            <ContactUS/>
         </ThemeProvider>);
 }
