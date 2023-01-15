@@ -1,6 +1,7 @@
 import { Box, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Paper, Grid, CardHeader, Card, CardContent, Switch, Stepper, Step, StepContent, StepLabel } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import ContactUS from "../Components/ContactUs";
+import QuestionFooter from "../Components/QuestionFooter";
 
 
 import { theme } from "./../Theme/LightTheme";
@@ -93,6 +94,6 @@ export default function Questions(props) {
                     <Outlet />
                 </Container>
             </Box>
-            <ContactUS />
+            <QuestionFooter/>
         </ThemeProvider>);
 }

@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import Login from './Pages/Login';
 import DashboardX from './Pages/Dashboard';
-import Question from './Pages/Question';
+import Question from './Components/Question';
 import Help from './Components/Help';
 import Home from './Components/Home';
 import ScoreBoardX from './Components/Scoreboard';
@@ -19,7 +19,9 @@ function App() {
           <Route path="scoreboard" element={<ScoreBoardX/>}></Route>
           <Route path="profile" element={<ProfileX/>}></Route>
         </Route>
-        <Route path="q" element={<Questions/>}></Route>
+        <Route path="q" element={<Questions/>}>
+          <Route path="" element={<Question/>}></Route>
+        </Route>
         {/* <Route path="question" element = {<Question/>}></Route> */}
       </Routes>
     </div>
