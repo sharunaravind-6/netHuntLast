@@ -29,8 +29,12 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+]
 INSTALLED_APPS = [
+    'corsheaders',
+    'rest_framework',
     "rest_framework_swagger",
     "drf_yasg",
     "college",
@@ -51,6 +55,7 @@ REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSc
 
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
