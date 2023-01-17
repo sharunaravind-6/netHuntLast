@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "rest_framework_swagger",
+    "drf_yasg",
     "college",
     "user",
     "instruction",
@@ -42,6 +44,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+                  'PAGE_SIZE': 100,
+                  'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+                  }
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
