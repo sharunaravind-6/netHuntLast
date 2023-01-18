@@ -34,6 +34,7 @@ CORS_ORIGIN_WHITELIST = [
 ]
 INSTALLED_APPS = [
     'corsheaders',
+    'rest_framework.authtoken',
     'rest_framework',
     "rest_framework_swagger",
     "drf_yasg",
@@ -48,10 +49,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
-REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-                  'PAGE_SIZE': 100,
-                  'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
-                  }
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema', }
 
 
 MIDDLEWARE = [
