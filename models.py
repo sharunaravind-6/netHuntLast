@@ -12,6 +12,8 @@ class NethuntUserManager(BaseUserManager):
     def get_queryset(self):
         return super().get_queryset().all()
 
+
+class NethuntUser(AbstractUser):
     def create_user(self, email, password):
         user = self.model(email=self.normalize_email(email))
         user.set_password(password)
@@ -23,12 +25,12 @@ class NethuntUserManager(BaseUserManager):
         extraField.setdefault("is_active", True)
         self.create_user(email, password)
 
-
-class NethuntUser(AbstractUser):
     class Role(models.TextChoices):
         COORDINATOR = "Coordinator", "COORDINATOR"
         CANDIDATE = "Candidate", "CANDIDATE"
         ADMIN = "Admin", "ADMIN"
+    USERNAME_FIELD = "email"
+    email = models.EmailField(unique=True)
     role = models.CharField(max_length=50, choices=Role.choices)
     objects = NethuntUserManager()
 
