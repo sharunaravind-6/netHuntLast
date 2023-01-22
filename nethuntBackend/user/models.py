@@ -19,7 +19,7 @@ class NethuntUserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_superuser(self, email, password,**extraField):
+    def create_superuser(self, email, password, **extraField):
         extraField.setdefault("is_superuser", True)
         extraField.setdefault("is_staff", True)
         extraField.setdefault("is_active", True)
@@ -38,6 +38,29 @@ class NethuntUser(AbstractUser):
 class NethuntCandidateManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(role=Role.CANDIDATE)
+
+
 class NethuntCandidate(NethuntUser):
     class Meta:
         proxy = True
+
+
+class College(models.Model):
+    collegeName = models.CharField(max_length=100)
+    collegeCity = models.CharField(max_length=50)
+
+
+def validPhone(value):
+    if len(value) > 10 or len(value) < 10:
+        raise ValueError("Phone number must be of 10 digits")
+    for no in value:
+        if no not in ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]:
+            raise ValueError("Phone no must contain valid characters")
+
+
+class Candidate(models.Model):
+    user = models.OneToOneField(NethuntCandidate, on_delete=models.CASCADE)
+    college = models.ForeignKey(College, on_delete=models.CASCADE)
+    current_level = models.IntegerField(default=1)
+    status = models.CharField(default="offline", max_length=10)
+    phone = models.CharField(max_length=10, validators=[validPhone])

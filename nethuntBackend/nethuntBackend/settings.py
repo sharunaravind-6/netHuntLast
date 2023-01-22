@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "user",
+    "rest_framework",
 ]
 AUTH_USER_MODEL = "user.NethuntUser"
 MIDDLEWARE = [
