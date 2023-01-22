@@ -12,9 +12,7 @@ def view_user(request,*args,**kwargs):
 def add_user(request,*args,**kwargs):
     data = request.POST
     user = NethuntUserSerializer(data = {"email" : data["email"],"password":data["password"]})
-    if user.is_valid():
-        user.save()
-    # user = CandidateUserSerializer(user_email = data["email"],password=data["password"],collegeName=data["collegeName"],collegeCity=data["collegeCity"])
-
-    print(data)
-    return Response({"test":"Works!"})
+    if user.is_valid(raise_exception=True):
+        temp = user.save()
+        print(temp)
+        return Response({"test":"Works!"})
