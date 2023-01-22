@@ -3,52 +3,41 @@ from django.contrib.auth.models import (AbstractUser, BaseUserManager)
 # Create your models here.
 
 
-def validCollege(value):
-    if User.objects.filter(collegeName=value).count() >= 2:
-        raise ValueError("College already with two participants")
+class Role(models.TextChoices):
+    COORDINATOR = "Coordinator", "COORDINATOR"
+    CANDIDATE = "Candidate", "CANDIDATE"
+    ADMIN = "Admin", "ADMIN"
 
 
 class NethuntUserManager(BaseUserManager):
     def get_queryset(self):
-        return super().get_queryset().all()
+        return super().get_queryset()
 
-    def create_user(self, email, password):
-        user = self.model(email=self.normalize_email(email))
+    def create_user(self, email, password, **extraField):
+        user = self.model(email=self.normalize_email(email), **extraField)
         user.set_password(password)
         user.save()
+        return user
 
-    def create_superuser(self, email, password):
+    def create_superuser(self, email, password,**extraField):
         extraField.setdefault("is_superuser", True)
         extraField.setdefault("is_staff", True)
         extraField.setdefault("is_active", True)
-        self.create_user(email, password)
+        extraField.setdefault("role", Role.ADMIN)
+        return self.create_user(email, password, **extraField)
 
 
 class NethuntUser(AbstractUser):
-    class Role(models.TextChoices):
-        COORDINATOR = "Coordinator", "COORDINATOR"
-        CANDIDATE = "Candidate", "CANDIDATE"
-        ADMIN = "Admin", "ADMIN"
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+    email = models.EmailField(unique=True)
     role = models.CharField(max_length=50, choices=Role.choices)
     objects = NethuntUserManager()
 
 
-class College(models.Model):
-    collegeName = models.CharField(max_length=200)
-    collegeCity = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.collegeName
-
-
+class NethuntCandidateManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(role=Role.CANDIDATE)
 class NethuntCandidate(NethuntUser):
     class Meta:
         proxy = True
-
-
-class CandidateDetails(models.Model):
-    user = models.OneToOneField(NethuntCandidate, models.CASCADE)
-    collegeName = models.ForeignKey(
-        to=College, on_delete=models.CASCADE, validators=[validCollege])
-    current_level = models.IntegerField(default=1)
-    status = models.CharField(default="offline", max_length=10)
