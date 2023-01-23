@@ -65,3 +65,17 @@ class Candidate(models.Model):
     current_level = models.IntegerField(default=1)
     status = models.CharField(default="offline", max_length=10)
     phone = models.CharField(max_length=10, validators=[validPhone])
+
+class NethuntCoordinatorManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(role=Role.COORDINATOR)
+
+
+class NethuntCoordinator(NethuntUser):
+    class Meta:
+        proxy = True
+
+class Coordinator(models.Model):
+    user = models.OneToOneField(NethuntCoordinator, on_delete=models.CASCADE)
+    image = models.FileField(upload_to="images")
+    phone = models.CharField(max_length=10, validators=[validPhone])
