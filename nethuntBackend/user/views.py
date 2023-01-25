@@ -16,3 +16,7 @@ def add_user(request,*args,**kwargs):
         temp = user.save()
         print(temp)
         return Response({"test":"Works!"})
+@api_view(["POST"])
+def auth_user(request,*args,**kwargs):
+    print(request.POST)
+    return Response({"test":"testing"})
