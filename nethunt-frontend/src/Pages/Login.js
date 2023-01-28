@@ -1,4 +1,3 @@
-import { serverHost } from '../utils/server';
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -17,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeTheme } from '../Store/globalStoreSlice';
 import { theme } from "./../Theme/LightTheme";
 import jwt_decode from "jwt-decode";
+import { userContext } from '../Store/user';
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -32,31 +32,9 @@ function Copyright(props) {
 
 
 export default function SignUp() {
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const body = {
-      email: data.get('email'),
-      password: data.get('password'),
-    };
-    fetch(serverHost + "/user/auth/token",{
-      method:"POST",
-      headers:{'content-type': 'application/json'},
-      body:JSON.stringify(body)
-    }).then(async (res) => {
-      const token = await res.json().then(response=>{
-        // console.log(response)
-        return response
-      }).catch(err=>{
-        console.error(err)
-      })
-      console.log(jwt_decode(token.access))
-    }).catch((err) => {
-      console.log(err);
-    })
-  };
-
+  const [userId,setUser] = React.useState(null)
+  const {user,handleSubmit}=  React.useContext(userContext)
+  console.log(user)
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
