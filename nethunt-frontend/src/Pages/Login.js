@@ -1,3 +1,4 @@
+import { serverHost } from '../utils/server';
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -14,7 +15,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeTheme } from '../Store/globalStoreSlice';
-import {theme} from "./../Theme/LightTheme";
+import { theme } from "./../Theme/LightTheme";
+import jwt_decode from "jwt-decode";
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -30,22 +32,37 @@ function Copyright(props) {
 
 
 export default function SignUp() {
-   
-   const handleSubmit = (event) => {
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const body = {
       email: data.get('email'),
       password: data.get('password'),
-    });
+    };
+    fetch(serverHost + "/user/auth/token",{
+      method:"POST",
+      headers:{'content-type': 'application/json'},
+      body:JSON.stringify(body)
+    }).then(async (res) => {
+      const token = await res.json().then(response=>{
+        // console.log(response)
+        return response
+      }).catch(err=>{
+        console.error(err)
+      })
+      console.log(jwt_decode(token.access))
+    }).catch((err) => {
+      console.log(err);
+    })
   };
 
   return (
     <ThemeProvider theme={theme}>
-          <CssBaseline />
-    
+      <CssBaseline />
+
       <Container component="main" maxWidth="xs">
-        
+
         <Box
           sx={{
             marginTop: 8,
