@@ -9,6 +9,8 @@ import ProfileX from './Components/Profile';
 import Questions from './Pages/Questions';
 import "./App.css";
 import { UserContextProvider } from './Store/user';
+import AdminMain from './Pages/Admin/AdminMain';
+import AdminHome from './Components/AdminHome';
 function App() {
   return (
     <div>
@@ -23,6 +25,9 @@ function App() {
           </Route>
           <Route path="q" element={<Questions />}>
             <Route path="" element={<Question />}></Route>
+          </Route>
+          <Route path="a" element={<AdminMain />}>
+            <Route path="" element={<AdminHome />}></Route>
           </Route>
           {/* <Route path="question" element = {<Question/>}></Route> */}
         </Routes>
