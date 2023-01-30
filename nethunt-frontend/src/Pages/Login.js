@@ -17,6 +17,7 @@ import { changeTheme } from '../Store/globalStoreSlice';
 import { theme } from "./../Theme/LightTheme";
 import jwt_decode from "jwt-decode";
 import { userContext } from '../Store/user';
+import { Backdrop, CircularProgress } from '@mui/material';
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -32,13 +33,19 @@ function Copyright(props) {
 
 
 export default function SignUp() {
-  const [userId,setUser] = React.useState(null)
-  const {user,handleSubmit}=  React.useContext(userContext)
+  const [userId, setUser] = React.useState(null)
+  const { user, handleSubmit } = React.useContext(userContext)
+  const [openBackdrop, setOpenBackdrop] = React.useState(false)
   console.log(user)
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={openBackdrop}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Container component="main" maxWidth="xs">
 
         <Box
@@ -55,7 +62,11 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Login
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" noValidate onSubmit={async (event) => {
+            setOpenBackdrop(true);
+            let result = await handleSubmit(event);
+            setOpenBackdrop(false)
+          }} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField

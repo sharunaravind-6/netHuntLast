@@ -7,26 +7,18 @@ let user = {
 }
 async function handleSubmit(event)  {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget);
     const body = {
-      email: data.get('email'),
-      password: data.get('password'),
+      email: formData.get('email'),
+      password: formData.get('password'),
     };
-    fetch(serverHost + "/user/auth/token",{
+    let response = await fetch(serverHost + "/user/auth/token",{
       method:"POST",
       headers:{'content-type': 'application/json'},
       body:JSON.stringify(body)
-    }).then(async (res) => {
-      const token = await res.json().then(response=>{
-        // console.log(response)
-        return response
-      }).catch(err=>{
-        console.error(err)
-      })
-      return {token,data:jwt_decode(token.access)}
-    }).catch((err) => {
-      console.log(err);
     })
+    let data = await response.json()
+    return {token:data,data:jwt_decode(data.access)}
   };
   export const userContext = createContext({handleSubmit:handleSubmit,user:user})
 
