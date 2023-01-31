@@ -12,6 +12,7 @@ import { UserContextProvider } from './Store/user';
 import AdminMain from './Pages/Admin/AdminMain';
 import AdminHome from './Components/AdminHome';
 import College from './Pages/Admin/College';
+import Candidate from './Pages/Admin/Candidate';
 function App() {
   return (
     <div>
@@ -30,6 +31,7 @@ function App() {
           <Route path="a" element={<AdminMain />}>
             <Route path="" element={<AdminHome />}></Route>
             <Route path="college" element={<College />}></Route>
+            <Route path="usr" element={<Candidate />}></Route>
           </Route>
           {/* <Route path="question" element = {<Question/>}></Route> */}
         </Routes>

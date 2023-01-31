@@ -1,4 +1,4 @@
-import { ArrowBackIosRounded, ArrowForwardRounded, ArrowLeftRounded, DashboardRounded, Face2Rounded, Face3Rounded, FaceRounded, ForkLeftRounded, HelpCenterRounded, InboxRounded, LogoutOutlined, MenuRounded, SchoolRounded, ScoreboardRounded, SettingsOutlined, StartRounded, SupervisedUserCircleRounded } from "@mui/icons-material";
+import { ArrowBackIosRounded, ArrowForwardRounded, ArrowLeftRounded, DashboardRounded, Face2Rounded, Face3Rounded, FaceRounded, ForkLeftRounded, HelpCenterRounded, InboxRounded, LogoutOutlined, MenuRounded, QuizRounded, SchoolRounded, ScoreboardRounded, SettingsOutlined, StartRounded, SupervisedUserCircleRounded } from "@mui/icons-material";
 import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Paper, Grid, CardHeader, Card, CardContent, Switch, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import { Outlet, Route, Router, Routes } from "react-router-dom";
@@ -125,6 +125,14 @@ export default function AdminMain(props) {
                                     <DashboardRounded />
                                 </ListItemIcon>
                                 <ListItemText primary={"Home"} />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                <QuizRounded />
+                                </ListItemIcon>
+                                <ListItemText primary={"Quiz"} />
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
