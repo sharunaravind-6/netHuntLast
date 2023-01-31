@@ -1,18 +1,24 @@
 from django.db import models
 from user.models import Coordinator
+import datetime
 # Create your models here.
 
 
 class Info(models.Model):
-    flag = models.BooleanField(default=False)
+    class Event(models.TextChoices):
+        LOGIN = "Login","LOGIN"
+        THIRAN = "Thiran","THIRAN"
+    event = models.CharField(max_length=50,choices=Event.choices,default=Event.THIRAN)
+    year = models.IntegerField(default=datetime.date.today().year)
+    eventLogo = models.FileField(upload_to="images") 
     logo = models.FileField(upload_to="images")
     coordinator1 = models.ForeignKey(
         Coordinator, on_delete=models.CASCADE, related_name="Coordinator1")
     coordinator2 = models.ForeignKey(
         Coordinator, on_delete=models.CASCADE, related_name="Coordinator2")
     startBy = models.DateTimeField()
-    endtBy = models.DateTimeField()
-
+    endBy = models.DateTimeField()
+    commonMailId = models.EmailField(max_length=254)
 
 class Quiz(models.Model):
     name = models.CharField(max_length=200)
@@ -34,6 +40,11 @@ class Question(models.Model):
     hint1 = models.CharField(max_length=100)
     hint2 = models.CharField(max_length=100)
     answer = models.CharField(max_length=100)
+    class Difficulty(models.TextChoices):
+        EASY = "Easy","EASY"
+        MODERATE = "Moderate","MODERATE"
+        HARD = "Hard","HARD"
+    difficulty = models.CharField(max_length=50,choices=Difficulty.choices,default=Difficulty.EASY)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
 
     class Meta:
