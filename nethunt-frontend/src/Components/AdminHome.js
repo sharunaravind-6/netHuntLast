@@ -7,7 +7,7 @@ export default function AdminHome(props) {
 
     return (<ThemeProvider theme={theme}>
         <CssBaseline />
-        <Container>
+        <Container maxWidth="false">
             <Grid container padding={3}>
                 <Grid item md={9}>
                     <Paper sx={{ padding: 3 }} elevation={10}>

@@ -11,6 +11,7 @@ import "./App.css";
 import { UserContextProvider } from './Store/user';
 import AdminMain from './Pages/Admin/AdminMain';
 import AdminHome from './Components/AdminHome';
+import College from './Pages/Admin/College';
 function App() {
   return (
     <div>
@@ -28,6 +29,7 @@ function App() {
           </Route>
           <Route path="a" element={<AdminMain />}>
             <Route path="" element={<AdminHome />}></Route>
+            <Route path="college" element={<College />}></Route>
           </Route>
           {/* <Route path="question" element = {<Question/>}></Route> */}
         </Routes>

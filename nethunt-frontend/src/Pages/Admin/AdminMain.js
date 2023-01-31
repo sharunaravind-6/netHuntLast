@@ -107,7 +107,7 @@ export default function AdminMain(props) {
             <Toolbar />
             <Box>
                 <Drawer open={openDrawer} anchor="left"
-                    variant={useMediaQuery(theme.breakpoints.up("sm"))?"permanent":"persistent"}
+                    variant="persistent"
                     onClose={() => { setOpenDrawer(false) }}
                     sx={{
                         width: 240,
@@ -162,7 +162,7 @@ export default function AdminMain(props) {
                         </ListItem>
                     </List>
                 </Drawer>
-                <Container >
+                <Container sx={{marginTop:2}} maxWidth="false">
                     <Outlet />
                 </Container>
             </Box>
