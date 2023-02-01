@@ -64,9 +64,7 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={async (event) => {
             setOpenBackdrop(true);
-            let result = await handleSubmit(event);
-            console.log(result);
-            localStorage.setItem("token",JSON.stringify(result))
+            await handleSubmit(event);
             setOpenBackdrop(false)
           }} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
