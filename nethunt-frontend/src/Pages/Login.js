@@ -34,7 +34,7 @@ function Copyright(props) {
 
 export default function SignUp() {
   const [userId, setUser] = React.useState(null)
-  const { user, handleSubmit } = React.useContext(userContext)
+  const { handleSubmit } = React.useContext(userContext)
   const [openBackdrop, setOpenBackdrop] = React.useState(false)
   // console.log(user)
   return (
@@ -66,7 +66,7 @@ export default function SignUp() {
             setOpenBackdrop(true);
             let result = await handleSubmit(event);
             console.log(result);
-            console.log(user);
+            localStorage.setItem("token",JSON.stringify(result))
             setOpenBackdrop(false)
           }} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
