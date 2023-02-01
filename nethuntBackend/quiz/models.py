@@ -18,6 +18,9 @@ class Info(models.Model):
         Coordinator, on_delete=models.CASCADE, related_name="Coordinator2")
     startBy = models.DateTimeField()
     endBy = models.DateTimeField()
+    easyScore = models.IntegerField(default=250)
+    moderateScore = models.IntegerField(default=500)
+    hardScore = models.IntegerField(default=1000)
     commonMailId = models.EmailField(max_length=254)
 
 class Quiz(models.Model):

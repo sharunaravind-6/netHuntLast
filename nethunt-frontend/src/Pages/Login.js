@@ -23,7 +23,7 @@ function Copyright(props) {
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        N E T H U N T
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -36,7 +36,7 @@ export default function SignUp() {
   const [userId, setUser] = React.useState(null)
   const { user, handleSubmit } = React.useContext(userContext)
   const [openBackdrop, setOpenBackdrop] = React.useState(false)
-  console.log(user)
+  // console.log(user)
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -65,6 +65,8 @@ export default function SignUp() {
           <Box component="form" noValidate onSubmit={async (event) => {
             setOpenBackdrop(true);
             let result = await handleSubmit(event);
+            console.log(result);
+            console.log(user);
             setOpenBackdrop(false)
           }} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
