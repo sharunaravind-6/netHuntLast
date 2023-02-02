@@ -12,17 +12,36 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {theme} from "./../Theme/LightTheme";
+import { theme } from "./../Theme/LightTheme";
 import { SchoolOutlined, SchoolRounded } from '@mui/icons-material';
+import { userContext } from '../Store/user';
+import { serverHost } from '../utils/server';
+import { Backdrop, CircularProgress } from '@mui/material';
 
 export default function AddCollege() {
-  const handleSubmit = (event) => {
+  const { token } = React.useContext(userContext)
+  const [loading, setLoading] = React.useState(false)
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      cname: data.get('cname'),
-      ccity: data.get('ccity'),
-    });
+    // data.append("collegeName",data.get('collegeName'))
+    // data.append("collegeCity",data.get('collegeCity'))
+    const dataX = {
+      collegeName: data.get('collegeName'),
+      collegeCity: data.get('collegeCity'),
+    };
+    console.log(data)
+    setLoading(true)
+    const response = await fetch(serverHost + "/user/add_college", {
+      method: "POST",
+      body: JSON.stringify(dataX),
+      headers: {
+        'Authorization': String("Bearer ") + token.access, 'Content-Type': 'application/json'
+      },
+
+    })
+    const feedback = await response.json();
+    setLoading(false)
   };
 
   return (
@@ -44,7 +63,7 @@ export default function AddCollege() {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{  bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ bgcolor: 'secondary.main' }}>
               <SchoolOutlined />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -55,20 +74,20 @@ export default function AddCollege() {
                 margin="normal"
                 required
                 fullWidth
-                id="cname"
+                id="collegeName"
                 label="College Name"
-                name="cname"
-                autoComplete="cname"
+                name="collegeName"
+                autoComplete="collegeName"
                 autoFocus
               />
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                name="ccity"
+                name="collegeCity"
                 label="City"
-                id="ccity"
-                autoComplete="ccity"
+                id="collegeCity"
+                autoComplete="collegeCity"
               />
               <Button
                 type="submit"
@@ -82,6 +101,9 @@ export default function AddCollege() {
           </Box>
         </Grid>
       </Grid>
+      <Backdrop open={loading}>
+        <CircularProgress />
+      </Backdrop>
     </ThemeProvider>
   );
 }

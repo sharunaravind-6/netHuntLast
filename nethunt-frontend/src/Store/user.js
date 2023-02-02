@@ -21,7 +21,7 @@ export const UserContextProvider = ({ children }) => {
     if (token == null){
       return
     }
-    // console.log("Update Function")
+    console.log("Update Function")
     let response = await fetch(serverHost + "/user/auth/refresh", {
       method: "POST",
       headers: {
@@ -46,16 +46,17 @@ export const UserContextProvider = ({ children }) => {
     }
     let interval = setInterval(
       () => {
-        updateToken()
+        if (token)
+          updateToken()
       },
-      4 *60* 1000
+      4 * 60* 1000
     )
     if (loading) {
       setLoading(false)
     }
     return () => clearInterval(interval)
   }), [token, loading]);
-
+  
   async function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
