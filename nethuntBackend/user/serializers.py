@@ -5,10 +5,7 @@ from .models import (Candidate, College, NethuntUser)
 class CollegeSerializer(serializers.ModelSerializer):
     class Meta:
         model = College
-        fileds = [
-            "collegeName",
-            "collegeCity"
-        ]
+        fields = "__all__"
 
 
 class CandidateSerializer(serializers.ModelSerializer):

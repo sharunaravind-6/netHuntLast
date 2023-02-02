@@ -10,14 +10,14 @@ from .serializers import (
     CandidateSerializer, CandidateUserSerializer, NethuntUserSerializer,CollegeSerializer)
 # Create your views here.
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def view_college(request, *args, **kwargs):
     data = CollegeSerializer(College.objects.all(), many=True).data
     return Response(data)
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def view_user(request, *args, **kwargs):
     data = CandidateSerializer(Candidate.objects.all(), many=True).data
     return Response(data)

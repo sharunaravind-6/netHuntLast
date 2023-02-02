@@ -11,6 +11,8 @@ import { Autocomplete, createFilterOptions, Divider, IconButton, List, ListItem,
 import { AddRounded, DeleteRounded, SearchRounded } from '@mui/icons-material';
 import { red } from '@mui/material/colors';
 import AddCollege from '../../Components/AddCollege';
+import { userContext } from '../../Store/user';
+import { serverHost } from '../../utils/server';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -175,7 +177,26 @@ export default function College() {
     ];
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
+    const { token } = React.useContext(userContext)
     const [searchValue, setSearchValue] = React.useState("");
+    const [colleges, setColleges] = React.useState([])
+    async function fetchCollege() {
+        let response = await fetch(serverHost + "/user/college", {
+            method: "GET",
+            headers: {
+                'content-type': 'application/json',
+                'Authorization': String("Bearer ") + token.access
+            },
+        })
+        if (response.status === 200) {
+            let collegeZ = await response.json()
+            console.log(collegeZ)
+            return collegeZ
+        }
+    }
+    React.useEffect(async () => {
+        const temp = await fetchCollege()
+    }, [])
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -283,17 +304,17 @@ export default function College() {
                     </Paper>
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
-                            <AddCollege/>
+                    <AddCollege />
                 </TabPanel>
                 <TabPanel value={value} index={2} dir={theme.direction}>
                     <Paper elevation={5} sx={{ marginTop: 3 }}>
                         <List dense>
                             {top100Films.map(item => {
                                 return (<React.Fragment key={item.title}>
-                                    <ListItem 
+                                    <ListItem
                                         secondaryAction={
                                             <IconButton edge="end" aria-label="comments">
-                                                <DeleteRounded color={red[100]}/>
+                                                <DeleteRounded color={red[100]} />
                                             </IconButton>
                                         }
                                     >

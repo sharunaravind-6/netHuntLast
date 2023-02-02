@@ -1,24 +1,27 @@
 import { createContext, useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { serverHost } from '../utils/server';
+import { useNavigation } from "react-router-dom";
 export const userContext = createContext()
 
 export const UserContextProvider = ({ children }) => {
   const oldToken = localStorage.getItem("authToken")
   // console.log(oldToken)
-  const [userId, setUserId] = useState()
-  const [token, setToken] = useState()
+  const [userId, setUserId] = useState(oldToken?jwt_decode(JSON.parse(oldToken).access).user_id:null)
+  const [token, setToken] = useState(oldToken?JSON.parse(oldToken):null)
   const [loading, setLoading] = useState(true)
-  if (oldToken) {
-    console.log(oldToken)
-    const temp = JSON.parse(oldToken)
-    setToken(temp)
-    setUserId(jwt_decode(temp).access)
+  // const navigate = useNavigation()
+  function logout() {
+    setUserId(null);
+    setToken(null);
+    localStorage.removeItem("authToken")
+    // navigate("/login")
   }
-
   async function updateToken() {
-
-    console.log("Update Function")
+    if (token == null){
+      return
+    }
+    // console.log("Update Function")
     let response = await fetch(serverHost + "/user/auth/refresh", {
       method: "POST",
       headers: {
@@ -29,11 +32,12 @@ export const UserContextProvider = ({ children }) => {
     })
     if (response.status === 200) {
       let data = await response.json()
-      console.log(data);
-    }else{
-      setUserId(null);
-      setToken(null);
-      localStorage.removeItem("authToken")
+      setToken(data)
+      setUserId(jwt_decode(data.access).user_id)
+      localStorage.setItem("authToken",JSON.stringify(data))
+      // console.log(data);
+    } else {
+      logout()
     }
   }
   useEffect((() => {
@@ -44,7 +48,7 @@ export const UserContextProvider = ({ children }) => {
       () => {
         updateToken()
       },
-      4 * 1000
+      4 *60* 1000
     )
     if (loading) {
       setLoading(false)
@@ -69,14 +73,15 @@ export const UserContextProvider = ({ children }) => {
       setUserId(jwt_decode(data.access).user_id);
       localStorage.setItem("authToken", JSON.stringify(data));
       setToken(data);
-      console.log(typeof data)
       return { token: data, data: jwt_decode(data.access) }
+    } else {
+      logout()
     }
   };
 
 
 
-  return <userContext.Provider value={{ handleSubmit: handleSubmit, user: userId }}>
+  return <userContext.Provider value={{ handleSubmit: handleSubmit, user: userId,token:token }}>
     {children}
   </userContext.Provider>
 }
