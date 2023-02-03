@@ -8,11 +8,12 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Autocomplete, createFilterOptions, Divider, IconButton, List, ListItem, ListItemText, Paper, TextField } from '@mui/material';
-import { AddRounded, DeleteRounded, SearchRounded } from '@mui/icons-material';
+import { AddRounded, DeleteRounded, EditRounded, ModeEdit, SearchRounded } from '@mui/icons-material';
 import { red } from '@mui/material/colors';
 import AddCollege from '../../Components/AddCollege';
 import { userContext } from '../../Store/user';
 import { serverHost } from '../../utils/server';
+import { Container } from '@mui/material';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -65,7 +66,7 @@ export default function College() {
         if (response.status === 200) {
             let collegeZ = await response.json()
             console.log(collegeZ)
-            setColleges(()=>{return collegeZ})
+            setColleges(() => { return collegeZ })
             return collegeZ
         }
     }
@@ -97,7 +98,7 @@ export default function College() {
                 >
                     <Tab label="Search" {...a11yProps(0)} icon={<SearchRounded />} />
                     <Tab label="Add" {...a11yProps(1)} icon={<AddRounded />} />
-                    <Tab label="Delete" {...a11yProps(2)} icon={<DeleteRounded />} />
+                    <Tab label="Edit" {...a11yProps(2)} icon={<EditRounded />} />
                 </Tabs>
             </AppBar>
             <SwipeableViews
@@ -185,12 +186,17 @@ export default function College() {
                     <Paper elevation={5} sx={{ marginTop: 3 }}>
                         <List dense>
                             {colleges.map(item => {
-                                return (<React.Fragment key={item.collegeName}>
+                                return (<React.Fragment key={item.id}>
                                     <ListItem
                                         secondaryAction={
-                                            <IconButton edge="end" aria-label="comments">
-                                                <DeleteRounded color={red[100]} />
-                                            </IconButton>
+                                            <Box edge="end">
+                                                <IconButton  >
+                                                    <ModeEdit color={red[100]} />
+                                                </IconButton>
+                                                <IconButton >
+                                                    <DeleteRounded color={red[100]} />
+                                                </IconButton>
+                                            </Box>
                                         }
                                     >
                                         <ListItemText

@@ -7,67 +7,130 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { EventBusyRounded } from "@mui/icons-material";
-import { Backdrop, IconButton } from '@mui/material';
+import { EventBusyRounded, NoEncryption } from "@mui/icons-material";
+import { Backdrop, FormControl, IconButton, InputLabel, MenuItem, Select } from '@mui/material';
 
-const steps = [
-  {
-    label: 'Event info',
-    description: `For each ad campaign that you create, you can control how much
-              you're willing to spend on clicks and conversions, which networks
-              and geographical locations you want your ads to show on, and more.`,
-    component: (<Box>
-
-    </Box>),
-    icon: (
-      <EventBusyRounded />
-    )
-  },
-  {
-    label: 'Event Logos',
-    description:
-      'An ad group contains one or more ads which target a shared set of keywords.',
-    icon: (
-      <EventBusyRounded />
-    )
-  },
-  {
-    label: 'Event Coordinator details',
-    description: `Try out different ad text to see what brings in the most customers,
-              and learn how to enhance your ads using features like ad extensions.
-              If you run into any problems with your ads, find out how to tell if
-              they're running and how to resolve approval issues.`,
-    icon: (
-      <EventBusyRounded />
-    )
-  },
-  {
-    label: 'Quiz Settings',
-    description: `Try out different ad text to see what brings in the most customers,
-              and learn how to enhance your ads using features like ad extensions.
-              If you run into any problems with your ads, find out how to tell if
-              they're running and how to resolve approval issues.`,
-    icon: (
-      <EventBusyRounded />
-    )
-  },
-  {
-    label: 'Quiz timing',
-    description: `Try out different ad text to see what brings in the most customers,
-              and learn how to enhance your ads using features like ad extensions.
-              If you run into any problems with your ads, find out how to tell if
-              they're running and how to resolve approval issues.`,
-    icon: (
-      <EventBusyRounded />
-    )
-  },
-];
 
 export default function QuizSettings() {
   const theme = useTheme();
   const [activeStep, setActiveStep] = React.useState(0);
+  const [data, setData] = React.useState({
+    eventInfo: {
+      event: "",
+      year: null,
+    },
+    coordinators: [
+      {
+        coordinatorName: null,
+        coordinatorEmail: null,
+        coordinatorPassword: null,
+        coordinatorPhone: null,
+        coordinatorImg: null,
+      },
+      {
+        coordinatorName: null,
+        coordinatorEmail: null,
+        coordinatorPassword: null,
+        coordinatorPhone: null,
+        coordinatorImg: null,
+      }
+    ],
+    quizScores:{
+      easy:null,
+      medium:null,
+      hard:null,
+    },
+    quizTimings:{
+      startsBy:null,
+      endsBy:null
+    }
+  })
+  
+  const steps = [
+    {
+      label: 'Event info',
+      description: `For each ad campaign that you create, you can control how much
+                you're willing to spend on clicks and conversions, which networks
+                and geographical locations you want your ads to show on, and more.`,
+      component: (<Box>
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Event</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={data.eventInfo.event}
+            label="Event"
+            onChange={(event) => {setData((data)=>{return {...data,eventInfo:{...data["eventInfo"],event:event.target.value}}});}}
+          >
+            <MenuItem value={"Login"}>Login</MenuItem>
+            <MenuItem value={"Thiran"}>Thiran</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>),
+      icon: (
+        <EventBusyRounded />
+      )
+    },
+    {
+      label: 'Event Logos',
+      component:(
+        <Box>
+          Test
+        </Box>
+      ),
+      description:
+        'An ad group contains one or more ads which target a shared set of keywords.',
+      icon: (
+        <EventBusyRounded />
+      )
+    },
+    {
+      label: 'Event Coordinator details',
+      component:(
+        <Box>
+          Test
+        </Box>
+      ),
+      description: `Try out different ad text to see what brings in the most customers,
+                and learn how to enhance your ads using features like ad extensions.
+                If you run into any problems with your ads, find out how to tell if
+                they're running and how to resolve approval issues.`,
+      icon: (
+        <EventBusyRounded />
+      )
+    },
+    {
+      label: 'Quiz Settings',
+      component:(
+        <Box>
+          Test
+        </Box>
+      ),
+      description: `Try out different ad text to see what brings in the most customers,
+                and learn how to enhance your ads using features like ad extensions.
+                If you run into any problems with your ads, find out how to tell if
+                they're running and how to resolve approval issues.`,
+      icon: (
+        <EventBusyRounded />
+      )
+    },
+    {
+      label: 'Quiz timing',
+      component:(
+        <Box>
+          Test
+        </Box>
+      ),
+      description: `Try out different ad text to see what brings in the most customers,
+                and learn how to enhance your ads using features like ad extensions.
+                If you run into any problems with your ads, find out how to tell if
+                they're running and how to resolve approval issues.`,
+      icon: (
+        <EventBusyRounded />
+      )
+    },
+  ];
   const maxSteps = steps.length;
-
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -102,7 +165,7 @@ export default function QuizSettings() {
         </Paper>
         <Box sx={{ width: '100%', p: 2 }}>
 
-          {steps[activeStep].description}
+          {steps[activeStep].component}
         </Box>
         <MobileStepper
           sx={{ width: "100%" }}

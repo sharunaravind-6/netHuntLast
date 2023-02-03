@@ -7,8 +7,8 @@ export const userContext = createContext()
 export const UserContextProvider = ({ children }) => {
   const oldToken = localStorage.getItem("authToken")
   // console.log(oldToken)
-  const [userId, setUserId] = useState(oldToken?jwt_decode(JSON.parse(oldToken).access).user_id:null)
-  const [token, setToken] = useState(oldToken?JSON.parse(oldToken):null)
+  const [userId, setUserId] = useState(oldToken ? jwt_decode(JSON.parse(oldToken).access).user_id : null)
+  const [token, setToken] = useState(oldToken ? JSON.parse(oldToken) : null)
   const [loading, setLoading] = useState(true)
   // const navigate = useNavigation()
   function logout() {
@@ -17,11 +17,18 @@ export const UserContextProvider = ({ children }) => {
     localStorage.removeItem("authToken")
     // navigate("/login")
   }
+  async function setTokenReuse(data) {
+    setUserId(jwt_decode(data.access).user_id);
+    localStorage.setItem("authToken", JSON.stringify(data));
+    setToken(data);
+  }
   async function updateToken() {
-    if (token == null){
-      return
-    }
+    const oldToken = localStorage.getItem("authToken")
+    setUserId(oldToken ? jwt_decode(JSON.parse(oldToken).access).user_id : null)
+    setToken(oldToken ? JSON.parse(oldToken) : null)
     console.log("Update Function")
+    if (token == null)
+      return
     let response = await fetch(serverHost + "/user/auth/refresh", {
       method: "POST",
       headers: {
@@ -32,10 +39,7 @@ export const UserContextProvider = ({ children }) => {
     })
     if (response.status === 200) {
       let data = await response.json()
-      setToken(data)
-      setUserId(jwt_decode(data.access).user_id)
-      localStorage.setItem("authToken",JSON.stringify(data))
-      // console.log(data);
+      setTokenReuse(data)
     } else {
       logout()
     }
@@ -46,17 +50,16 @@ export const UserContextProvider = ({ children }) => {
     }
     let interval = setInterval(
       () => {
-        if (token)
-          updateToken()
+        updateToken()
       },
-      4 * 60* 1000
+      4 * 60 * 1000
     )
     if (loading) {
       setLoading(false)
     }
     return () => clearInterval(interval)
-  }), [token, loading]);
-  
+  }), [token, loading,]);
+
   async function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -71,9 +74,7 @@ export const UserContextProvider = ({ children }) => {
     })
     if (response.status === 200) {
       let data = await response.json()
-      setUserId(jwt_decode(data.access).user_id);
-      localStorage.setItem("authToken", JSON.stringify(data));
-      setToken(data);
+      setTokenReuse(data)
       return { token: data, data: jwt_decode(data.access) }
     } else {
       logout()
@@ -82,7 +83,7 @@ export const UserContextProvider = ({ children }) => {
 
 
 
-  return <userContext.Provider value={{ handleSubmit: handleSubmit, user: userId,token:token }}>
+  return <userContext.Provider value={{ handleSubmit: handleSubmit, user: userId, token: token }}>
     {children}
   </userContext.Provider>
 }
