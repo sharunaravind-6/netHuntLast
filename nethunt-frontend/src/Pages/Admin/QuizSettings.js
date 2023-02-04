@@ -7,8 +7,10 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { EventBusyRounded, NoEncryption } from "@mui/icons-material";
-import { Backdrop, FormControl, IconButton, InputLabel, MenuItem, Select } from '@mui/material';
+import { EventBusyRounded } from "@mui/icons-material";
+import { Avatar, Backdrop, Container, FormControl, Grid, IconButton, InputLabel, MenuItem, Select } from '@mui/material';
+import { YearPicker } from '@mui/x-date-pickers';
+import { Stack } from '@mui/system';
 
 
 export default function QuizSettings() {
@@ -17,7 +19,7 @@ export default function QuizSettings() {
   const [data, setData] = React.useState({
     eventInfo: {
       event: "",
-      year: null,
+      year: "",
     },
     coordinators: [
       {
@@ -35,47 +37,89 @@ export default function QuizSettings() {
         coordinatorImg: null,
       }
     ],
-    quizScores:{
-      easy:null,
-      medium:null,
-      hard:null,
+    quizScores: {
+      easy: null,
+      medium: null,
+      hard: null,
     },
-    quizTimings:{
-      startsBy:null,
-      endsBy:null
+    quizTimings: {
+      startsBy: null,
+      endsBy: null
     }
   })
-  
+
   const steps = [
     {
       label: 'Event info',
       description: `For each ad campaign that you create, you can control how much
                 you're willing to spend on clicks and conversions, which networks
                 and geographical locations you want your ads to show on, and more.`,
-      component: (<Box>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Event</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={data.eventInfo.event}
-            label="Event"
-            onChange={(event) => {setData((data)=>{return {...data,eventInfo:{...data["eventInfo"],event:event.target.value}}});}}
-          >
-            <MenuItem value={"Login"}>Login</MenuItem>
-            <MenuItem value={"Thiran"}>Thiran</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>),
+      component: (
+        <Box>
+          <Stack sx={{ padding: 2, gap: 4 }}>
+            <FormControl fullWidth>
+              <InputLabel id="event-select-label">Event</InputLabel>
+              <Select
+                labelId="event-select-label"
+                id="event-select"
+                value={data.eventInfo.event}
+                label="Event"
+                onChange={(event) => { setData((data) => { return { ...data, eventInfo: { ...data["eventInfo"], event: event.target.value } } }); console.log(event.target.value); }}
+              >
+                <MenuItem value={"Login"}>Login</MenuItem>
+                <MenuItem value={"Thiran"}>Thiran</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl fullWidth>
+              <InputLabel id="year-select-label">Year</InputLabel>
+              <Select
+                labelId="year-select-label"
+                id="year-select"
+                value={data.eventInfo.year}
+                label="Year"
+                onChange={(event) => { setData((data) => { return { ...data, eventInfo: { ...data["eventInfo"], year: event.target.value } } }); console.log(event.target.value); }}
+              >
+                <MenuItem value={new Date().getFullYear()}>{new Date().getFullYear()}</MenuItem>
+                <MenuItem value={new Date().getFullYear() + 1}>{new Date().getFullYear() + 1}</MenuItem>
+              </Select>
+            </FormControl>
+          </Stack>
+        </Box>),
       icon: (
         <EventBusyRounded />
       )
     },
     {
       label: 'Event Logos',
-      component:(
+      component: (
         <Box>
-          Test
+          <Paper>
+            <Container sx={{ display: "flex", alignItems: "center" ,alignContent:"center",width:"100%",justifyContent:"center",gap:4,flexDirection:{sm:"column",md:"row"}}}>
+              <Avatar
+                variant="contained"
+                component="label"
+                sx={{ width: 300, height: 300 }}
+              >
+                <Typography>Nethunt Logo</Typography>
+                <input
+                  type="file"
+                  hidden
+                />
+              </Avatar>
+
+              <Avatar
+                variant="contained"
+                component="label"
+                sx={{ width: 300, height: 300 }}
+              >
+                <Typography>{data.eventInfo.event} Logo </Typography>
+                <input
+                  type="file"
+                  hidden
+                />
+              </Avatar>
+            </Container>
+          </Paper>
         </Box>
       ),
       description:
@@ -86,7 +130,7 @@ export default function QuizSettings() {
     },
     {
       label: 'Event Coordinator details',
-      component:(
+      component: (
         <Box>
           Test
         </Box>
@@ -101,7 +145,7 @@ export default function QuizSettings() {
     },
     {
       label: 'Quiz Settings',
-      component:(
+      component: (
         <Box>
           Test
         </Box>
@@ -116,7 +160,7 @@ export default function QuizSettings() {
     },
     {
       label: 'Quiz timing',
-      component:(
+      component: (
         <Box>
           Test
         </Box>
@@ -163,7 +207,7 @@ export default function QuizSettings() {
           <Typography flexGrow={1} >{steps[activeStep].label}</Typography>
           <IconButton>{steps[activeStep].icon}</IconButton>
         </Paper>
-        <Box sx={{ width: '100%', p: 2 }}>
+        <Box sx={{ minWidth: { sm: "100vw", md: '50vw' }, minHeight: "50vh", p: 2 }}>
 
           {steps[activeStep].component}
         </Box>

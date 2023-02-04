@@ -15,13 +15,12 @@ import College from './Pages/Admin/College';
 import Candidate from './Pages/Admin/Candidate';
 import QuizSettings from './Pages/Admin/QuizSettings';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 function App() {
   return (
     <div>
       <UserContextProvider>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Routes>
             <Route path='login' element={<Login />}></Route>
             <Route path="s" element={<DashboardX />}>
