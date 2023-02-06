@@ -7,8 +7,8 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { EventBusyRounded } from "@mui/icons-material";
-import { Avatar, Backdrop, Container, FormControl, Grid, IconButton, InputLabel, MenuItem, Select } from '@mui/material';
+import { AccountCircle, AddPhotoAlternateRounded, EventBusyRounded, MailRounded, PhoneRounded } from "@mui/icons-material";
+import { Avatar, Backdrop, Container, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { YearPicker } from '@mui/x-date-pickers';
 import { Stack } from '@mui/system';
 
@@ -20,6 +20,10 @@ export default function QuizSettings() {
     eventInfo: {
       event: "",
       year: "",
+    },
+    eventLogos: {
+      event: null,
+      nethunt: null,
     },
     coordinators: [
       {
@@ -47,7 +51,33 @@ export default function QuizSettings() {
       endsBy: null
     }
   })
-
+  const previewImageFile = (event, type) => {
+    if (type == "event")
+      setData((data) => { return { ...data, eventLogos: { ...data["eventLogos"], event: URL.createObjectURL(event.target.files[0]) } } });
+    else
+      setData((data) => { return { ...data, eventLogos: { ...data["eventLogos"], nethunt: URL.createObjectURL(event.target.files[0]) } } });
+  }
+  const previewCoordinatorImageFile = (event, type) => {
+    console.log("testy")
+    if (type == "c1")
+      setData(
+        (data) => {
+          let coordinators = data.coordinators
+          coordinators[0].coordinatorImg = URL.createObjectURL(event.target.files[0])
+          return {
+            ...data, coordinators: [...coordinators]
+          }
+        });
+    else
+      setData(
+        (data) => {
+          let coordinators = data.coordinators
+          coordinators[1].coordinatorImg = URL.createObjectURL(event.target.files[0])
+          return {
+            ...data, coordinators: [...coordinators]
+          }
+        });
+  }
   const steps = [
     {
       label: 'Event info',
@@ -93,31 +123,38 @@ export default function QuizSettings() {
       label: 'Event Logos',
       component: (
         <Box>
-          <Paper>
-            <Container sx={{ display: "flex", alignItems: "center" ,alignContent:"center",width:"100%",justifyContent:"center",gap:4,flexDirection:{sm:"column",md:"row"}}}>
-              <Avatar
-                variant="contained"
-                component="label"
-                sx={{ width: 300, height: 300 }}
-              >
-                <Typography>Nethunt Logo</Typography>
-                <input
-                  type="file"
-                  hidden
-                />
-              </Avatar>
+          <Paper sx={{ padding: 3 }}>
+            <Container sx={{ display: "flex", alignItems: "center", alignContent: "center", width: "100%", justifyContent: "center", gap: 3, flexDirection: { xs: "column", sm: "row" } }}>
+              <Paper elevation={16} sx={{ padding: 3 }}>
+                <Button component="label">
+                  <AddPhotoAlternateRounded />
+                  <Typography>{"NETHUNT"} Logo </Typography>
 
-              <Avatar
-                variant="contained"
-                component="label"
-                sx={{ width: 300, height: 300 }}
-              >
-                <Typography>{data.eventInfo.event} Logo </Typography>
-                <input
-                  type="file"
-                  hidden
-                />
-              </Avatar>
+                  <input
+                    hidden
+                    type="file"
+                    onChange={(event) => { previewImageFile(event, "nethunt") }}
+                  />
+                </Button>
+                <Box>
+                  <img src={data.eventLogos.nethunt} width="200px" height="auto" />
+                </Box>
+              </Paper>
+              <Paper elevation={16} sx={{ padding: 3 }}>
+                <Button component="label">
+                  <AddPhotoAlternateRounded />
+                  <Typography>{data.eventInfo.event} Logo </Typography>
+
+                  <input
+                    hidden
+                    type="file"
+                    onChange={(event) => { previewImageFile(event, "event") }}
+                  />
+                </Button>
+                <Box >
+                  <img src={data.eventLogos.event} width="200px" height="auto" />
+                </Box>
+              </Paper>
             </Container>
           </Paper>
         </Box>
@@ -131,9 +168,139 @@ export default function QuizSettings() {
     {
       label: 'Event Coordinator details',
       component: (
-        <Box>
-          Test
-        </Box>
+        <Grid container padding={3}>
+          <Grid item xs={12} padding={2}>
+            <Typography variant="h5">
+              Coordinators
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} padding={2}>
+            <Paper elevation={10} sx={{ padding: 2 }}>
+              <Stack sx={{ display: "flex", alignItems: "center", }}>
+                <Avatar sx={{ width: { xs: "100px", sm: "200px" }, height: { xs: "100px", sm: "200px" } }} component="label">
+                  {data.coordinators[0].coordinatorImg && <img src={data.coordinators[0].coordinatorImg} width="200px" height="auto" />}
+                  {!data.coordinators[0].coordinatorImg && <AddPhotoAlternateRounded sx={{ width: "100px" }} />}
+                  <input type="file" hidden onChange={(event) => { previewCoordinatorImageFile(event, "c1") }} />
+                </Avatar>
+                <FormControl variant="standard">
+                  <InputLabel htmlFor="c1name">
+                    Coordinator name
+                  </InputLabel>
+                  <Input
+                    id="c1name"
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <AccountCircle />
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <Divider />
+                <Box mt={2}>
+                  <Stack>
+                    <Typography variant="h6" align="center" mt={3}>
+                      <Container sx={{ display: "flex", alignItems: "center", gap: 2, fontSize: { xs: "15px", sm: "20px" } }}>
+                        <FormControl variant="standard">
+                          <InputLabel htmlFor="c1email">
+                            Email
+                          </InputLabel>
+                          <Input
+                            id="c1email"
+                            startAdornment={
+                              <InputAdornment position="start">
+                                <MailRounded />
+                              </InputAdornment>
+                            }
+                          />
+                        </FormControl>
+                      </Container>
+                    </Typography>
+                    <Typography variant="h6" align="center" mt={3}>
+                      <Container sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                        <FormControl variant="standard">
+                          <InputLabel htmlFor="c1phone">
+                            Phone
+                          </InputLabel>
+                          <Input
+                            id="c1phone"
+                            startAdornment={
+                              <InputAdornment position="start">
+                                <PhoneRounded />
+                              </InputAdornment>
+                            }
+                          />
+                        </FormControl>
+                      </Container>
+                    </Typography>
+                  </Stack>
+                </Box>
+              </Stack>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6} padding={2}>
+            <Paper elevation={10} sx={{ padding: 2 }}>
+              <Stack sx={{ display: "flex", alignItems: "center", }}>
+                <Avatar sx={{ width: { xs: "100px", sm: "200px" }, height: { xs: "100px", sm: "200px" } }} component="label">
+                  {data.coordinators[1].coordinatorImg && <img src={data.coordinators[1].coordinatorImg} width="200px" height="auto" />}
+                  {!data.coordinators[1].coordinatorImg && <AddPhotoAlternateRounded sx={{ width: "100px" }} />}
+                  <input type="file" hidden onChange={(event) => { previewCoordinatorImageFile(event, "c2") }} />
+                </Avatar>
+                <FormControl variant="standard">
+                  <InputLabel htmlFor="c1name">
+                    Coordinator name
+                  </InputLabel>
+                  <Input
+                    id="c1name"
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <AccountCircle />
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <Divider />
+                <Box mt={2}>
+                  <Stack>
+                    <Typography variant="h6" align="center" mt={3}>
+                      <Container sx={{ display: "flex", alignItems: "center", gap: 2, fontSize: { xs: "15px", sm: "20px" } }}>
+                        <FormControl variant="standard">
+                          <InputLabel htmlFor="c1email">
+                            Email
+                          </InputLabel>
+                          <Input
+                            id="c1email"
+                            startAdornment={
+                              <InputAdornment position="start">
+                                <MailRounded />
+                              </InputAdornment>
+                            }
+                          />
+                        </FormControl>
+                      </Container>
+                    </Typography>
+                    <Typography variant="h6" align="center" mt={3}>
+                      <Container sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                        <FormControl variant="standard">
+                          <InputLabel htmlFor="c1phone">
+                            Phone
+                          </InputLabel>
+                          <Input
+                            id="c1phone"
+                            startAdornment={
+                              <InputAdornment position="start">
+                                <PhoneRounded />
+                              </InputAdornment>
+                            }
+                          />
+                        </FormControl>
+                      </Container>
+                    </Typography>
+                  </Stack>
+                </Box>
+              </Stack>
+            </Paper>
+          </Grid>
+        </Grid>
       ),
       description: `Try out different ad text to see what brings in the most customers,
                 and learn how to enhance your ads using features like ad extensions.
@@ -184,64 +351,56 @@ export default function QuizSettings() {
   };
 
   return (
-    <Backdrop open={true} >
-      <Box
+    <Box sx={{
+      width:{xs:"100%",sm:"80%",md:"50%"}
+    }}>
+      <Paper
+        square
+        elevation={12}
         sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%,-50%)",
-        }}>
-        <Paper
-          square
-          elevation={12}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            textAlign: "center",
-            pl: 2,
-            width: "100%",
-            bgcolor: 'background.default',
-          }}
-        >
-          <Typography flexGrow={1} >{steps[activeStep].label}</Typography>
-          <IconButton>{steps[activeStep].icon}</IconButton>
-        </Paper>
-        <Box sx={{ minWidth: { sm: "100vw", md: '50vw' }, minHeight: "50vh", p: 2 }}>
-
-          {steps[activeStep].component}
-        </Box>
-        <MobileStepper
-          sx={{ width: "100%" }}
-          variant="dots"
-          steps={maxSteps}
-          position="static"
-          activeStep={activeStep}
-          nextButton={
-            <Button
-              size="small"
-              onClick={handleNext}
-            >
-              {activeStep === maxSteps - 1 ? "Finish" : "Next"}
-              {theme.direction === 'rtl' ? (
-                <KeyboardArrowLeft />
-              ) : (
-                <KeyboardArrowRight />
-              )}
-            </Button>
-          }
-          backButton={
-            <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-              {theme.direction === 'rtl' ? (
-                <KeyboardArrowRight />
-              ) : (
-                <KeyboardArrowLeft />
-              )}
-              Back
-            </Button>
-          }
-        />
-      </Box>
-    </Backdrop>
+          display: 'flex',
+          alignItems: 'center',
+          textAlign: "center",
+          width: "100%",
+          bgcolor: 'background.default',
+        }}
+      >
+        <Typography flexGrow={1} >{steps[activeStep].label}</Typography>
+        <IconButton>{steps[activeStep].icon}</IconButton>
+      </Paper>
+      <Paper sx={{minHeight: "50vh", p: 2 }}>
+        {steps[activeStep].component}
+      </Paper>
+      <MobileStepper
+        sx={{ width: "100%" }}
+        variant="dots"
+        steps={maxSteps}
+        position="static"
+        activeStep={activeStep}
+        nextButton={
+          <Button
+            size="small"
+            onClick={handleNext}
+          >
+            {activeStep === maxSteps - 1 ? "Finish" : "Next"}
+            {theme.direction === 'rtl' ? (
+              <KeyboardArrowLeft />
+            ) : (
+              <KeyboardArrowRight />
+            )}
+          </Button>
+        }
+        backButton={
+          <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+            {theme.direction === 'rtl' ? (
+              <KeyboardArrowRight />
+            ) : (
+              <KeyboardArrowLeft />
+            )}
+            Back
+          </Button>
+        }
+      />
+    </Box>
   );
 }
