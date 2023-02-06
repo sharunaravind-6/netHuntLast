@@ -5,10 +5,8 @@ import { useNavigation } from "react-router-dom";
 export const userContext = createContext()
 
 export const UserContextProvider = ({ children }) => {
-  const oldToken = localStorage.getItem("authToken")
-  // console.log(oldToken)
-  const [userId, setUserId] = useState(oldToken ? jwt_decode(JSON.parse(oldToken).access).user_id : null)
-  const [token, setToken] = useState(oldToken ? JSON.parse(oldToken) : null)
+  const [userId, setUserId] = useState(() => { return localStorage.getItem("authToken") ? jwt_decode(JSON.parse(localStorage.getItem("authToken")).access).user_id : null })
+  const [token, setToken] = useState(() => { return localStorage.getItem("authToken") ? JSON.parse(localStorage.getItem("authToken")) : null })
   const [loading, setLoading] = useState(true)
   // const navigate = useNavigation()
   function logout() {
@@ -17,25 +15,16 @@ export const UserContextProvider = ({ children }) => {
     localStorage.removeItem("authToken")
     // navigate("/login")
   }
-  async function setTokenReuse(data) {
-    setUserId(jwt_decode(data.access).user_id);
-    localStorage.setItem("authToken", JSON.stringify(data));
-    setToken(data);
-  }
+
   async function updateToken() {
-    const oldToken = localStorage.getItem("authToken")
-    setUserId(oldToken ? jwt_decode(JSON.parse(oldToken).access).user_id : null)
-    setToken(oldToken ? JSON.parse(oldToken) : null)
     console.log("Update Function")
-    if (token == null)
-      return
     let response = await fetch(serverHost + "/user/auth/refresh", {
       method: "POST",
       headers: {
         'content-type': 'application/json',
         // 'Authorization': String("Bearer") + token.access
       },
-      body: JSON.stringify({ "refresh": token.refresh })
+      body: JSON.stringify({ "refresh": token?.refresh })
     })
     if (response.status === 200) {
       let data = await response.json()
@@ -43,21 +32,27 @@ export const UserContextProvider = ({ children }) => {
     } else {
       logout()
     }
+    if(loading){
+      setLoading(false)
+    }
+  }
+  function setTokenReuse(data) {
+    setUserId(jwt_decode(data.access).user_id);
+    localStorage.setItem("authToken", JSON.stringify(data));
+    setToken(data);
   }
   useEffect((() => {
     if (loading) {
       updateToken()
     }
     let interval = setInterval(
-      () => {
-        updateToken()
-      },
-      4 * 60 * 1000
-    )
-    if (loading) {
-      setLoading(false)
-    }
-    return () => clearInterval(interval)
+      ()=>{
+        if(token){
+          updateToken()
+        }
+      }
+    ,4*1000*60)
+    return ()=>{clearInterval(interval)}
   }), [token, loading,]);
 
   async function handleSubmit(event) {

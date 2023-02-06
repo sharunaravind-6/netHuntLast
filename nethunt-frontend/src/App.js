@@ -19,8 +19,8 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 function App() {
   return (
     <div>
-      <UserContextProvider>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <UserContextProvider>
           <Routes>
             <Route path='login' element={<Login />}></Route>
             <Route path="s" element={<DashboardX />}>
@@ -40,8 +40,8 @@ function App() {
             </Route>
             {/* <Route path="question" element = {<Question/>}></Route> */}
           </Routes>
-        </LocalizationProvider>
-      </UserContextProvider>
+        </UserContextProvider>
+      </LocalizationProvider>
     </div>
   );
 }
