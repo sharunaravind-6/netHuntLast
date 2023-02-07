@@ -1,6 +1,10 @@
 import { AddCircleRounded, ArrowLeftRounded, ArrowRightAltRounded, ArrowRightAltSharp, KeyboardArrowRightRounded } from "@mui/icons-material";
-import {Stack, AppBar, Box, Divider, Grid, IconButton, List, ListItem, ListItemButton, ListItemSecondaryAction, ListItemText, Paper, Toolbar, Typography } from "@mui/material";
-export default function QuizDisplay() {
+import { Stack, AppBar, Box, Divider, Grid, IconButton, List, ListItem, ListItemButton, ListItemSecondaryAction, ListItemText, Paper, Toolbar, Typography } from "@mui/material";
+import { useEffect } from "react";
+export default function QuizDisplay(props) {
+    useEffect(()=>{
+        console.log("Quiz Disp")
+    },[])
     return (<Grid container padding={2}>
         <Grid item xs={12}>
             <Toolbar>

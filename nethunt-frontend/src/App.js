@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Outlet, Route, Routes } from 'react-router-dom';
 import Login from './Pages/Login';
 import DashboardX from './Pages/Dashboard';
 import Question from './Components/Question';
@@ -17,8 +17,9 @@ import QuizSettings from './Pages/Admin/QuizSettings';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import CoordinatorsAdmin from './Pages/Admin/CoordinatorsAdmin';
-import QuizAdmin from './Pages/Admin/QuizAdmin';
 import QuizDisplay from './Components/QuizDisplay';
+import QuizEdit from './Components/QuizEdit';
+import QuestionAdmin from './Components/QuestionsAdmin';
 function App() {
   return (
     <div>
@@ -41,8 +42,10 @@ function App() {
               <Route path="qsettings" element={<QuizSettings />}></Route>
               <Route path="usr" element={<Candidate />}></Route>
               <Route path="crd" element={<CoordinatorsAdmin />}></Route>
-              <Route path="quiz" element={<QuizAdmin />}>
-                <Route path="v" component={<QuizDisplay/>}></Route>
+              <Route path="quiz" element={<Outlet />}>
+                <Route path="v" element={<QuizDisplay/>}></Route>
+                <Route path="e" element={<QuizEdit/>}></Route>
+                <Route path="q" element={<QuestionAdmin/>}></Route>
               </Route>
             </Route>
             {/* <Route path="question" element = {<Question/>}></Route> */}
