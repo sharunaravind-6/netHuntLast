@@ -51,7 +51,7 @@ export const UserContextProvider = ({ children }) => {
           updateToken()
         }
       }
-    ,4*1000*60)
+    ,4.5*1000*60)
     return ()=>{clearInterval(interval)}
   }), [token, loading,]);
 
@@ -79,6 +79,6 @@ export const UserContextProvider = ({ children }) => {
 
 
   return <userContext.Provider value={{ handleSubmit: handleSubmit, user: userId, token: token }}>
-    {children}
+    {loading ? null:children}
   </userContext.Provider>
 }
