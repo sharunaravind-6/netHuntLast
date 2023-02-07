@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { AccountCircle, AddPhotoAlternateRounded, EventBusyRounded, MailRounded, PhoneRounded } from "@mui/icons-material";
+import { AccountCircle, AddPhotoAlternateRounded, ChildCareRounded, EventBusyRounded, KeyboardArrowUpRounded, KeyboardDoubleArrowUpRounded, MailRounded, PhoneRounded } from "@mui/icons-material";
 import { Avatar, Backdrop, Container, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { YearPicker } from '@mui/x-date-pickers';
 import { Stack } from '@mui/system';
@@ -250,7 +250,7 @@ export default function QuizSettings() {
                     Coordinator name
                   </InputLabel>
                   <Input
-                    id="c1name"
+                    id="c2name"
                     startAdornment={
                       <InputAdornment position="start">
                         <AccountCircle />
@@ -264,11 +264,11 @@ export default function QuizSettings() {
                     <Typography variant="h6" align="center" mt={3}>
                       <Container sx={{ display: "flex", alignItems: "center", gap: 2, fontSize: { xs: "15px", sm: "20px" } }}>
                         <FormControl variant="standard">
-                          <InputLabel htmlFor="c1email">
+                          <InputLabel htmlFor="c2email">
                             Email
                           </InputLabel>
                           <Input
-                            id="c1email"
+                            id="c2email"
                             startAdornment={
                               <InputAdornment position="start">
                                 <MailRounded />
@@ -281,11 +281,11 @@ export default function QuizSettings() {
                     <Typography variant="h6" align="center" mt={3}>
                       <Container sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                         <FormControl variant="standard">
-                          <InputLabel htmlFor="c1phone">
+                          <InputLabel htmlFor="c2phone">
                             Phone
                           </InputLabel>
                           <Input
-                            id="c1phone"
+                            id="c2phone"
                             startAdornment={
                               <InputAdornment position="start">
                                 <PhoneRounded />
@@ -313,9 +313,50 @@ export default function QuizSettings() {
     {
       label: 'Quiz Settings',
       component: (
-        <Box>
-          Test
-        </Box>
+        <Stack sx={{ gap: 3 }}>
+          <FormControl variant="standard">
+            <InputLabel htmlFor="easy">
+              Easy Score
+            </InputLabel>
+            <Input
+              id="easy"
+              type='number'
+              startAdornment={
+                <InputAdornment position="start">
+                  <ChildCareRounded />
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+          <FormControl variant="standard">
+            <InputLabel htmlFor="moderate">
+              Moderate Score
+            </InputLabel>
+            <Input
+              id="moderate"
+              type='number'
+              startAdornment={
+                <InputAdornment position="start">
+                  <KeyboardArrowUpRounded />
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+          <FormControl variant="standard">
+            <InputLabel htmlFor="hard">
+              Hard Score
+            </InputLabel>
+            <Input
+              type='number'
+              id="hard"
+              startAdornment={
+                <InputAdornment position="start">
+                  <KeyboardDoubleArrowUpRounded />
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+        </Stack>
       ),
       description: `Try out different ad text to see what brings in the most customers,
                 and learn how to enhance your ads using features like ad extensions.
@@ -328,9 +369,24 @@ export default function QuizSettings() {
     {
       label: 'Quiz timing',
       component: (
-        <Box>
-          Test
-        </Box>
+        <Stack sx={{gap:4}}>
+          <TextField
+            id="startby"
+            label="Start By"
+            type="datetime-local"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <TextField
+            id="datetime-local"
+            label="End By"
+            type="datetime-local"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </Stack>
       ),
       description: `Try out different ad text to see what brings in the most customers,
                 and learn how to enhance your ads using features like ad extensions.
@@ -352,7 +408,7 @@ export default function QuizSettings() {
 
   return (
     <Box sx={{
-      width:{xs:"100%",sm:"80%",md:"50%"}
+      width: { xs: "100%", sm: "80%", md: "50%" }
     }}>
       <Paper
         square
@@ -368,7 +424,7 @@ export default function QuizSettings() {
         <Typography flexGrow={1} >{steps[activeStep].label}</Typography>
         <IconButton>{steps[activeStep].icon}</IconButton>
       </Paper>
-      <Paper sx={{minHeight: "50vh", p: 2 }}>
+      <Paper sx={{ minHeight: "50vh", p: 2 }}>
         {steps[activeStep].component}
       </Paper>
       <MobileStepper

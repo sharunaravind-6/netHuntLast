@@ -16,6 +16,9 @@ import Candidate from './Pages/Admin/Candidate';
 import QuizSettings from './Pages/Admin/QuizSettings';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import CoordinatorsAdmin from './Pages/Admin/CoordinatorsAdmin';
+import QuizAdmin from './Pages/Admin/QuizAdmin';
+import QuizDisplay from './Components/QuizDisplay';
 function App() {
   return (
     <div>
@@ -37,6 +40,10 @@ function App() {
               <Route path="college" element={<College />}></Route>
               <Route path="qsettings" element={<QuizSettings />}></Route>
               <Route path="usr" element={<Candidate />}></Route>
+              <Route path="crd" element={<CoordinatorsAdmin />}></Route>
+              <Route path="quiz" element={<QuizAdmin />}>
+                <Route path="v" component={<QuizDisplay/>}></Route>
+              </Route>
             </Route>
             {/* <Route path="question" element = {<Question/>}></Route> */}
           </Routes>
