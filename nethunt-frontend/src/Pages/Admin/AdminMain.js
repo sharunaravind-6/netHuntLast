@@ -1,13 +1,15 @@
 import { ArrowBackIosRounded, ArrowForwardRounded, ArrowLeftRounded, DashboardRounded, Face2Rounded, Face3Rounded, FaceRounded, ForkLeftRounded, HelpCenterRounded, InboxRounded, LogoutOutlined, MenuRounded, QuizRounded, SchoolRounded, ScoreboardRounded, SettingsOutlined, StartRounded, SupervisedUserCircleRounded } from "@mui/icons-material";
 import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Paper, Grid, CardHeader, Card, CardContent, Switch, useMediaQuery } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Outlet, Route, Router, Routes } from "react-router-dom";
 import ContactUS from "../../Components/ContactUs";
+import { userContext } from "../../Store/user";
 import { theme } from "./../../Theme/LightTheme";
 export default function AdminMain(props) {
     const [anchorEl, setAnchorEl] = useState(null)
     const [openDrawer, setOpenDrawer] = useState(false)
     const openMenu = Boolean(anchorEl)
+    const {logout} = useContext(userContext)
     const StyledBadge = styled(Badge)(({ theme }) => ({
         '& .MuiBadge-badge': {
             backgroundColor: '#f00',
@@ -90,7 +92,7 @@ export default function AdminMain(props) {
                                         Settings
                                     </ListItemText>
                                 </MenuItem>
-                                <MenuItem>
+                                <MenuItem onClick={logout}>
                                     <ListItemIcon>
                                         <LogoutOutlined />
                                     </ListItemIcon>

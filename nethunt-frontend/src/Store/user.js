@@ -1,19 +1,19 @@
 import { createContext, useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { serverHost } from '../utils/server';
-import { useNavigation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 export const userContext = createContext()
 
 export const UserContextProvider = ({ children }) => {
   const [userId, setUserId] = useState(() => { return localStorage.getItem("authToken") ? jwt_decode(JSON.parse(localStorage.getItem("authToken")).access).user_id : null })
   const [token, setToken] = useState(() => { return localStorage.getItem("authToken") ? JSON.parse(localStorage.getItem("authToken")) : null })
   const [loading, setLoading] = useState(true)
-  // const navigate = useNavigation()
+  const navigate = useNavigate()
   function logout() {
     setUserId(null);
     setToken(null);
     localStorage.removeItem("authToken")
-    // navigate("/login")
+    navigate("/login")
   }
 
  
@@ -29,30 +29,10 @@ export const UserContextProvider = ({ children }) => {
     setLoading(false)
   }), [token, loading,]);
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const body = {
-      email: formData.get('email'),
-      password: formData.get('password'),
-    };
-    let response = await fetch(serverHost + "/user/auth/token", {
-      method: "POST",
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(body)
-    })
-    if (response.status === 200) {
-      let data = await response.json()
-      setTokenReuse(data)
-      return { token: data, data: jwt_decode(data.access) }
-    } else {
-      logout()
-    }
-  };
 
 
 
-  return <userContext.Provider value={{ handleSubmit: handleSubmit, user: userId, token: token ,setToken,setUserId}}>
+  return <userContext.Provider value={{  user: userId, token ,setToken,setUserId,setTokenReuse,logout}}>
     {loading ? null:children}
   </userContext.Provider>
 }
