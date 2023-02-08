@@ -16,43 +16,17 @@ export const UserContextProvider = ({ children }) => {
     // navigate("/login")
   }
 
-  async function updateToken() {
-    console.log("Update Function")
-    let response = await fetch(serverHost + "/user/auth/refresh", {
-      method: "POST",
-      headers: {
-        'content-type': 'application/json',
-        // 'Authorization': String("Bearer") + token.access
-      },
-      body: JSON.stringify({ "refresh": token?.refresh })
-    })
-    if (response.status === 200) {
-      let data = await response.json()
-      setTokenReuse(data)
-    } else {
-      logout()
-    }
-    if(loading){
-      setLoading(false)
-    }
-  }
+ 
   function setTokenReuse(data) {
     setUserId(jwt_decode(data.access).user_id);
     localStorage.setItem("authToken", JSON.stringify(data));
     setToken(data);
   }
   useEffect((() => {
-    if (loading) {
-      updateToken()
+    if(token){
+      setUserId(jwt_decode(token.access).user_id)
     }
-    let interval = setInterval(
-      ()=>{
-        if(token){
-          updateToken()
-        }
-      }
-    ,4.5*1000*60)
-    return ()=>{clearInterval(interval)}
+    setLoading(false)
   }), [token, loading,]);
 
   async function handleSubmit(event) {
@@ -78,7 +52,28 @@ export const UserContextProvider = ({ children }) => {
 
 
 
-  return <userContext.Provider value={{ handleSubmit: handleSubmit, user: userId, token: token }}>
+  return <userContext.Provider value={{ handleSubmit: handleSubmit, user: userId, token: token ,setToken,setUserId}}>
     {loading ? null:children}
   </userContext.Provider>
 }
+
+ // async function updateToken() {
+  //   console.log("Update Function")
+  //   let response = await fetch(serverHost + "/user/auth/refresh", {
+  //     method: "POST",
+  //     headers: {
+  //       'content-type': 'application/json',
+  //       // 'Authorization': String("Bearer") + token.access
+  //     },
+  //     body: JSON.stringify({ "refresh": token?.refresh })
+  //   })
+  //   if (response.status === 200) {
+  //     let data = await response.json()
+  //     setTokenReuse(data)
+  //   } else {
+  //     logout()
+  //   }
+  //   if(loading){
+  //     setLoading(false)
+  //   }
+  // }

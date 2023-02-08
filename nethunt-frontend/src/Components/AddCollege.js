@@ -17,28 +17,22 @@ import { SchoolOutlined, SchoolRounded } from '@mui/icons-material';
 import { userContext } from '../Store/user';
 import { serverHost } from '../utils/server';
 import { Backdrop, CircularProgress } from '@mui/material';
-
+import useAxios from '../utils/useAxios';
 export default function AddCollege() {
   const { token } = React.useContext(userContext)
   const [loading, setLoading] = React.useState(false)
+  const api = useAxios()
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // data.append("collegeName",data.get('collegeName'))
-    // data.append("collegeCity",data.get('collegeCity'))
     const dataX = {
       collegeName: data.get('collegeName'),
       collegeCity: data.get('collegeCity'),
     };
-    console.log(data)
     setLoading(true)
-    const response = await fetch(serverHost + "/user/add_college", {
-      method: "POST",
-      body: JSON.stringify(dataX),
-      headers: {
-        'Authorization': String("Bearer ") + token.access, 'Content-Type': 'application/json'
-      },
 
+    const response = await api.post("/user/add_college", {
+      ...dataX
     })
     const feedback = await response.json();
     setLoading(false)

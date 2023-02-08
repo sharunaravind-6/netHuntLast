@@ -14,6 +14,8 @@ import AddCollege from '../../Components/AddCollege';
 import { userContext } from '../../Store/user';
 import { serverHost } from '../../utils/server';
 import { Container } from '@mui/material';
+import useAxios from '../../utils/useAxios';
+import axios from 'axios';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -50,21 +52,16 @@ function a11yProps(index) {
 const filter = createFilterOptions();
 
 export default function College() {
+    const api = useAxios()
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
     const { token } = React.useContext(userContext)
     const [searchValue, setSearchValue] = React.useState("");
     const [colleges, setColleges] = React.useState([])
     async function fetchCollege() {
-        let response = await fetch(serverHost + "/user/college", {
-            method: "GET",
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': String("Bearer ") + token.access
-            },
-        })
-        if (response.status === 200) {
-            let collegeZ = await response.json()
+        let response = await api.get( "/user/college")
+        if (response.data) {
+            let collegeZ = await response.data
             console.log(collegeZ)
             setColleges(() => { return collegeZ })
             return collegeZ
