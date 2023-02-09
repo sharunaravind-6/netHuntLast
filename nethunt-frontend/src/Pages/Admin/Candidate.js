@@ -12,6 +12,7 @@ import { AddRounded, CircleRounded, DeleteRounded, SearchRounded } from '@mui/ic
 import { red } from '@mui/material/colors';
 import AddCollege from '../../Components/AddCollege';
 import AddCandidate from '../../Components/AddCandidate';
+import useAxios from '../../utils/useAxios';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -48,6 +49,18 @@ function a11yProps(index) {
 const filter = createFilterOptions();
 
 export default function Candidate() {
+    const api = useAxios()
+    async function fetchCollege() {
+        let response = await api.get( "/user/view")
+        if (response.data) {
+            let candidates = await response.data
+            console.log(candidates)
+            return candidates
+        }
+    }
+    React.useEffect(() => {
+        fetchCollege()
+    }, [])
     const top100Films = [
         { title: 'The Shawshank Redemption', year: 1994 },
         { title: 'The Godfather', year: 1972 },

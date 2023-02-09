@@ -11,9 +11,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeTheme } from '../Store/globalStoreSlice';
+import {  ThemeProvider } from '@mui/material/styles';
 import { theme } from "./../Theme/LightTheme";
 import jwt_decode from "jwt-decode";
 import { userContext } from '../Store/user';
@@ -23,7 +21,6 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function SignUp() {
-  const [userId, setUser] = React.useState(null)
   const { setTokenReuse, logout, token } = React.useContext(userContext)
   const [openBackdrop, setOpenBackdrop] = React.useState(false)
   const navigate = useNavigate()
@@ -31,7 +28,7 @@ export default function SignUp() {
   React.useEffect(() => {
     if (loading) {
       if (token != null) {
-        if (jwt_decode(token.access).role == "Admin") {
+        if (jwt_decode(token.access).role === "Admin") {
           navigate("/a")
         }
       }
@@ -55,7 +52,7 @@ export default function SignUp() {
     if (response.status === 200) {
       let data = await response.json()
       setTokenReuse(data)
-      if (jwt_decode(data.access).role == "Admin") {
+      if (jwt_decode(data.access).role === "Admin") {
         navigate("/a")
       }
       return { token: data, data: jwt_decode(data.access) }

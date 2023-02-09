@@ -1,7 +1,7 @@
-import { ArrowBackIosRounded, ArrowForwardRounded, ArrowLeftRounded, DashboardRounded, Face2Rounded, Face3Rounded, FaceRounded, ForkLeftRounded, HelpCenterRounded, InboxRounded, LogoutOutlined, MenuRounded, QuizRounded, SchoolRounded, ScoreboardRounded, SettingsOutlined, StartRounded, SupervisedUserCircleRounded } from "@mui/icons-material";
+import { ArrowBackIosRounded, DashboardRounded, FaceRounded, LogoutOutlined, MenuRounded, QuizRounded, SchoolRounded, ScoreboardRounded, SettingsOutlined, SupervisedUserCircleRounded } from "@mui/icons-material";
 import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Paper, Grid, CardHeader, Card, CardContent, Switch, useMediaQuery } from "@mui/material";
 import { useContext, useState } from "react";
-import { Outlet, Route, Router, Routes } from "react-router-dom";
+import { Outlet, useNavigate,} from "react-router-dom";
 import ContactUS from "../../Components/ContactUs";
 import { userContext } from "../../Store/user";
 import { theme } from "./../../Theme/LightTheme";
@@ -10,6 +10,8 @@ export default function AdminMain(props) {
     const [openDrawer, setOpenDrawer] = useState(false)
     const openMenu = Boolean(anchorEl)
     const {logout} = useContext(userContext)
+    const navigate = useNavigate()
+
     const StyledBadge = styled(Badge)(({ theme }) => ({
         '& .MuiBadge-badge': {
             backgroundColor: '#f00',
@@ -122,7 +124,7 @@ export default function AdminMain(props) {
                     <Toolbar />
                     <List>
                         <ListItem disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={()=>{navigate("")}}>
                                 <ListItemIcon>
                                     <DashboardRounded />
                                 </ListItemIcon>
@@ -130,7 +132,7 @@ export default function AdminMain(props) {
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={()=>{navigate("quiz/v")}}>
                                 <ListItemIcon>
                                 <QuizRounded />
                                 </ListItemIcon>
@@ -138,7 +140,7 @@ export default function AdminMain(props) {
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={()=>{navigate("college")}}>
                                 <ListItemIcon>
                                     {/* Choose based on boy or girl */}
                                     <SchoolRounded/>
@@ -147,7 +149,7 @@ export default function AdminMain(props) {
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={()=>{navigate("usr")}}>
                                 <ListItemIcon>
                                     <FaceRounded/>
                                 </ListItemIcon>
@@ -155,7 +157,7 @@ export default function AdminMain(props) {
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={()=>{navigate("crd")}}>
                                 <ListItemIcon>
                                     <SupervisedUserCircleRounded/>
                                 </ListItemIcon>
@@ -163,7 +165,7 @@ export default function AdminMain(props) {
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={()=>{navigate("score")}}>
                                 <ListItemIcon>
                                 <ScoreboardRounded />
                                 </ListItemIcon>

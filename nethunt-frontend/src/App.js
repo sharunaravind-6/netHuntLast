@@ -52,6 +52,7 @@ function App() {
               <Route path="e" element={<QuizEdit />}></Route>
               <Route path="q" element={<QuestionAdmin />}></Route>
             </Route>
+            <Route path="score" element={<ScoreBoardX />}></Route>
           </Route>)}
 
           <Route path='*' element={<Page404/>}/>

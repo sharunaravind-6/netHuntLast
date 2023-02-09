@@ -68,7 +68,7 @@ export default function College() {
         }
     }
     React.useEffect(() => {
-        const temp = fetchCollege()
+        fetchCollege()
     }, [])
     const handleChange = (event, newValue) => {
         setValue(newValue);
