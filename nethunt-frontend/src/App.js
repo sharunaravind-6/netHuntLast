@@ -8,7 +8,7 @@ import ScoreBoardX from './Components/Scoreboard';
 import ProfileX from './Components/Profile';
 import Questions from './Pages/Questions';
 import "./App.css";
-import { userContext, UserContextProvider } from './Store/user';
+import { userContext } from './Store/user';
 import AdminMain from './Pages/Admin/AdminMain';
 import AdminHome from './Components/AdminHome';
 import College from './Pages/Admin/College';
@@ -24,6 +24,8 @@ import QuestionAdmin from './Components/QuestionsAdmin';
 import { useContext } from 'react';
 import jwtDecode from 'jwt-decode';
 import Page404 from './Pages/404';
+import AdminProvider from './Store/adminStore';
+import { Paper } from '@mui/material';
 function App() {
   const { token } = useContext(userContext)
   return (
@@ -41,13 +43,14 @@ function App() {
             <Route path="" element={<Question />}></Route>
           </Route>
           
-          {(token!=null&&jwtDecode(token?.access).role =="Admin")&&(<Route path="a" element={<AdminMain />} >
+          {(token!=null&&jwtDecode(token?.access).role ==="Admin")&&(
+          <Route path="a" element={<AdminProvider><AdminMain /></AdminProvider>} >
             <Route path="" element={<AdminHome />}></Route>
             <Route path="college" element={<College />}></Route>
             <Route path="qsettings" element={<QuizSettings />}></Route>
             <Route path="usr" element={<Candidate />}></Route>
             <Route path="crd" element={<CoordinatorsAdmin />}></Route>
-            <Route path="quiz" element={<Outlet />}>
+            <Route path="quiz" element={<Paper><Outlet /></Paper>}>
               <Route path="v" element={<QuizDisplay />}></Route>
               <Route path="e" element={<QuizEdit />}></Route>
               <Route path="q" element={<QuestionAdmin />}></Route>

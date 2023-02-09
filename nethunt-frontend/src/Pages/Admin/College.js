@@ -5,17 +5,13 @@ import { useTheme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Autocomplete, createFilterOptions, Divider, IconButton, List, ListItem, ListItemText, Paper, TextField } from '@mui/material';
 import { AddRounded, DeleteRounded, EditRounded, ModeEdit, SearchRounded } from '@mui/icons-material';
 import { red } from '@mui/material/colors';
 import AddCollege from '../../Components/AddCollege';
-import { userContext } from '../../Store/user';
-import { serverHost } from '../../utils/server';
-import { Container } from '@mui/material';
 import useAxios from '../../utils/useAxios';
-import axios from 'axios';
+import { AdminContext } from '../../Store/adminStore';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -52,21 +48,12 @@ function a11yProps(index) {
 const filter = createFilterOptions();
 
 export default function College() {
-    const api = useAxios()
+    const {colleges,fetchCollege} = React.useContext(AdminContext)
+    
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
-    const { token } = React.useContext(userContext)
     const [searchValue, setSearchValue] = React.useState("");
-    const [colleges, setColleges] = React.useState([])
-    async function fetchCollege() {
-        let response = await api.get( "/user/college")
-        if (response.data) {
-            let collegeZ = await response.data
-            console.log(collegeZ)
-            setColleges(() => { return collegeZ })
-            return collegeZ
-        }
-    }
+   
     React.useEffect(() => {
         fetchCollege()
     }, [])

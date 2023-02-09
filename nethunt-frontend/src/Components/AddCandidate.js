@@ -3,20 +3,28 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {  ThemeProvider } from '@mui/material/styles';
 import { theme } from "../Theme/LightTheme";
-import { SchoolOutlined, SchoolRounded } from '@mui/icons-material';
-import { Autocomplete } from '@mui/material';
+import { SchoolOutlined } from '@mui/icons-material';
+import {  FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { AdminContext } from '../Store/adminStore';
 
 export default function AddCandidate() {
+  const [college, setCollege] = React.useState('');
+  const {colleges,fetchCollege} = React.useContext(AdminContext)
+  const [loading,setLoading] = React.useState(true)
+
+  React.useEffect(
+    ()=>{
+      if(loading)
+        fetchCollege()
+      setLoading(false)
+    },
+  [loading])
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -82,13 +90,24 @@ export default function AddCandidate() {
                 id="cpassword"
                 autoComplete="password"
               />
-              <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={[{label:"test1"},{label:"test2"},{label:"test3"},{label:"test4"},]}
-                
-                renderInput={(params) => <TextField {...params} label="College" />}
-              />
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">College</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={college}
+                  label="Age"
+                  onChange={(event)=>{setCollege(event.target.value);}}
+                >
+                  {
+                    colleges.map((item)=>{
+                      return (
+                        <MenuItem value={item.collegeName} key={item.id}>{item.collegeName}</MenuItem>
+                      )
+                    })
+                  }
+                </Select>
+              </FormControl>
               <Button
                 type="submit"
                 fullWidth

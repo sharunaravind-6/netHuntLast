@@ -1,7 +1,7 @@
 import { ArrowBackIosRounded, DashboardRounded, FaceRounded, LogoutOutlined, MenuRounded, QuizRounded, SchoolRounded, ScoreboardRounded, SettingsOutlined, SupervisedUserCircleRounded } from "@mui/icons-material";
-import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Paper, Grid, CardHeader, Card, CardContent, Switch, useMediaQuery } from "@mui/material";
+import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider,Backdrop, CircularProgress } from "@mui/material";
 import { useContext, useState } from "react";
-import { Outlet, useNavigate,} from "react-router-dom";
+import { Outlet, useNavigate, } from "react-router-dom";
 import ContactUS from "../../Components/ContactUs";
 import { userContext } from "../../Store/user";
 import { theme } from "./../../Theme/LightTheme";
@@ -9,7 +9,8 @@ export default function AdminMain(props) {
     const [anchorEl, setAnchorEl] = useState(null)
     const [openDrawer, setOpenDrawer] = useState(false)
     const openMenu = Boolean(anchorEl)
-    const {logout} = useContext(userContext)
+    const [loading, setLoading] = useState(false)
+    const { logout } = useContext(userContext)
     const navigate = useNavigate()
 
     const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -31,6 +32,7 @@ export default function AdminMain(props) {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
+
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
 
                 <Toolbar>
@@ -111,7 +113,7 @@ export default function AdminMain(props) {
             <Toolbar />
             <Box>
                 <Drawer open={openDrawer} anchor="left"
-                    variant="persistent"
+                    // variant="persistent"
                     onClose={() => { setOpenDrawer(false) }}
                     sx={{
                         width: 240,
@@ -124,7 +126,10 @@ export default function AdminMain(props) {
                     <Toolbar />
                     <List>
                         <ListItem disablePadding>
-                            <ListItemButton onClick={()=>{navigate("")}}>
+                            <ListItemButton onClick={() => {
+                                navigate("")
+                                setOpenDrawer(false);
+                            }}>
                                 <ListItemIcon>
                                     <DashboardRounded />
                                 </ListItemIcon>
@@ -132,49 +137,77 @@ export default function AdminMain(props) {
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton onClick={()=>{navigate("quiz/v")}}>
+                            <ListItemButton onClick={() => {
+                                setLoading(true);
+                                navigate("quiz/v");
+                                setOpenDrawer(false);
+                                setLoading(false);
+                            }}>
                                 <ListItemIcon>
-                                <QuizRounded />
+                                    <QuizRounded />
                                 </ListItemIcon>
                                 <ListItemText primary={"Quiz"} />
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton onClick={()=>{navigate("college")}}>
+                            <ListItemButton onClick={() => {
+                                setLoading(true);
+                                navigate("college")
+                                setOpenDrawer(false);
+                                setLoading(false);
+                            }}>
                                 <ListItemIcon>
                                     {/* Choose based on boy or girl */}
-                                    <SchoolRounded/>
+                                    <SchoolRounded />
                                 </ListItemIcon>
                                 <ListItemText primary={"College"} />
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton onClick={()=>{navigate("usr")}}>
+                            <ListItemButton onClick={() => {
+                                setLoading(true);
+                                navigate("usr")
+                                setOpenDrawer(false);
+                                setLoading(false);
+                            }}>
                                 <ListItemIcon>
-                                    <FaceRounded/>
+                                    <FaceRounded />
                                 </ListItemIcon>
                                 <ListItemText primary={"Candidates"} />
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton onClick={()=>{navigate("crd")}}>
+                            <ListItemButton onClick={() => {
+                                setLoading(true);
+                                navigate("crd")
+                                setOpenDrawer(false);
+                                setLoading(false);
+                            }}>
                                 <ListItemIcon>
-                                    <SupervisedUserCircleRounded/>
+                                    <SupervisedUserCircleRounded />
                                 </ListItemIcon>
                                 <ListItemText primary={"Coordinators"} />
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton onClick={()=>{navigate("score")}}>
+                            <ListItemButton onClick={() => {
+                                setLoading(true);
+                                navigate("score")
+                                setOpenDrawer(false);
+                                setLoading(false);
+                            }}>
                                 <ListItemIcon>
-                                <ScoreboardRounded />
+                                    <ScoreboardRounded />
                                 </ListItemIcon>
                                 <ListItemText primary={"Scoreboard"} />
                             </ListItemButton>
                         </ListItem>
                     </List>
                 </Drawer>
-                <Container sx={{marginTop:2}} maxWidth="false">
+                <Container sx={{ marginTop: 2 }} maxWidth="false">
+                    <Backdrop open={loading} sx={{zIndex:10}}>
+                        <CircularProgress />
+                    </Backdrop>
                     <Outlet />
                 </Container>
             </Box>
