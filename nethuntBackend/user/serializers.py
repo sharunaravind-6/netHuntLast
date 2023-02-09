@@ -8,26 +8,20 @@ class CollegeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CandidateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Candidate
-        fields = [
-            "user",
-            "college",
-            "current_level",
-            "status",
-            "phone",
-        ]
-
-
 class NethuntUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = NethuntUser
-        fields = [
-            "email",
-            "password",
-        ]
+        fields = "__all__"
     # email = serializers.EmailField(unique=True)
+
+class CandidateSerializer(serializers.ModelSerializer):
+    user = NethuntUserSerializer(read_only=True)
+    college = CollegeSerializer(read_only = True)
+    class Meta:
+        model = Candidate
+        fields = "__all__"
+
+
 
 
 class CandidateUserSerializer(serializers.Serializer):

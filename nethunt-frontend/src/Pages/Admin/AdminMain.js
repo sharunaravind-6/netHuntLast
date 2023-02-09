@@ -3,7 +3,9 @@ import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar,
 import { useContext, useState } from "react";
 import { Outlet, useNavigate, } from "react-router-dom";
 import ContactUS from "../../Components/ContactUs";
+import StyledBadge from "../../Components/Parts/StyledBadge";
 import { userContext } from "../../Store/user";
+
 import { theme } from "./../../Theme/LightTheme";
 export default function AdminMain(props) {
     const [anchorEl, setAnchorEl] = useState(null)
@@ -12,22 +14,6 @@ export default function AdminMain(props) {
     const [loading, setLoading] = useState(false)
     const { logout } = useContext(userContext)
     const navigate = useNavigate()
-
-    const StyledBadge = styled(Badge)(({ theme }) => ({
-        '& .MuiBadge-badge': {
-            backgroundColor: '#f00',
-            color: '#f00',
-            boxShadow: `0 0 0 .5px ${theme.palette.background.paper}`,
-            '&::after': {
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                content: '""',
-            },
-        },
-    }));
 
     return (
         <ThemeProvider theme={theme}>
@@ -44,10 +30,7 @@ export default function AdminMain(props) {
                             N E T H U N T
                         </Typography>
                         <IconButton onClick={(event) => { anchorEl == null ? setAnchorEl(event.currentTarget) : setAnchorEl(null) }}>
-                            <StyledBadge
-                                overlap="circular"
-                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                variant="dot">
+                            <StyledBadge color="green">
                                 <Avatar />
                             </StyledBadge>
                             <Menu open={openMenu} anchorEl={anchorEl} onClose={() => setAnchorEl(null)}
