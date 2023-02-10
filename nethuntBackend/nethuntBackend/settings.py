@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "user",
     "rest_framework",
-    "quiz",
+    "game",
     "corsheaders",
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',

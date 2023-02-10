@@ -408,7 +408,7 @@ export default function QuizSettings() {
 
   return (
     <Box sx={{
-      width: { xs: "100%", sm: "80%", md: "50%" }
+      width: { xs: "100%", sm: "80%", md: "50%" ,position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)"}
     }}>
       <Paper
         square

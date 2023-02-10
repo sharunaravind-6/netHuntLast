@@ -26,6 +26,7 @@ import jwtDecode from 'jwt-decode';
 import Page404 from './Pages/404';
 import AdminProvider from './Store/adminStore';
 import { Paper } from '@mui/material';
+import QuizInitialConfig from './Components/QuizInitialConfig';
 function App() {
   const { token } = useContext(userContext)
   return (
@@ -49,6 +50,8 @@ function App() {
             <Route path="" element={<AdminHome />}></Route>
             <Route path="college" element={<College />}></Route>
             <Route path="qsettings" element={<QuizSettings />}></Route>
+            <Route path="config" element={<QuizInitialConfig />}></Route>
+            
             <Route path="usr" element={<Candidate />}></Route>
             <Route path="crd" element={<CoordinatorsAdmin />}></Route>
             <Route path="quiz" element={<Paper><Outlet /></Paper>}>
