@@ -49,6 +49,9 @@ class NethuntCandidate(NethuntUser):
 class College(models.Model):
     collegeName = models.CharField(max_length=100)
     collegeCity = models.CharField(max_length=50)
+    def __str__(self):
+        return self.collegeName
+    
 
 
 def validPhone(value):

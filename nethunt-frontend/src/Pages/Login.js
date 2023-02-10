@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {  ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { theme } from "./../Theme/LightTheme";
 import jwt_decode from "jwt-decode";
 import { userContext } from '../Store/user';
@@ -30,6 +30,8 @@ export default function SignUp() {
       if (token != null) {
         if (jwt_decode(token.access).role === "Admin") {
           navigate("/a")
+        } else if (jwt_decode(token.access).role === "Candidate") {
+          navigate("/s/dashboard")
         }
       }
     }
@@ -54,6 +56,8 @@ export default function SignUp() {
       setTokenReuse(data)
       if (jwt_decode(data.access).role === "Admin") {
         navigate("/a")
+      } else if (jwt_decode(data.access).role === "Candidate") {
+        navigate("/s/dashboard")
       }
       return { token: data, data: jwt_decode(data.access) }
     } else {

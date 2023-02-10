@@ -1,17 +1,16 @@
-import { ArrowBackIosRounded, ArrowForwardRounded, ArrowLeftRounded, DashboardRounded, Face2Rounded, Face3Rounded, FaceRounded, ForkLeftRounded, HelpCenterRounded, InboxRounded, LogoutOutlined, MenuRounded, ScoreboardRounded, SettingsOutlined, StartRounded } from "@mui/icons-material";
-import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Paper, Grid, CardHeader, Card, CardContent, Switch } from "@mui/material";
-import { useState } from "react";
-import { Outlet, Route, Router, Routes } from "react-router-dom";
+import { ArrowBackIosRounded, DashboardRounded, FaceRounded, HelpCenterRounded, LogoutOutlined, MenuRounded, ScoreboardRounded, SettingsOutlined } from "@mui/icons-material";
+import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider } from "@mui/material";
+import { useContext, useState } from "react";
+import { Outlet, } from "react-router-dom";
 import ContactUS from "../Components/ContactUs";
-import Help from "../Components/Help";
-import Home from "../Components/Home";
-import DashboardImg from "./../Images/Dashboard.svg";
+import { userContext } from "../Store/user";
 
 import { theme } from "./../Theme/LightTheme";
 export default function DashboardX(props) {
     const [anchorEl, setAnchorEl] = useState(null)
     const [openDrawer, setOpenDrawer] = useState(false)
     const openMenu = Boolean(anchorEl)
+    const {logout} = useContext(userContext)
     const StyledBadge = styled(Badge)(({ theme }) => ({
         '& .MuiBadge-badge': {
             backgroundColor: '#f00',
@@ -32,7 +31,6 @@ export default function DashboardX(props) {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-
                 <Toolbar>
                     <Box sx={{ display: "flex", width: "100%", alignItems: "center" }}>
                         <IconButton color="inherit" onClick={() => setOpenDrawer(openDrawer ? false : true)}>
@@ -94,7 +92,7 @@ export default function DashboardX(props) {
                                         Settings
                                     </ListItemText>
                                 </MenuItem>
-                                <MenuItem>
+                                <MenuItem onClick={logout}>
                                     <ListItemIcon>
                                         <LogoutOutlined />
                                     </ListItemIcon>
@@ -111,7 +109,7 @@ export default function DashboardX(props) {
             <Toolbar />
             <Box>
                 <Drawer open={openDrawer} anchor="left"
-                    variant="persistent"
+                    // variant="persistent"
                     onClose={() => { setOpenDrawer(false) }}
                     sx={{
                         width: 240,
@@ -158,7 +156,7 @@ export default function DashboardX(props) {
                         </ListItem>
                     </List>
                 </Drawer>
-                <Container >
+                <Container sx={{marginTop:3}}>
                     <Outlet/>
                 </Container>
             </Box>

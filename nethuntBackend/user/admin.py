@@ -13,33 +13,31 @@ class NethuntUserAdmin(UserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("email", "password1", "password2"),
+                "fields": ("email","password1", "password2","role","first_name","last_name"),
             },
         ),
     )
-    # fieldsets = (
-    #     (
-    #         "Fields",
-    #         {
-    #             "fields": (
-    #                 "email",
-    #                 "uuid",
-    #                 "date_joined",
-    #                 "last_login",
-    #                 "is_active",
-    #                 "is_staff",
-    #                 "is_superuser",
-    #                 "groups",
-    #                 "user_permissions",
-    #                 "password",
-    #             )
-    #         },
-    #     ),
-    # )
-    exclude = ["username"]
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = NethuntUser
+    exclude=("username",)
+    fieldsets = (
+        (None, {"fields": ("email", "password")}),
+        (("Personal info"), {"fields": ("first_name", "last_name",)}),
+        (
+            ("Permissions"),
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                ),
+            },
+        ),
+        (("Important dates"), {"fields": ("last_login", "date_joined")}),
+    )
 class CollegeAdmin(admin.ModelAdmin):
     model = College
     # fields = ("collegeName",)
