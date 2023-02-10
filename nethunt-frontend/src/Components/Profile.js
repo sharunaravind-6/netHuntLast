@@ -1,8 +1,11 @@
 import { MailRounded, PhoneEnabledRounded } from "@mui/icons-material";
 import { Avatar, Card, CardContent, CardHeader, Container, Divider, Grid, Paper, Typography } from "@mui/material";
 import { Box, Stack, width } from "@mui/system";
+import { useContext } from "react";
+import { userContext } from "../Store/user";
 import MaleAvatar from "./../Images/MaleAvatar.svg";
 export default function ProfileX(props) {
+    const {userDetails} = useContext(userContext)
     return <Paper elevation={10} sx={{ marginTop: 4 }}>
         <Grid container p={2} sx={{display:"flex",alignItems:"center"}}>
             <Grid item sm={6}>
@@ -24,7 +27,7 @@ export default function ProfileX(props) {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Typography>
-                                        Sanjay
+                                    {userDetails?.user?.first_name + " "+ userDetails?.user?.last_name}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={6}>
@@ -34,7 +37,7 @@ export default function ProfileX(props) {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Typography>
-                                        PSG TECH
+                                        {userDetails?.college?.collegeName + ", "+userDetails?.college?.collegeCity}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={6}>
@@ -45,7 +48,7 @@ export default function ProfileX(props) {
                                 <Grid item xs={6} sx={{display:"flex",alignItems:"center"}}>
                                     <MailRounded/>
                                     <Box  sx={{ overflowx: "wrap",wordBreak:"break-word",marginLeft:1}}>
-                                        nethuntlogin2k22@gmail.com
+                                        {userDetails?.user?.email}
                                     </Box>
                                 </Grid>
                                 <Grid item xs={6}>
@@ -56,7 +59,7 @@ export default function ProfileX(props) {
                                 <Grid item xs={6} sx={{display:"flex",alignItems:"center"}}>
                                     <PhoneEnabledRounded/>
                                     <Box  sx={{ overflowx: "wrap",wordBreak:"break-word",marginLeft:1}}>
-                                        +91 9677427924
+                                        +91 {userDetails?.phone}
                                     </Box>
                                 </Grid>
                                 

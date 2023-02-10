@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 export const userContext = createContext()
 
 export const UserContextProvider = ({ children }) => {
-  const [userId, setUserId] = useState(() => { return localStorage.getItem("authToken") ? jwt_decode(JSON.parse(localStorage.getItem("authToken")).access).user_id : null })
+  const [userDetails, setUserDetails] = useState(() => { return localStorage.getItem("authToken") ? jwt_decode(JSON.parse(localStorage.getItem("authToken")).access).user : null })
   const [token, setToken] = useState(() => { return localStorage.getItem("authToken") ? JSON.parse(localStorage.getItem("authToken")) : null })
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
   function logout() {
-    setUserId(null);
+    setUserDetails(null);
     setToken(null);
     localStorage.removeItem("authToken")
     navigate("/login")
@@ -18,13 +18,13 @@ export const UserContextProvider = ({ children }) => {
 
  
   function setTokenReuse(data) {
-    setUserId(jwt_decode(data.access).user_id);
+    setUserDetails(jwt_decode(data.access).user);
     localStorage.setItem("authToken", JSON.stringify(data));
     setToken(data);
   }
   useEffect((() => {
     if(token){
-      setUserId(jwt_decode(token.access).user_id)
+      setUserDetails(jwt_decode(token.access).user)
     }
     setLoading(false)
   }), [token, loading,]);
@@ -32,7 +32,7 @@ export const UserContextProvider = ({ children }) => {
 
 
 
-  return <userContext.Provider value={{  user: userId, token ,setToken,setUserId,setTokenReuse,logout}}>
+  return <userContext.Provider value={{  userDetails, token ,setToken,setUserDetails,setTokenReuse,logout}}>
     {loading ? null:children}
   </userContext.Provider>
 }

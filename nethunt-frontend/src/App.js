@@ -33,12 +33,13 @@ function App() {
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Routes>
           <Route path='login' element={<Login />}></Route>
+          {(token!=null&&jwtDecode(token?.access).role ==="Candidate")&&(
           <Route path="s" element={<DashboardX />}>
             <Route path="dashboard" element={<Home />}></Route>
             <Route path="help" element={<Help />}></Route>
             <Route path="scoreboard" element={<ScoreBoardX />}></Route>
             <Route path="profile" element={<ProfileX />}></Route>
-          </Route>
+          </Route>)}
           <Route path="q" element={<Questions />}>
             <Route path="" element={<Question />}></Route>
           </Route>

@@ -34,7 +34,7 @@ export default function AddCollege() {
     const response = await api.post("/user/add_college", {
       ...dataX
     })
-    const feedback = await response.json();
+    const feedback = await response.data;
     setLoading(false)
   };
 

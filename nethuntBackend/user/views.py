@@ -37,7 +37,14 @@ def view_user(request, *args, **kwargs):
     data = CandidateSerializer(Candidate.objects.all(), many=True).data
     return Response(data)
 
-
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def view_user_individual(request, *args, **kwargs):
+    data =  json.loads(request.body)
+    print(data)
+    data = CandidateSerializer(Candidate.objects.get(user=data["userId"]),).data
+    # Candidate.objects.get(user=data["userId"])
+    return Response(data)
 
 @api_view(["POST"])
 def add_user(request, *args, **kwargs):
@@ -65,6 +72,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         print(user)
         token['email'] = user.email
         token["role"] = user.role
+        if(user.role == "Candidate"):
+            token["user"] = CandidateSerializer(Candidate.objects.get(user=user.id)).data
         return token
 
 

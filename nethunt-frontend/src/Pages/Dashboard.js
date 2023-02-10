@@ -1,8 +1,9 @@
 import { ArrowBackIosRounded, DashboardRounded, FaceRounded, HelpCenterRounded, LogoutOutlined, MenuRounded, ScoreboardRounded, SettingsOutlined } from "@mui/icons-material";
-import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider } from "@mui/material";
-import { useContext, useState } from "react";
-import { Outlet, } from "react-router-dom";
+import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Backdrop, CircularProgress } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
+import { Outlet, useNavigate, } from "react-router-dom";
 import ContactUS from "../Components/ContactUs";
+import StyledBadge from "../Components/Parts/StyledBadge";
 import { userContext } from "../Store/user";
 
 import { theme } from "./../Theme/LightTheme";
@@ -10,23 +11,9 @@ export default function DashboardX(props) {
     const [anchorEl, setAnchorEl] = useState(null)
     const [openDrawer, setOpenDrawer] = useState(false)
     const openMenu = Boolean(anchorEl)
-    const {logout} = useContext(userContext)
-    const StyledBadge = styled(Badge)(({ theme }) => ({
-        '& .MuiBadge-badge': {
-            backgroundColor: '#f00',
-            color: '#f00',
-            boxShadow: `0 0 0 .5px ${theme.palette.background.paper}`,
-            '&::after': {
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                content: '""',
-            },
-        },
-    }));
-
+    const [loading, setLoading] = useState(false)
+    const { logout } = useContext(userContext)
+    const navigate = useNavigate()
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -122,7 +109,12 @@ export default function DashboardX(props) {
                     <Toolbar />
                     <List>
                         <ListItem disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={() => {
+                                setLoading(true);
+                                navigate("dashboard");
+                                setOpenDrawer(false);
+                                setLoading(false);
+                            }}>
                                 <ListItemIcon>
                                     <DashboardRounded />
                                 </ListItemIcon>
@@ -130,7 +122,12 @@ export default function DashboardX(props) {
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={() => {
+                                setLoading(true);
+                                navigate("profile");
+                                setOpenDrawer(false);
+                                setLoading(false);
+                            }}>
                                 <ListItemIcon>
                                     {/* Choose based on boy or girl */}
                                     <FaceRounded />
@@ -139,7 +136,12 @@ export default function DashboardX(props) {
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={() => {
+                                setLoading(true);
+                                navigate("scoreboard");
+                                setOpenDrawer(false);
+                                setLoading(false);
+                            }}>
                                 <ListItemIcon>
                                     <ScoreboardRounded />
                                 </ListItemIcon>
@@ -147,7 +149,12 @@ export default function DashboardX(props) {
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={() => {
+                                setLoading(true);
+                                navigate("help");
+                                setOpenDrawer(false);
+                                setLoading(false);
+                            }}>
                                 <ListItemIcon>
                                     <HelpCenterRounded />
                                 </ListItemIcon>
@@ -156,10 +163,13 @@ export default function DashboardX(props) {
                         </ListItem>
                     </List>
                 </Drawer>
-                <Container sx={{marginTop:3}}>
-                    <Outlet/>
+                <Container sx={{ marginTop: 3 }}>
+                    <Backdrop open={loading}>
+                        <CircularProgress />
+                    </Backdrop>
+                    <Outlet />
                 </Container>
             </Box>
-            <ContactUS/>
+            <ContactUS />
         </ThemeProvider>);
 }

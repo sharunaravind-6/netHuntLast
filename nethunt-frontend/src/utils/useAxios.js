@@ -6,7 +6,7 @@ import { userContext } from "../Store/user";
 const baseUrl = "http://127.0.0.1:8000/api"
 
 const useAxios = ()=>{
-    const {token,setUserId,setToken} = useContext(userContext)
+    const {token,setUserDetails,setToken} = useContext(userContext)
     const apiInstance = axios.create({
         baseURL:baseUrl,
         headers:{
@@ -27,7 +27,7 @@ const useAxios = ()=>{
                 })
                 localStorage.setItem("authToken",JSON.stringify(response.data))
                 setToken(response.data)
-                setUserId(jwtDecode(response.data.access).user_id)
+                setUserDetails(jwtDecode(response.data.access).user)
                 req.headers.Authorization = `Bearer ${String(response?.data?.access)}`
                 return req
             }
