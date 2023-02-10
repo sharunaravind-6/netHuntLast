@@ -1,6 +1,6 @@
 import { ArrowBackIosRounded, DashboardRounded, FaceRounded, HelpCenterRounded, LogoutOutlined, MenuRounded, ScoreboardRounded, SettingsOutlined } from "@mui/icons-material";
-import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Backdrop, CircularProgress } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { Box, Container, AppBar, Toolbar, Typography, IconButton, Avatar, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Backdrop, CircularProgress } from "@mui/material";
+import { useContext, useState } from "react";
 import { Outlet, useNavigate, } from "react-router-dom";
 import ContactUS from "../Components/ContactUs";
 import StyledBadge from "../Components/Parts/StyledBadge";
@@ -163,7 +163,7 @@ export default function DashboardX(props) {
                         </ListItem>
                     </List>
                 </Drawer>
-                <Container sx={{ marginTop: 3 }}>
+                <Container sx={{ marginTop: 3 }} maxWidth="false">
                     <Backdrop open={loading}>
                         <CircularProgress />
                     </Backdrop>

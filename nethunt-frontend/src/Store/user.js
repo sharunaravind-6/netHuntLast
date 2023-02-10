@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
-import { serverHost } from '../utils/server';
 import { useNavigate } from "react-router-dom";
 export const userContext = createContext()
 

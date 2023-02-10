@@ -74,6 +74,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token["role"] = user.role
         if(user.role == "Candidate"):
             token["user"] = CandidateSerializer(Candidate.objects.get(user=user.id)).data
+        # if(user.role == "Admin"):
+        #     token["configured"] =  
         return token
 
 

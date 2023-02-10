@@ -8,12 +8,13 @@ import Button from '@mui/material/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { AccountCircle, AddPhotoAlternateRounded, ChildCareRounded, EventBusyRounded, KeyboardArrowUpRounded, KeyboardDoubleArrowUpRounded, MailRounded, PhoneRounded } from "@mui/icons-material";
-import { Avatar, Backdrop, Container, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import { YearPicker } from '@mui/x-date-pickers';
+import { Avatar, Container, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
+import { userContext } from '../../Store/user';
 
 
 export default function QuizSettings() {
+  const {logout} = React.useContext(userContext)
   const theme = useTheme();
   const [activeStep, setActiveStep] = React.useState(0);
   const [data, setData] = React.useState({
@@ -52,14 +53,14 @@ export default function QuizSettings() {
     }
   })
   const previewImageFile = (event, type) => {
-    if (type == "event")
+    if (type === "event")
       setData((data) => { return { ...data, eventLogos: { ...data["eventLogos"], event: URL.createObjectURL(event.target.files[0]) } } });
     else
       setData((data) => { return { ...data, eventLogos: { ...data["eventLogos"], nethunt: URL.createObjectURL(event.target.files[0]) } } });
   }
   const previewCoordinatorImageFile = (event, type) => {
     console.log("testy")
-    if (type == "c1")
+    if (type === "c1")
       setData(
         (data) => {
           let coordinators = data.coordinators
@@ -423,6 +424,7 @@ export default function QuizSettings() {
       >
         <Typography flexGrow={1} >{steps[activeStep].label}</Typography>
         <IconButton>{steps[activeStep].icon}</IconButton>
+        <Button onClick = {logout}>Cancel</Button>
       </Paper>
       <Paper sx={{ minHeight: "50vh", p: 2 }}>
         {steps[activeStep].component}
