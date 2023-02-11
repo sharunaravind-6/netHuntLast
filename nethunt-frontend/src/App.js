@@ -21,12 +21,12 @@ import QuizDisplay from './Components/QuizDisplay';
 import QuizEdit from './Components/QuizEdit';
 import QuestionAdmin from './Components/QuestionsAdmin';
 
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import jwtDecode from 'jwt-decode';
 import Page404 from './Pages/404';
 import AdminProvider from './Store/adminStore';
 import { Paper } from '@mui/material';
-import QuizInitialConfig from './Components/QuizInitialConfig';
+import Settings from './Pages/Admin/Settings';
 function App() {
   const { token } = useContext(userContext)
   return (
@@ -34,35 +34,36 @@ function App() {
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Routes>
           <Route path='login' element={<Login />}></Route>
-          {(token!=null&&jwtDecode(token?.access).role ==="Candidate")&&(
-          <Route path="s" element={<DashboardX />}>
-            <Route path="dashboard" element={<Home />}></Route>
-            <Route path="help" element={<Help />}></Route>
-            <Route path="scoreboard" element={<ScoreBoardX />}></Route>
-            <Route path="profile" element={<ProfileX />}></Route>
-          </Route>)}
+          {(token != null && jwtDecode(token?.access).role === "Candidate") && (
+            <Route path="s" element={<DashboardX />}>
+              <Route path="dashboard" element={<Home />}></Route>
+              <Route path="help" element={<Help />}></Route>
+              <Route path="scoreboard" element={<ScoreBoardX />}></Route>
+              <Route path="profile" element={<ProfileX />}></Route>
+            </Route>)}
           <Route path="q" element={<Questions />}>
             <Route path="" element={<Question />}></Route>
           </Route>
-          
-          {(token!=null&&jwtDecode(token?.access).role ==="Admin")&&(
-          <Route path="a" element={<AdminProvider><AdminMain /></AdminProvider>} >
-            <Route path="" element={<AdminHome />}></Route>
-            <Route path="college" element={<College />}></Route>
-            <Route path="qsettings" element={<QuizSettings />}></Route>
-            <Route path="config" element={<QuizInitialConfig />}></Route>
-            
-            <Route path="usr" element={<Candidate />}></Route>
-            <Route path="crd" element={<CoordinatorsAdmin />}></Route>
-            <Route path="quiz" element={<Paper><Outlet /></Paper>}>
-              <Route path="v" element={<QuizDisplay />}></Route>
-              <Route path="e" element={<QuizEdit />}></Route>
-              <Route path="q" element={<QuestionAdmin />}></Route>
-            </Route>
-            <Route path="score" element={<ScoreBoardX />}></Route>
-          </Route>)}
 
-          <Route path='*' element={<Page404/>}/>
+          {(token != null && jwtDecode(token?.access).role === "Admin") && (
+            <Route path="a" element={<AdminProvider><AdminMain /></AdminProvider>} >
+              <Route path="dashboard" element={<AdminHome />}></Route>
+              <Route path="college" element={<College />}></Route>
+              <Route path="qsettings" element={<QuizSettings />}></Route>
+              <Route path="usr" element={<Candidate />}></Route>
+              <Route path="crd" element={<CoordinatorsAdmin />}></Route>
+              <Route path="quiz" element={<Paper><Outlet /></Paper>}>
+                <Route path="v" element={<QuizDisplay />}></Route>
+                <Route path="e" element={<QuizEdit />}></Route>
+                <Route path="q" element={<QuestionAdmin />}></Route>
+              </Route>
+              <Route path="score" element={<ScoreBoardX />}></Route>
+            </Route>
+          )}
+          {(token != null && jwtDecode(token?.access).role === "Admin") && (<><Route path="a/config" element={<QuizSettings />}></Route>
+            <Route path="a/settings" element={<Settings />}></Route></>
+          )}
+          <Route path='*' element={<Page404 />} />
           {/* <Route path="question" element = {<Question/>}></Route> */}
         </Routes>
       </LocalizationProvider>

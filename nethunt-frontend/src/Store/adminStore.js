@@ -4,6 +4,7 @@ export const AdminContext = createContext()
 export default function AdminProvider({children}){
     const [colleges,setColleges] = useState([])
     const [usrs,setUsers] = useState([])
+    const [config,setConfig] = useState(null)
     const api = useAxios()
     async function fetchCollege() {
         let response = await api.get( "/user/college")
@@ -24,7 +25,7 @@ export default function AdminProvider({children}){
             return users
         }
     }
-     return <AdminContext.Provider value={{usrs,colleges,setUsers,setColleges,fetchCollege,fetchUsers}}>
+     return <AdminContext.Provider value={{usrs,colleges,setUsers,setColleges,fetchCollege,fetchUsers,config,setConfig}}>
         {children}
      </AdminContext.Provider>
 }

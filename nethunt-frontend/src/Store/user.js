@@ -17,6 +17,7 @@ export const UserContextProvider = ({ children }) => {
 
  
   function setTokenReuse(data) {
+    // console.log(jwt_decode(data.access))
     setUserDetails(jwt_decode(data.access).user);
     localStorage.setItem("authToken", JSON.stringify(data));
     setToken(data);

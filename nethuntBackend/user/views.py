@@ -6,7 +6,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import (Candidate,College)
+from game.models import Info
 import json
+
 from .serializers import (
     CandidateSerializer, CandidateUserSerializer, NethuntUserSerializer,CollegeSerializer)
 # Create your views here.
@@ -74,8 +76,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token["role"] = user.role
         if(user.role == "Candidate"):
             token["user"] = CandidateSerializer(Candidate.objects.get(user=user.id)).data
-        # if(user.role == "Admin"):
-        #     token["configured"] =  
         return token
 
 

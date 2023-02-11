@@ -1,10 +1,12 @@
 import { ArrowBackIosRounded, DashboardRounded, FaceRounded, LogoutOutlined, MenuRounded, QuizRounded, SchoolRounded, ScoreboardRounded, SettingsOutlined, SupervisedUserCircleRounded } from "@mui/icons-material";
-import { Box, Badge, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider,Backdrop, CircularProgress } from "@mui/material";
-import { useContext, useState } from "react";
+import { Box, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Backdrop, CircularProgress } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
 import { Outlet, useNavigate, } from "react-router-dom";
 import ContactUS from "../../Components/ContactUs";
 import StyledBadge from "../../Components/Parts/StyledBadge";
+import { AdminContext } from "../../Store/adminStore";
 import { userContext } from "../../Store/user";
+import useAxios from "../../utils/useAxios";
 
 import { theme } from "./../../Theme/LightTheme";
 export default function AdminMain(props) {
@@ -14,7 +16,27 @@ export default function AdminMain(props) {
     const [loading, setLoading] = useState(false)
     const { logout } = useContext(userContext)
     const navigate = useNavigate()
-
+    const api = useAxios()
+    const { config, setConfig } = useContext(AdminContext)
+    const [initialLoading, setInitialLoading] = useState(true)
+    useEffect(
+        () => {
+            if (initialLoading) {
+                if (config === null) {
+                    api.get("/game/config").then(
+                        response => {
+                            setConfig("yes")
+                            if (!response?.data?.configured) {
+                                navigate("config")
+                            }
+                        }
+                    )
+                }
+            }
+            setInitialLoading(false)
+        },
+        [initialLoading]
+    )
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -110,7 +132,7 @@ export default function AdminMain(props) {
                     <List>
                         <ListItem disablePadding>
                             <ListItemButton onClick={() => {
-                                navigate("")
+                                navigate("dashboard")
                                 setOpenDrawer(false);
                             }}>
                                 <ListItemIcon>
@@ -188,7 +210,7 @@ export default function AdminMain(props) {
                     </List>
                 </Drawer>
                 <Container sx={{ marginTop: 2 }} maxWidth="false">
-                    <Backdrop open={loading} sx={{zIndex:10}}>
+                    <Backdrop open={loading} sx={{ zIndex: 10 }}>
                         <CircularProgress />
                     </Backdrop>
                     <Outlet />

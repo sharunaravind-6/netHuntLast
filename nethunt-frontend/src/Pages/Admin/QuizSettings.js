@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { useTheme } from '@mui/material/styles';
 import MobileStepper from '@mui/material/MobileStepper';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
@@ -8,14 +7,14 @@ import Button from '@mui/material/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { AccountCircle, AddPhotoAlternateRounded, ChildCareRounded, EventBusyRounded, KeyboardArrowUpRounded, KeyboardDoubleArrowUpRounded, MailRounded, PhoneRounded } from "@mui/icons-material";
-import { Avatar, Container, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Avatar, Container, CssBaseline, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, MenuItem, Select, TextField, ThemeProvider } from '@mui/material';
 import { Stack } from '@mui/system';
 import { userContext } from '../../Store/user';
+import { theme } from '../../Theme/LightTheme';
 
 
 export default function QuizSettings() {
-  const {logout} = React.useContext(userContext)
-  const theme = useTheme();
+  const { logout } = React.useContext(userContext)
   const [activeStep, setActiveStep] = React.useState(0);
   const [data, setData] = React.useState({
     eventInfo: {
@@ -370,7 +369,7 @@ export default function QuizSettings() {
     {
       label: 'Quiz timing',
       component: (
-        <Stack sx={{gap:4}}>
+        <Stack sx={{ gap: 4 }}>
           <TextField
             id="startby"
             label="Start By"
@@ -408,57 +407,71 @@ export default function QuizSettings() {
   };
 
   return (
-    <Box sx={{
-      width: { xs: "100%", sm: "80%", md: "50%" ,position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)"}
-    }}>
-      <Paper
-        square
-        elevation={12}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          textAlign: "center",
-          width: "100%",
-          bgcolor: 'background.default',
-        }}
-      >
-        <Typography flexGrow={1} >{steps[activeStep].label}</Typography>
-        <IconButton>{steps[activeStep].icon}</IconButton>
-        <Button onClick = {logout}>Cancel</Button>
-      </Paper>
-      <Paper sx={{ minHeight: "50vh", p: 2 }}>
-        {steps[activeStep].component}
-      </Paper>
-      <MobileStepper
-        sx={{ width: "100%" }}
-        variant="dots"
-        steps={maxSteps}
-        position="static"
-        activeStep={activeStep}
-        nextButton={
-          <Button
-            size="small"
-            onClick={handleNext}
-          >
-            {activeStep === maxSteps - 1 ? "Finish" : "Next"}
-            {theme.direction === 'rtl' ? (
-              <KeyboardArrowLeft />
-            ) : (
-              <KeyboardArrowRight />
-            )}
-          </Button>
-        }
-        backButton={
-          <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-            {theme.direction === 'rtl' ? (
-              <KeyboardArrowRight />
-            ) : (
-              <KeyboardArrowLeft />
-            )}
-            Back
-          </Button>
-        }
-      />
-    </Box>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+
+      <Grid container>
+        <Grid item xs={0} sm={0} md={3} />
+        <Grid item xs={12} sm={12} md={6}>
+          <Box sx={{
+            width: "100%",
+            marginTop: {"xs":0,"sm":15},
+          }}>
+            <Paper
+              square
+              elevation={12}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                textAlign: "center",
+                width: "100%",
+                bgcolor: 'background.default',
+              }}
+            >
+              <Typography flexGrow={1} >{steps[activeStep].label}</Typography>
+              <IconButton>{steps[activeStep].icon}</IconButton>
+              <Button onClick={logout}>Cancel</Button>
+            </Paper>
+            <Paper sx={{ 
+                minHeight:{"sm":"90vh","md":"50vh"}, p: 2 }}>
+              {steps[activeStep].component}
+            </Paper>
+            <MobileStepper
+              sx={{ 
+                width: "100%",
+            }}
+              variant="dots"
+              steps={maxSteps}
+              position="static"
+              activeStep={activeStep}
+              nextButton={
+                <Button
+                  size="small"
+                  onClick={handleNext}
+                >
+                  {activeStep === maxSteps - 1 ? "Finish" : "Next"}
+                  {theme.direction === 'rtl' ? (
+                    <KeyboardArrowLeft />
+                  ) : (
+                    <KeyboardArrowRight />
+                  )}
+                </Button>
+              }
+              backButton={
+                <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                  {theme.direction === 'rtl' ? (
+                    <KeyboardArrowRight />
+                  ) : (
+                    <KeyboardArrowLeft />
+                  )}
+                  Back
+                </Button>
+              }
+            />
+          </Box>
+        </Grid>
+        <Grid item xs={0} sm={0} md={3} />
+      </Grid>
+    </ThemeProvider>
   );
 }
