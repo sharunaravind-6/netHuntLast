@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { AccountCircle, AddPhotoAlternateRounded, ChildCareRounded, EventBusyRounded, KeyboardArrowUpRounded, KeyboardDoubleArrowUpRounded, MailRounded, PhoneRounded } from "@mui/icons-material";
+import { AccountCircle, AddPhotoAlternateRounded, ChildCareRounded, EventBusyRounded, KeyboardArrowUpRounded, KeyboardDoubleArrowUpRounded, KeyRounded, MailRounded, PasswordRounded, PhoneRounded } from "@mui/icons-material";
 import { Avatar, Container, CssBaseline, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, MenuItem, Select, TextField, ThemeProvider } from '@mui/material';
 import { Stack } from '@mui/system';
 import { userContext } from '../../Store/user';
@@ -279,6 +279,24 @@ export default function QuizSettings() {
                       </Container>
                     </Typography>
                     <Typography variant="h6" align="center" mt={3}>
+                      <Container sx={{ display: "flex", alignItems: "center", gap: 2, fontSize: { xs: "15px", sm: "20px" } }}>
+                        <FormControl variant="standard">
+                          <InputLabel htmlFor="c2password">
+                            password
+                          </InputLabel>
+                          <Input
+                            id="c2password"
+                            type='password'
+                            startAdornment={
+                              <InputAdornment position="start">
+                                <KeyRounded />
+                              </InputAdornment>
+                            }
+                          />
+                        </FormControl>
+                      </Container>
+                    </Typography>
+                    <Typography variant="h6" align="center" mt={3}>
                       <Container sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                         <FormControl variant="standard">
                           <InputLabel htmlFor="c2phone">
@@ -445,17 +463,78 @@ export default function QuizSettings() {
               position="static"
               activeStep={activeStep}
               nextButton={
-                <Button
-                  size="small"
-                  onClick={handleNext}
-                >
-                  {activeStep === maxSteps - 1 ? "Finish" : "Next"}
-                  {theme.direction === 'rtl' ? (
+                <>
+                  {activeStep === maxSteps - 1 ? (
+                    <Button
+                    size="small"
+                    onClick={handleNext}
+                    disabled = {
+                      !(
+                        data.eventInfo.event != "" &&
+                        data.eventInfo.event != null &&
+                        data.eventInfo.year != ""&&
+                        data.eventInfo.year != null&&
+                        data.eventLogos.event != "" &&
+                        data.eventLogos.event != null &&
+                        data.eventLogos.nethunt != "" &&
+                        data.eventLogos.nethunt != null &&
+                        data.coordinators[0].coordinatorName != "" &&
+                        data.coordinators[0].coordinatorName != null&&
+                        data.coordinators[0].coordinatorEmail!=""&&
+                        data.coordinators[0].coordinatorEmail!=null&&
+                        data.coordinators[0].coordinatorPassword != ""&&
+                        data.coordinators[0].coordinatorPassword != null&&
+                        data.coordinators[0].coordinatorPhone!= ""&&
+                        data.coordinators[0].coordinatorPhone!= null &&
+                        data.coordinators[0].coordinatorImg!=""&&
+                        data.coordinators[0].coordinatorImg!=null&&
+                        
+                        data.coordinators[1].coordinatorName != "" &&
+                        data.coordinators[1].coordinatorName != null&&
+                        data.coordinators[1].coordinatorEmail!=""&&
+                        data.coordinators[1].coordinatorEmail!=null&&
+                        data.coordinators[1].coordinatorPassword != ""&&
+                        data.coordinators[1].coordinatorPassword != null&&
+                        data.coordinators[1].coordinatorPhone!= ""&&
+                        data.coordinators[1].coordinatorPhone!= null &&
+                        data.coordinators[1].coordinatorImg!=""&&
+                        data.coordinators[1].coordinatorImg!=null&&
+                          
+                        data.quizScores.easy != "" &&
+                        data.quizScores.easy != null &&
+                        data.quizScores.medium != "" &&
+                        data.quizScores.medium != null&&
+                        data.quizScores.hard != "" &&
+                        data.quizScores.hard != null&&
+                        
+                        data.quizTimings.startsBy != ""&&
+                        data.quizTimings.startsBy != null&&
+                        data.quizTimings.endsBy != ""&&
+                        data.quizTimings.endsBy != null
+                      )
+                    }
+                  >
+                    Finish
+                    {theme.direction === 'rtl' ? (
                     <KeyboardArrowLeft />
                   ) : (
                     <KeyboardArrowRight />
                   )}
-                </Button>
+                    </Button>    
+                    ) :( 
+                      <Button
+                      size="small"
+                      onClick={handleNext}
+                    >
+                      Next
+                      {theme.direction === 'rtl' ? (
+                      <KeyboardArrowLeft />
+                    ) : (
+                      <KeyboardArrowRight />
+                    )}
+                      </Button>
+                    )}
+                    </>
               }
               backButton={
                 <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
