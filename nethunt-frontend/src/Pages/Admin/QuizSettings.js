@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { AccountCircle, AddPhotoAlternateRounded, ChildCareRounded, EventBusyRounded, KeyboardArrowUpRounded, KeyboardDoubleArrowUpRounded, KeyRounded, MailRounded, PasswordRounded, PhoneRounded } from "@mui/icons-material";
+import { AccountCircle, AddPhotoAlternateRounded, ChildCareRounded, EventBusyRounded, KeyboardArrowUpRounded, KeyboardDoubleArrowUpRounded, KeyRounded, MailRounded, PhoneRounded } from "@mui/icons-material";
 import { Avatar, Container, CssBaseline, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, MenuItem, Select, TextField, ThemeProvider } from '@mui/material';
 import { Stack } from '@mui/system';
 import { userContext } from '../../Store/user';
@@ -27,28 +27,28 @@ export default function QuizSettings() {
     },
     coordinators: [
       {
-        coordinatorName: null,
-        coordinatorEmail: null,
-        coordinatorPassword: null,
-        coordinatorPhone: null,
+        coordinatorName: "",
+        coordinatorEmail: "",
+        coordinatorPassword: "",
+        coordinatorPhone: "",
         coordinatorImg: null,
       },
       {
-        coordinatorName: null,
-        coordinatorEmail: null,
-        coordinatorPassword: null,
-        coordinatorPhone: null,
+        coordinatorName: "",
+        coordinatorEmail: "",
+        coordinatorPassword: "",
+        coordinatorPhone: "",
         coordinatorImg: null,
       }
     ],
     quizScores: {
-      easy: null,
-      medium: null,
-      hard: null,
+      easy: "",
+      medium: "",
+      hard: "",
     },
     quizTimings: {
-      startsBy: null,
-      endsBy: null
+      startsBy: new Date(),
+      endsBy: new Date()
     }
   })
   const previewImageFile = (event, type) => {
@@ -81,9 +81,6 @@ export default function QuizSettings() {
   const steps = [
     {
       label: 'Event info',
-      description: `For each ad campaign that you create, you can control how much
-                you're willing to spend on clicks and conversions, which networks
-                and geographical locations you want your ads to show on, and more.`,
       component: (
         <Box>
           <Stack sx={{ padding: 2, gap: 4 }}>
@@ -94,7 +91,12 @@ export default function QuizSettings() {
                 id="event-select"
                 value={data.eventInfo.event}
                 label="Event"
-                onChange={(event) => { setData((data) => { return { ...data, eventInfo: { ...data["eventInfo"], event: event.target.value } } }); console.log(event.target.value); }}
+                onChange={(event) => {
+                  setData((data) => {
+                    return { ...data, eventInfo: { ...data["eventInfo"], event: event.target.value } }
+                  });
+                  console.log(event.target.value);
+                }}
               >
                 <MenuItem value={"Login"}>Login</MenuItem>
                 <MenuItem value={"Thiran"}>Thiran</MenuItem>
@@ -188,6 +190,18 @@ export default function QuizSettings() {
                   </InputLabel>
                   <Input
                     id="c1name"
+                    value={data.coordinators[0].coordinatorName}
+                    onChange={event => {
+                      setData(
+                        (data) => {
+                          let coordinators = data.coordinators
+                          coordinators[0].coordinatorName = event.target.value
+                          return {
+                            ...data, coordinators: [...coordinators]
+                          }
+                        })
+                    }
+                    }
                     startAdornment={
                       <InputAdornment position="start">
                         <AccountCircle />
@@ -206,6 +220,18 @@ export default function QuizSettings() {
                           </InputLabel>
                           <Input
                             id="c1email"
+                            value={data.coordinators[0].coordinatorEmail}
+                            onChange={event => {
+                              setData(
+                                (data) => {
+                                  let coordinators = data.coordinators
+                                  coordinators[0].coordinatorEmail = event.target.value
+                                  return {
+                                    ...data, coordinators: [...coordinators]
+                                  }
+                                })
+                            }
+                            }
                             startAdornment={
                               <InputAdornment position="start">
                                 <MailRounded />
@@ -215,6 +241,38 @@ export default function QuizSettings() {
                         </FormControl>
                       </Container>
                     </Typography>
+
+                    <Typography variant="h6" align="center" mt={3}>
+                      <Container sx={{ display: "flex", alignItems: "center", gap: 2, fontSize: { xs: "15px", sm: "20px" } }}>
+                        <FormControl variant="standard">
+                          <InputLabel htmlFor="c1password">
+                            password
+                          </InputLabel>
+                          <Input
+                            id="c1password"
+                            type='password'
+                            value={data.coordinators[0].coordinatorPassword}
+                            onChange={event => {
+                              setData(
+                                (data) => {
+                                  let coordinators = data.coordinators
+                                  coordinators[0].coordinatorPassword = event.target.value
+                                  return {
+                                    ...data, coordinators: [...coordinators]
+                                  }
+                                })
+                            }
+                            }
+                            startAdornment={
+                              <InputAdornment position="start">
+                                <KeyRounded />
+                              </InputAdornment>
+                            }
+                          />
+                        </FormControl>
+                      </Container>
+                    </Typography>
+
                     <Typography variant="h6" align="center" mt={3}>
                       <Container sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                         <FormControl variant="standard">
@@ -223,6 +281,19 @@ export default function QuizSettings() {
                           </InputLabel>
                           <Input
                             id="c1phone"
+                            value={data.coordinators[0].coordinatorPhone}
+                            type="number"
+                            onChange={event => {
+                              setData(
+                                (data) => {
+                                  let coordinators = data.coordinators
+                                  coordinators[0].coordinatorPhone = event.target.value
+                                  return {
+                                    ...data, coordinators: [...coordinators]
+                                  }
+                                })
+                            }
+                            }
                             startAdornment={
                               <InputAdornment position="start">
                                 <PhoneRounded />
@@ -251,6 +322,18 @@ export default function QuizSettings() {
                   </InputLabel>
                   <Input
                     id="c2name"
+                    value={data.coordinators[1].coordinatorName}
+                    onChange={event => {
+                      setData(
+                        (data) => {
+                          let coordinators = data.coordinators
+                          coordinators[1].coordinatorName = event.target.value
+                          return {
+                            ...data, coordinators: [...coordinators]
+                          }
+                        })
+                    }
+                    }
                     startAdornment={
                       <InputAdornment position="start">
                         <AccountCircle />
@@ -269,6 +352,18 @@ export default function QuizSettings() {
                           </InputLabel>
                           <Input
                             id="c2email"
+                            value={data.coordinators[1].coordinatorEmail}
+                            onChange={event => {
+                              setData(
+                                (data) => {
+                                  let coordinators = data.coordinators
+                                  coordinators[1].coordinatorEmail = event.target.value
+                                  return {
+                                    ...data, coordinators: [...coordinators]
+                                  }
+                                })
+                            }
+                            }
                             startAdornment={
                               <InputAdornment position="start">
                                 <MailRounded />
@@ -287,6 +382,18 @@ export default function QuizSettings() {
                           <Input
                             id="c2password"
                             type='password'
+                            value={data.coordinators[1].coordinatorPassword}
+                            onChange={event => {
+                              setData(
+                                (data) => {
+                                  let coordinators = data.coordinators
+                                  coordinators[1].coordinatorPassword = event.target.value
+                                  return {
+                                    ...data, coordinators: [...coordinators]
+                                  }
+                                })
+                            }
+                            }
                             startAdornment={
                               <InputAdornment position="start">
                                 <KeyRounded />
@@ -304,6 +411,19 @@ export default function QuizSettings() {
                           </InputLabel>
                           <Input
                             id="c2phone"
+                            type='number'
+                            value={data.coordinators[1].coordinatorPhone}
+                            onChange={event => {
+                              setData(
+                                (data) => {
+                                  let coordinators = data.coordinators
+                                  coordinators[1].coordinatorPhone = event.target.value
+                                  return {
+                                    ...data, coordinators: [...coordinators]
+                                  }
+                                })
+                            }
+                            }
                             startAdornment={
                               <InputAdornment position="start">
                                 <PhoneRounded />
@@ -320,10 +440,6 @@ export default function QuizSettings() {
           </Grid>
         </Grid>
       ),
-      description: `Try out different ad text to see what brings in the most customers,
-                and learn how to enhance your ads using features like ad extensions.
-                If you run into any problems with your ads, find out how to tell if
-                they're running and how to resolve approval issues.`,
       icon: (
         <EventBusyRounded />
       )
@@ -339,6 +455,20 @@ export default function QuizSettings() {
             <Input
               id="easy"
               type='number'
+              value={data.quizScores.easy}
+              onChange={event => {
+                setData(
+                  (data) => {
+                    return {
+                      ...data, 
+                      quizScores : {
+                        ...data.quizScores,
+                        easy:event.target.value,
+                      }
+                    }
+                  })
+              }
+              }
               startAdornment={
                 <InputAdornment position="start">
                   <ChildCareRounded />
@@ -353,6 +483,20 @@ export default function QuizSettings() {
             <Input
               id="moderate"
               type='number'
+              value={data.quizScores.medium}
+              onChange={event => {
+                setData(
+                  (data) => {
+                    return {
+                      ...data, 
+                      quizScores : {
+                        ...data.quizScores,
+                        medium:event.target.value,
+                      }
+                    }
+                  })
+              }
+              }
               startAdornment={
                 <InputAdornment position="start">
                   <KeyboardArrowUpRounded />
@@ -367,6 +511,20 @@ export default function QuizSettings() {
             <Input
               type='number'
               id="hard"
+              value={data.quizScores.hard}
+              onChange={event => {
+                setData(
+                  (data) => {
+                    return {
+                      ...data, 
+                      quizScores : {
+                        ...data.quizScores,
+                        hard:event.target.value,
+                      }
+                    }
+                  })
+              }
+              }
               startAdornment={
                 <InputAdornment position="start">
                   <KeyboardDoubleArrowUpRounded />
@@ -376,10 +534,6 @@ export default function QuizSettings() {
           </FormControl>
         </Stack>
       ),
-      description: `Try out different ad text to see what brings in the most customers,
-                and learn how to enhance your ads using features like ad extensions.
-                If you run into any problems with your ads, find out how to tell if
-                they're running and how to resolve approval issues.`,
       icon: (
         <EventBusyRounded />
       )
@@ -395,6 +549,20 @@ export default function QuizSettings() {
             InputLabelProps={{
               shrink: true,
             }}
+            value={data.quizTimings.startsBy}
+              onChange={event => {
+                setData(
+                  (data) => {
+                    return {
+                      ...data, 
+                      quizTimings : {
+                        ...data.quizTimings,
+                        startsBy:event.target.value,
+                      }
+                    }
+                  })
+              }
+              }
           />
           <TextField
             id="datetime-local"
@@ -403,13 +571,23 @@ export default function QuizSettings() {
             InputLabelProps={{
               shrink: true,
             }}
+            value={data.quizTimings.endsBy}
+              onChange={event => {
+                setData(
+                  (data) => {
+                    return {
+                      ...data, 
+                      quizTimings : {
+                        ...data.quizTimings,
+                        endsBy:event.target.value,
+                      }
+                    }
+                  })
+              }
+              }
           />
         </Stack>
       ),
-      description: `Try out different ad text to see what brings in the most customers,
-                and learn how to enhance your ads using features like ad extensions.
-                If you run into any problems with your ads, find out how to tell if
-                they're running and how to resolve approval issues.`,
       icon: (
         <EventBusyRounded />
       )
@@ -433,7 +611,7 @@ export default function QuizSettings() {
         <Grid item xs={12} sm={12} md={6}>
           <Box sx={{
             width: "100%",
-            marginTop: {"xs":0,"sm":15},
+            marginTop: { "sm": 0, "md": 15 },
           }}>
             <Paper
               square
@@ -450,14 +628,15 @@ export default function QuizSettings() {
               <IconButton>{steps[activeStep].icon}</IconButton>
               <Button onClick={logout}>Cancel</Button>
             </Paper>
-            <Paper sx={{ 
-                minHeight:{"sm":"90vh","md":"50vh"}, p: 2 }}>
+            <Paper sx={{
+              minHeight: { "sm": "90vh", "md": "50vh" }, p: 2
+            }}>
               {steps[activeStep].component}
             </Paper>
             <MobileStepper
-              sx={{ 
+              sx={{
                 width: "100%",
-            }}
+              }}
               variant="dots"
               steps={maxSteps}
               position="static"
@@ -466,75 +645,75 @@ export default function QuizSettings() {
                 <>
                   {activeStep === maxSteps - 1 ? (
                     <Button
-                    size="small"
-                    onClick={handleNext}
-                    disabled = {
-                      !(
-                        data.eventInfo.event != "" &&
-                        data.eventInfo.event != null &&
-                        data.eventInfo.year != ""&&
-                        data.eventInfo.year != null&&
-                        data.eventLogos.event != "" &&
-                        data.eventLogos.event != null &&
-                        data.eventLogos.nethunt != "" &&
-                        data.eventLogos.nethunt != null &&
-                        data.coordinators[0].coordinatorName != "" &&
-                        data.coordinators[0].coordinatorName != null&&
-                        data.coordinators[0].coordinatorEmail!=""&&
-                        data.coordinators[0].coordinatorEmail!=null&&
-                        data.coordinators[0].coordinatorPassword != ""&&
-                        data.coordinators[0].coordinatorPassword != null&&
-                        data.coordinators[0].coordinatorPhone!= ""&&
-                        data.coordinators[0].coordinatorPhone!= null &&
-                        data.coordinators[0].coordinatorImg!=""&&
-                        data.coordinators[0].coordinatorImg!=null&&
-                        
-                        data.coordinators[1].coordinatorName != "" &&
-                        data.coordinators[1].coordinatorName != null&&
-                        data.coordinators[1].coordinatorEmail!=""&&
-                        data.coordinators[1].coordinatorEmail!=null&&
-                        data.coordinators[1].coordinatorPassword != ""&&
-                        data.coordinators[1].coordinatorPassword != null&&
-                        data.coordinators[1].coordinatorPhone!= ""&&
-                        data.coordinators[1].coordinatorPhone!= null &&
-                        data.coordinators[1].coordinatorImg!=""&&
-                        data.coordinators[1].coordinatorImg!=null&&
-                          
-                        data.quizScores.easy != "" &&
-                        data.quizScores.easy != null &&
-                        data.quizScores.medium != "" &&
-                        data.quizScores.medium != null&&
-                        data.quizScores.hard != "" &&
-                        data.quizScores.hard != null&&
-                        
-                        data.quizTimings.startsBy != ""&&
-                        data.quizTimings.startsBy != null&&
-                        data.quizTimings.endsBy != ""&&
-                        data.quizTimings.endsBy != null
-                      )
-                    }
-                  >
-                    Finish
-                    {theme.direction === 'rtl' ? (
-                    <KeyboardArrowLeft />
+                      size="small"
+                      onClick={()=>{console.log(data)}}
+                      disabled={
+                        !(
+                          data.eventInfo.event !== "" &&
+                          data.eventInfo.event !== null &&
+                          data.eventInfo.year !== "" &&
+                          data.eventInfo.year !== null &&
+                          data.eventLogos.event !== "" &&
+                          data.eventLogos.event !== null &&
+                          data.eventLogos.nethunt !== "" &&
+                          data.eventLogos.nethunt !== null &&
+                          data.coordinators[0].coordinatorName !== "" &&
+                          data.coordinators[0].coordinatorName !== null &&
+                          data.coordinators[0].coordinatorEmail !== "" &&
+                          data.coordinators[0].coordinatorEmail !== null &&
+                          data.coordinators[0].coordinatorPassword !== "" &&
+                          data.coordinators[0].coordinatorPassword !== null &&
+                          data.coordinators[0].coordinatorPhone !== "" &&
+                          data.coordinators[0].coordinatorPhone !== null &&
+                          data.coordinators[0].coordinatorImg !== "" &&
+                          data.coordinators[0].coordinatorImg !== null &&
+
+                          data.coordinators[1].coordinatorName !== "" &&
+                          data.coordinators[1].coordinatorName !== null &&
+                          data.coordinators[1].coordinatorEmail !== "" &&
+                          data.coordinators[1].coordinatorEmail !== null &&
+                          data.coordinators[1].coordinatorPassword !== "" &&
+                          data.coordinators[1].coordinatorPassword !== null &&
+                          data.coordinators[1].coordinatorPhone !== "" &&
+                          data.coordinators[1].coordinatorPhone !== null &&
+                          data.coordinators[1].coordinatorImg !== "" &&
+                          data.coordinators[1].coordinatorImg !== null &&
+
+                          data.quizScores.easy !== "" &&
+                          data.quizScores.easy !== null &&
+                          data.quizScores.medium !== "" &&
+                          data.quizScores.medium !== null &&
+                          data.quizScores.hard !== "" &&
+                          data.quizScores.hard !== null &&
+
+                          data.quizTimings.startsBy !== "" &&
+                          data.quizTimings.startsBy !== null &&
+                          data.quizTimings.endsBy !== "" &&
+                          data.quizTimings.endsBy !== null
+                        )
+                      }
+                    >
+                      Finish
+                      {theme.direction === 'rtl' ? (
+                        <KeyboardArrowLeft />
+                      ) : (
+                        <KeyboardArrowRight />
+                      )}
+                    </Button>
                   ) : (
-                    <KeyboardArrowRight />
-                  )}
-                    </Button>    
-                    ) :( 
-                      <Button
+                    <Button
                       size="small"
                       onClick={handleNext}
                     >
                       Next
                       {theme.direction === 'rtl' ? (
-                      <KeyboardArrowLeft />
-                    ) : (
-                      <KeyboardArrowRight />
-                    )}
-                      </Button>
-                    )}
-                    </>
+                        <KeyboardArrowLeft />
+                      ) : (
+                        <KeyboardArrowRight />
+                      )}
+                    </Button>
+                  )}
+                </>
               }
               backButton={
                 <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
