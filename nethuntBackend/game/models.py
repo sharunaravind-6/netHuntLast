@@ -3,7 +3,8 @@ from user.models import Coordinator
 import datetime
 # Create your models here.
 
-
+# class Temp(models.Model):
+#     temp = models.FileField(upload_to="images") 
 class Info(models.Model):
     class Event(models.TextChoices):
         LOGIN = "Login","LOGIN"

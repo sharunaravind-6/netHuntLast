@@ -11,11 +11,17 @@ import { Avatar, Container, CssBaseline, Divider, FormControl, Grid, IconButton,
 import { Stack } from '@mui/system';
 import { userContext } from '../../Store/user';
 import { theme } from '../../Theme/LightTheme';
-
+import useAxios from "./../../utils/useAxios";
 
 export default function QuizSettings() {
   const { logout } = React.useContext(userContext)
   const [activeStep, setActiveStep] = React.useState(0);
+  const [imageUrls,setImageUrls] = React.useState({
+    event:null,
+    nethunt : null,
+    coordinatorImg1 : null,
+    coordinatorImg2 : null
+  })
   const [data, setData] = React.useState({
     eventInfo: {
       event: "",
@@ -52,31 +58,39 @@ export default function QuizSettings() {
     }
   })
   const previewImageFile = (event, type) => {
-    if (type === "event")
-      setData((data) => { return { ...data, eventLogos: { ...data["eventLogos"], event: URL.createObjectURL(event.target.files[0]) } } });
-    else
-      setData((data) => { return { ...data, eventLogos: { ...data["eventLogos"], nethunt: URL.createObjectURL(event.target.files[0]) } } });
+    if (type === "event"){
+      setData((data) => { return { ...data, eventLogos: { ...data["eventLogos"], event: event.target.files[0] } } });
+      setImageUrls((data)=> {return {...data,event : URL.createObjectURL(event.target.files[0])}})
+    }
+    else{
+      setData((data) => { return { ...data, eventLogos: { ...data["eventLogos"], nethunt: event.target.files[0] } } });
+      setImageUrls((data)=> {return {...data,nethunt : URL.createObjectURL(event.target.files[0])}})
+    }
   }
   const previewCoordinatorImageFile = (event, type) => {
     console.log("testy")
     if (type === "c1")
-      setData(
+      {setData(
         (data) => {
           let coordinators = data.coordinators
-          coordinators[0].coordinatorImg = URL.createObjectURL(event.target.files[0])
+          coordinators[0].coordinatorImg = event.target.files[0]
           return {
             ...data, coordinators: [...coordinators]
           }
         });
-    else
+        setImageUrls((data)=> {return {...data,coordinatorImg1 : URL.createObjectURL(event.target.files[0])}})
+      }
+    else{
       setData(
         (data) => {
           let coordinators = data.coordinators
-          coordinators[1].coordinatorImg = URL.createObjectURL(event.target.files[0])
+          coordinators[1].coordinatorImg = event.target.files[0]
           return {
             ...data, coordinators: [...coordinators]
           }
         });
+        setImageUrls((data)=> {return {...data,coordinatorImg2 : URL.createObjectURL(event.target.files[0])}})
+      }
   }
   const steps = [
     {
@@ -139,7 +153,7 @@ export default function QuizSettings() {
                   />
                 </Button>
                 <Box>
-                  <img src={data.eventLogos.nethunt} width="200px" height="auto" />
+                  <img src={imageUrls.nethunt} width="200px" height="auto" />
                 </Box>
               </Paper>
               <Paper elevation={16} sx={{ padding: 3 }}>
@@ -154,7 +168,7 @@ export default function QuizSettings() {
                   />
                 </Button>
                 <Box >
-                  <img src={data.eventLogos.event} width="200px" height="auto" />
+                  <img src={imageUrls.event} width="200px" height="auto" />
                 </Box>
               </Paper>
             </Container>
@@ -180,7 +194,7 @@ export default function QuizSettings() {
             <Paper elevation={10} sx={{ padding: 2 }}>
               <Stack sx={{ display: "flex", alignItems: "center", }}>
                 <Avatar sx={{ width: { xs: "100px", sm: "200px" }, height: { xs: "100px", sm: "200px" } }} component="label">
-                  {data.coordinators[0].coordinatorImg && <img src={data.coordinators[0].coordinatorImg} width="200px" height="auto" />}
+                  {data.coordinators[0].coordinatorImg && <img src={imageUrls.coordinatorImg1} width="200px" height="auto" />}
                   {!data.coordinators[0].coordinatorImg && <AddPhotoAlternateRounded sx={{ width: "100px" }} />}
                   <input type="file" hidden onChange={(event) => { previewCoordinatorImageFile(event, "c1") }} />
                 </Avatar>
@@ -312,7 +326,7 @@ export default function QuizSettings() {
             <Paper elevation={10} sx={{ padding: 2 }}>
               <Stack sx={{ display: "flex", alignItems: "center", }}>
                 <Avatar sx={{ width: { xs: "100px", sm: "200px" }, height: { xs: "100px", sm: "200px" } }} component="label">
-                  {data.coordinators[1].coordinatorImg && <img src={data.coordinators[1].coordinatorImg} width="200px" height="auto" />}
+                  {data.coordinators[1].coordinatorImg && <img src={imageUrls.coordinatorImg2} width="200px" height="auto" />}
                   {!data.coordinators[1].coordinatorImg && <AddPhotoAlternateRounded sx={{ width: "100px" }} />}
                   <input type="file" hidden onChange={(event) => { previewCoordinatorImageFile(event, "c2") }} />
                 </Avatar>
@@ -460,10 +474,10 @@ export default function QuizSettings() {
                 setData(
                   (data) => {
                     return {
-                      ...data, 
-                      quizScores : {
+                      ...data,
+                      quizScores: {
                         ...data.quizScores,
-                        easy:event.target.value,
+                        easy: event.target.value,
                       }
                     }
                   })
@@ -488,10 +502,10 @@ export default function QuizSettings() {
                 setData(
                   (data) => {
                     return {
-                      ...data, 
-                      quizScores : {
+                      ...data,
+                      quizScores: {
                         ...data.quizScores,
-                        medium:event.target.value,
+                        medium: event.target.value,
                       }
                     }
                   })
@@ -516,10 +530,10 @@ export default function QuizSettings() {
                 setData(
                   (data) => {
                     return {
-                      ...data, 
-                      quizScores : {
+                      ...data,
+                      quizScores: {
                         ...data.quizScores,
-                        hard:event.target.value,
+                        hard: event.target.value,
                       }
                     }
                   })
@@ -550,19 +564,19 @@ export default function QuizSettings() {
               shrink: true,
             }}
             value={data.quizTimings.startsBy}
-              onChange={event => {
-                setData(
-                  (data) => {
-                    return {
-                      ...data, 
-                      quizTimings : {
-                        ...data.quizTimings,
-                        startsBy:event.target.value,
-                      }
+            onChange={event => {
+              setData(
+                (data) => {
+                  return {
+                    ...data,
+                    quizTimings: {
+                      ...data.quizTimings,
+                      startsBy: event.target.value,
                     }
-                  })
-              }
-              }
+                  }
+                })
+            }
+            }
           />
           <TextField
             id="datetime-local"
@@ -572,19 +586,19 @@ export default function QuizSettings() {
               shrink: true,
             }}
             value={data.quizTimings.endsBy}
-              onChange={event => {
-                setData(
-                  (data) => {
-                    return {
-                      ...data, 
-                      quizTimings : {
-                        ...data.quizTimings,
-                        endsBy:event.target.value,
-                      }
+            onChange={event => {
+              setData(
+                (data) => {
+                  return {
+                    ...data,
+                    quizTimings: {
+                      ...data.quizTimings,
+                      endsBy: event.target.value,
                     }
-                  })
-              }
-              }
+                  }
+                })
+            }
+            }
           />
         </Stack>
       ),
@@ -593,6 +607,7 @@ export default function QuizSettings() {
       )
     },
   ];
+  const api = useAxios()
   const maxSteps = steps.length;
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -601,7 +616,27 @@ export default function QuizSettings() {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
+  const handleSumbit =async () => {
+    const form = new FormData()
+    const files = [
+      data.eventLogos.event,
+      data.eventLogos.nethunt,
+      data.coordinators[0].coordinatorImg,
+      data.coordinators[1].coordinatorImg,
+    ]
+    form.append("event",files[0])
+    form.append("nethunt",files[1])
+    form.append("coordinator1",files[2])
+    form.append("coordinator2",files[3])
+    form.append('data', JSON.stringify(data));
+    const response =await api.post("/game/set_config", form,{
+      headers: {
+        "Content-Type": "multipart/form-data"
+      },
+      body: data
+    })
+    console.log(response.data)
+  }
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -646,7 +681,7 @@ export default function QuizSettings() {
                   {activeStep === maxSteps - 1 ? (
                     <Button
                       size="small"
-                      onClick={()=>{console.log(data)}}
+                      onClick={handleSumbit}
                       disabled={
                         !(
                           data.eventInfo.event !== "" &&
