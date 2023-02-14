@@ -33,6 +33,7 @@ class NethuntUserAdmin(UserAdmin):
                     "is_superuser",
                     "groups",
                     "user_permissions",
+                    "role",
                 ),
             },
         ),

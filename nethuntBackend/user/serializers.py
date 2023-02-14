@@ -11,7 +11,7 @@ class CollegeSerializer(serializers.ModelSerializer):
 class NethuntUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = NethuntUser
-        fields = ('id', 'email', 'first_name', 'last_name', 'password')
+        fields = ('id', 'email', 'first_name', 'last_name', 'password',"role")
         extra_kwargs = {
             'password': {'write_only': True},
         }
@@ -37,6 +37,15 @@ class CoordinatorSerializer(serializers.ModelField):
     user = NethuntUserSerializer()
     class Meta:
         model = Coordinator
+    
+    def create(self,validated_data):
+        user = validated_data.pop('user')
+        print(user,"test")
+        user = NethuntUserSerializer(data=user)
+        if user.is_valid():
+            user.save()
+            coordinator = Coordinator.objects.create(user=user, **validated_data)
+            return coordinator
 # class CandidateUserSerializer(serializers.Serializer):
 #     user_email = serializers.EmailField()
 #     password = serializers.CharField(max_length=100)

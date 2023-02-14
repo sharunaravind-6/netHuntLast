@@ -12,15 +12,16 @@ import { Stack } from '@mui/system';
 import { userContext } from '../../Store/user';
 import { theme } from '../../Theme/LightTheme';
 import useAxios from "./../../utils/useAxios";
+import { useNavigate } from 'react-router-dom';
 
 export default function QuizSettings() {
   const { logout } = React.useContext(userContext)
   const [activeStep, setActiveStep] = React.useState(0);
-  const [imageUrls,setImageUrls] = React.useState({
-    event:null,
-    nethunt : null,
-    coordinatorImg1 : null,
-    coordinatorImg2 : null
+  const [imageUrls, setImageUrls] = React.useState({
+    event: null,
+    nethunt: null,
+    coordinatorImg1: null,
+    coordinatorImg2: null
   })
   const [data, setData] = React.useState({
     eventInfo: {
@@ -33,14 +34,16 @@ export default function QuizSettings() {
     },
     coordinators: [
       {
-        coordinatorName: "",
+        coordinatorFirstName: "",
+        coordinatorLastName: "",
         coordinatorEmail: "",
         coordinatorPassword: "",
         coordinatorPhone: "",
         coordinatorImg: null,
       },
       {
-        coordinatorName: "",
+        coordinatorFirstName: "",
+        coordinatorLastName: "",
         coordinatorEmail: "",
         coordinatorPassword: "",
         coordinatorPhone: "",
@@ -58,19 +61,19 @@ export default function QuizSettings() {
     }
   })
   const previewImageFile = (event, type) => {
-    if (type === "event"){
+    if (type === "event") {
       setData((data) => { return { ...data, eventLogos: { ...data["eventLogos"], event: event.target.files[0] } } });
-      setImageUrls((data)=> {return {...data,event : URL.createObjectURL(event.target.files[0])}})
+      setImageUrls((data) => { return { ...data, event: URL.createObjectURL(event.target.files[0]) } })
     }
-    else{
+    else {
       setData((data) => { return { ...data, eventLogos: { ...data["eventLogos"], nethunt: event.target.files[0] } } });
-      setImageUrls((data)=> {return {...data,nethunt : URL.createObjectURL(event.target.files[0])}})
+      setImageUrls((data) => { return { ...data, nethunt: URL.createObjectURL(event.target.files[0]) } })
     }
   }
   const previewCoordinatorImageFile = (event, type) => {
     console.log("testy")
-    if (type === "c1")
-      {setData(
+    if (type === "c1") {
+      setData(
         (data) => {
           let coordinators = data.coordinators
           coordinators[0].coordinatorImg = event.target.files[0]
@@ -78,9 +81,9 @@ export default function QuizSettings() {
             ...data, coordinators: [...coordinators]
           }
         });
-        setImageUrls((data)=> {return {...data,coordinatorImg1 : URL.createObjectURL(event.target.files[0])}})
-      }
-    else{
+      setImageUrls((data) => { return { ...data, coordinatorImg1: URL.createObjectURL(event.target.files[0]) } })
+    }
+    else {
       setData(
         (data) => {
           let coordinators = data.coordinators
@@ -89,8 +92,8 @@ export default function QuizSettings() {
             ...data, coordinators: [...coordinators]
           }
         });
-        setImageUrls((data)=> {return {...data,coordinatorImg2 : URL.createObjectURL(event.target.files[0])}})
-      }
+      setImageUrls((data) => { return { ...data, coordinatorImg2: URL.createObjectURL(event.target.files[0]) } })
+    }
   }
   const steps = [
     {
@@ -199,27 +202,44 @@ export default function QuizSettings() {
                   <input type="file" hidden onChange={(event) => { previewCoordinatorImageFile(event, "c1") }} />
                 </Avatar>
                 <FormControl variant="standard">
-                  <InputLabel htmlFor="c1name">
-                    Coordinator name
+                  <InputLabel htmlFor="c1fname">
+                    First name
                   </InputLabel>
                   <Input
-                    id="c1name"
-                    value={data.coordinators[0].coordinatorName}
+                    id="c1fname"
+                    value={data.coordinators[0].coordinatorFirstName}
                     onChange={event => {
                       setData(
                         (data) => {
                           let coordinators = data.coordinators
-                          coordinators[0].coordinatorName = event.target.value
+                          coordinators[0].coordinatorFirstName = event.target.value
                           return {
                             ...data, coordinators: [...coordinators]
                           }
                         })
                     }
                     }
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <AccountCircle />
-                      </InputAdornment>
+                    
+                  />
+                </FormControl>
+                <Divider />
+                <FormControl variant="standard">
+                  <InputLabel htmlFor="c1lname">
+                    Last name
+                  </InputLabel>
+                  <Input
+                    id="c1lname"
+                    value={data.coordinators[0].coordinatorLastName}
+                    onChange={event => {
+                      setData(
+                        (data) => {
+                          let coordinators = data.coordinators
+                          coordinators[0].coordinatorLastName = event.target.value
+                          return {
+                            ...data, coordinators: [...coordinators]
+                          }
+                        })
+                    }
                     }
                   />
                 </FormControl>
@@ -331,27 +351,44 @@ export default function QuizSettings() {
                   <input type="file" hidden onChange={(event) => { previewCoordinatorImageFile(event, "c2") }} />
                 </Avatar>
                 <FormControl variant="standard">
-                  <InputLabel htmlFor="c1name">
-                    Coordinator name
+                  <InputLabel htmlFor="c2fname">
+                    First name
                   </InputLabel>
                   <Input
-                    id="c2name"
-                    value={data.coordinators[1].coordinatorName}
+                    id="c2fname"
+                    value={data.coordinators[1].coordinatorFirstName}
                     onChange={event => {
                       setData(
                         (data) => {
                           let coordinators = data.coordinators
-                          coordinators[1].coordinatorName = event.target.value
+                          coordinators[1].coordinatorFirstName = event.target.value
                           return {
                             ...data, coordinators: [...coordinators]
                           }
                         })
                     }
                     }
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <AccountCircle />
-                      </InputAdornment>
+                    
+                  />
+                </FormControl>
+                <Divider />
+                <FormControl variant="standard">
+                  <InputLabel htmlFor="c2lname">
+                    Last name
+                  </InputLabel>
+                  <Input
+                    id="c2lname"
+                    value={data.coordinators[1].coordinatorLastName}
+                    onChange={event => {
+                      setData(
+                        (data) => {
+                          let coordinators = data.coordinators
+                          coordinators[1].coordinatorLastName = event.target.value
+                          return {
+                            ...data, coordinators: [...coordinators]
+                          }
+                        })
+                    }
                     }
                   />
                 </FormControl>
@@ -612,11 +649,11 @@ export default function QuizSettings() {
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
-
+  const navigate = useNavigate()
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-  const handleSumbit =async () => {
+  const handleSumbit = async () => {
     const form = new FormData()
     const files = [
       data.eventLogos.event,
@@ -624,18 +661,21 @@ export default function QuizSettings() {
       data.coordinators[0].coordinatorImg,
       data.coordinators[1].coordinatorImg,
     ]
-    form.append("event",files[0])
-    form.append("nethunt",files[1])
-    form.append("coordinator1",files[2])
-    form.append("coordinator2",files[3])
+    console.log(data)
+    form.append("event", files[0])
+    form.append("nethunt", files[1])
+    form.append("coordinator1", files[2])
+    form.append("coordinator2", files[3])
     form.append('data', JSON.stringify(data));
-    const response =await api.post("/game/set_config", form,{
+    const response = await api.post("/game/set_config", form, {
       headers: {
         "Content-Type": "multipart/form-data"
       },
       body: data
     })
-    console.log(response.data)
+    if(response.data?.configured){
+      navigate("/a/dashboard")
+    }
   }
   return (
     <ThemeProvider theme={theme}>
@@ -692,8 +732,11 @@ export default function QuizSettings() {
                           data.eventLogos.event !== null &&
                           data.eventLogos.nethunt !== "" &&
                           data.eventLogos.nethunt !== null &&
-                          data.coordinators[0].coordinatorName !== "" &&
-                          data.coordinators[0].coordinatorName !== null &&
+                          
+                          data.coordinators[0].coordinatorFirstName !== "" &&
+                          data.coordinators[0].coordinatorFirstName !== null &&
+                          data.coordinators[0].coordinatorLastName !== "" &&
+                          data.coordinators[0].coordinatorLastName !== null &&
                           data.coordinators[0].coordinatorEmail !== "" &&
                           data.coordinators[0].coordinatorEmail !== null &&
                           data.coordinators[0].coordinatorPassword !== "" &&
@@ -703,8 +746,10 @@ export default function QuizSettings() {
                           data.coordinators[0].coordinatorImg !== "" &&
                           data.coordinators[0].coordinatorImg !== null &&
 
-                          data.coordinators[1].coordinatorName !== "" &&
-                          data.coordinators[1].coordinatorName !== null &&
+                          data.coordinators[1].coordinatorFirstName !== "" &&
+                          data.coordinators[1].coordinatorFirstName !== null &&
+                          data.coordinators[1].coordinatorLastName !== "" &&
+                          data.coordinators[1].coordinatorLastName !== null &&
                           data.coordinators[1].coordinatorEmail !== "" &&
                           data.coordinators[1].coordinatorEmail !== null &&
                           data.coordinators[1].coordinatorPassword !== "" &&
