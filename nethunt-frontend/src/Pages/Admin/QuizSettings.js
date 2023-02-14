@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { AccountCircle, AddPhotoAlternateRounded, ChildCareRounded, EventBusyRounded, KeyboardArrowUpRounded, KeyboardDoubleArrowUpRounded, KeyRounded, MailRounded, PhoneRounded } from "@mui/icons-material";
-import { Avatar, Container, CssBaseline, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, MenuItem, Select, TextField, ThemeProvider } from '@mui/material';
+import { Avatar, Backdrop, Container, CssBaseline, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, LinearProgress, MenuItem, Select, TextField, ThemeProvider } from '@mui/material';
 import { Stack } from '@mui/system';
 import { userContext } from '../../Store/user';
 import { theme } from '../../Theme/LightTheme';
@@ -15,6 +15,7 @@ import useAxios from "./../../utils/useAxios";
 import { useNavigate } from 'react-router-dom';
 
 export default function QuizSettings() {
+  const [loading,setLoading] = React.useState(false)
   const { logout } = React.useContext(userContext)
   const [activeStep, setActiveStep] = React.useState(0);
   const [imageUrls, setImageUrls] = React.useState({
@@ -27,6 +28,7 @@ export default function QuizSettings() {
     eventInfo: {
       event: "",
       year: "",
+      commonMailId: "",
     },
     eventLogos: {
       event: null,
@@ -126,11 +128,29 @@ export default function QuizSettings() {
                 id="year-select"
                 value={data.eventInfo.year}
                 label="Year"
-                onChange={(event) => { setData((data) => { return { ...data, eventInfo: { ...data["eventInfo"], year: event.target.value } } }); console.log(event.target.value); }}
+                onChange={(event) => { setData((data) => { return { ...data, eventInfo: { ...data["eventInfo"], year: event.target.value } } }); }}
               >
                 <MenuItem value={new Date().getFullYear()}>{new Date().getFullYear()}</MenuItem>
                 <MenuItem value={new Date().getFullYear() + 1}>{new Date().getFullYear() + 1}</MenuItem>
               </Select>
+            </FormControl>
+            <FormControl variant="standard">
+              <InputLabel htmlFor="mailId">
+                Common mail id
+              </InputLabel>
+              <Input
+                id="mailId"
+                value={data.eventInfo.commonMailId}
+                onChange={event => {
+                  setData((data) => { return { ...data, eventInfo: { ...data["eventInfo"], commonMailId: event.target.value } } });
+                }
+                }
+                startAdornment={
+                  <InputAdornment position="start">
+                    <MailRounded />
+                  </InputAdornment>
+                }
+              />
             </FormControl>
           </Stack>
         </Box>),
@@ -219,7 +239,7 @@ export default function QuizSettings() {
                         })
                     }
                     }
-                    
+
                   />
                 </FormControl>
                 <Divider />
@@ -368,7 +388,7 @@ export default function QuizSettings() {
                         })
                     }
                     }
-                    
+
                   />
                 </FormControl>
                 <Divider />
@@ -654,6 +674,7 @@ export default function QuizSettings() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
   const handleSumbit = async () => {
+    setLoading(true);
     const form = new FormData()
     const files = [
       data.eventLogos.event,
@@ -673,14 +694,17 @@ export default function QuizSettings() {
       },
       body: data
     })
-    if(response.data?.configured){
+    if (response.data?.configured) {
       navigate("/a/dashboard")
     }
+    setLoading(false)
   }
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-
+      <Backdrop open={loading}>
+        <LinearProgress/>
+      </Backdrop>
       <Grid container>
         <Grid item xs={0} sm={0} md={3} />
         <Grid item xs={12} sm={12} md={6}>
@@ -728,11 +752,15 @@ export default function QuizSettings() {
                           data.eventInfo.event !== null &&
                           data.eventInfo.year !== "" &&
                           data.eventInfo.year !== null &&
+                          data.eventInfo.commonMailId !== "" &&
+                          data.eventInfo.commonMailId !== null &&
+
                           data.eventLogos.event !== "" &&
                           data.eventLogos.event !== null &&
                           data.eventLogos.nethunt !== "" &&
                           data.eventLogos.nethunt !== null &&
-                          
+
+
                           data.coordinators[0].coordinatorFirstName !== "" &&
                           data.coordinators[0].coordinatorFirstName !== null &&
                           data.coordinators[0].coordinatorLastName !== "" &&

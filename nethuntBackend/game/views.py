@@ -3,7 +3,7 @@ from .models import Info
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
-from user.models import (Coordinator)
+from user.models import (Coordinator,NethuntUser)
 from user.serializers import (CoordinatorSerializer)
 from user.serializers import NethuntUserSerializer
 from game.models import Info
@@ -42,7 +42,7 @@ def add_config(req):
             coordinator = Coordinator(user=tempUser,image = req.FILES["coordinator"+str(index+1)],phone= coordinator["coordinatorPhone"])
             coordinator.save()
         else:
-            Coordinator.objects.all().delete()
+            NethuntUser.objects.fetch(role="Coordinator").delete()
             return Response({"configured": False})   
     storedCoordinators = Coordinator.objects.all()
     if  storedCoordinators.count()== 2:
@@ -50,7 +50,8 @@ def add_config(req):
         eventInfo = data["eventInfo"]
         event = eventInfo["event"]
         year = int(eventInfo["year"])
-        
+        commonMailId = eventInfo["commonMailId"] 
+
         eventLogo = req.FILES["event"]  
         logo = req.FILES["nethunt"]
         
@@ -65,7 +66,7 @@ def add_config(req):
         easyScore = int(scorings["easy"])
         moderateScore = int(scorings["medium"])
         hardScore = int(scorings["hard"])
-        commonMailId = "dummy@gmail.com"
+        
 
         data = Info(event=event,year=year,coordinator1=coordinator1,coordinator2=coordinator2,startBy=startBy,endBy=endBy,easyScore=easyScore,moderateScore=moderateScore,hardScore=hardScore,commonMailId=commonMailId)
         data.save()

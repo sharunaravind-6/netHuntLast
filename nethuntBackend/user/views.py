@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import (IsAuthenticated,IsAdminUser)
 from .models import (Candidate,College)
 from game.models import Info
 import json
@@ -58,10 +58,18 @@ def add_user(request, *args, **kwargs):
         print(temp)
         return Response({"test": "Works!"})
 
-
+@api_view(["POST"])
+@permission_classes([IsAdminUser])
+def add_candidate(req):
+    data = json.loads(req.body)
+    college = College.objects.get(id=int(data["college"]))
+    print(data)
+    # NethuntUserSerializer(data= {})
+    return Response({"test": "testing"})
 @api_view(["POST"])
 def auth_user(request, *args, **kwargs):
     print(request)
+    
     # valid_data = VerifyJSONWebTokenSerializer().validate(data)
     # user = valid_data['user']
     return Response({"test": "testing"})

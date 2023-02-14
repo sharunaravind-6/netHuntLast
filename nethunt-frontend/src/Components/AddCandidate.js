@@ -7,31 +7,39 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import {  ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { theme } from "../Theme/LightTheme";
 import { SchoolOutlined } from '@mui/icons-material';
-import {  FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { AdminContext } from '../Store/adminStore';
+import useAxios from '../utils/useAxios';
 
 export default function AddCandidate() {
   const [college, setCollege] = React.useState('');
-  const {colleges,fetchCollege} = React.useContext(AdminContext)
-  const [loading,setLoading] = React.useState(true)
-
+  const { colleges, fetchCollege } = React.useContext(AdminContext)
+  const [loading, setLoading] = React.useState(true)
+  const api = useAxios()
   React.useEffect(
-    ()=>{
-      if(loading)
+    () => {
+      if (colleges===null)
         fetchCollege()
       setLoading(false)
     },
-  [loading])
-  const handleSubmit = (event) => {
+    [loading])
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      cname: data.get('cname'),
-      ccity: data.get('ccity'),
-    });
+    const body ={
+      email: data.get('email'),
+      password: data.get('password'),
+      first_name: data.get('first_name'),
+      last_name: data.get('last_name'),
+      college:colleges.filter(item=>item.collegeName === college)[0].id
+    };
+    const response = await api.post("/user/add_candidate",{
+      ...body
+    })
+    console.log(response.data)
   };
 
   return (
@@ -70,6 +78,23 @@ export default function AddCandidate() {
                 autoComplete="email"
                 autoFocus
               />
+
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="first_name"
+                label="First Name"
+                id="first_name"
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="last_name"
+                label="Last Name"
+                id="last_name"
+              />
               <TextField
                 margin="normal"
                 required
@@ -85,7 +110,7 @@ export default function AddCandidate() {
                 required
                 fullWidth
                 name="cpassword"
-                type="cpassword"
+                type="password"
                 label="Confirm Password"
                 id="cpassword"
                 autoComplete="password"
@@ -97,10 +122,10 @@ export default function AddCandidate() {
                   id="demo-simple-select"
                   value={college}
                   label="Age"
-                  onChange={(event)=>{setCollege(event.target.value);}}
+                  onChange={(event) => { setCollege(event.target.value); }}
                 >
                   {
-                    colleges.map((item)=>{
+                    colleges.map((item) => {
                       return (
                         <MenuItem value={item.collegeName} key={item.id}>{item.collegeName}</MenuItem>
                       )

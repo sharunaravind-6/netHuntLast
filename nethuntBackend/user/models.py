@@ -10,6 +10,9 @@ class Role(models.TextChoices):
 
 
 class NethuntUserManager(BaseUserManager):
+    def fetch(self, **kwargs):
+        return self.filter(**kwargs)
+
     def get_queryset(self):
         return super().get_queryset()
 
