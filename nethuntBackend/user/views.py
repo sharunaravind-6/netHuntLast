@@ -10,7 +10,7 @@ from game.models import Info
 import json
 
 from .serializers import (
-    CandidateSerializer, CandidateUserSerializer, NethuntUserSerializer,CollegeSerializer)
+    CandidateSerializer, NethuntUserSerializer,CollegeSerializer)
 # Create your views here.
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -66,7 +66,9 @@ def auth_user(request, *args, **kwargs):
     # user = valid_data['user']
     return Response({"test": "testing"})
 
-
+@api_view(["POST"])
+def add_coordinators(request):
+    pass
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):

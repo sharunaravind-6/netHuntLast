@@ -15,7 +15,7 @@ def is_configured(req):
 @api_view(["POST"])
 @permission_classes([IsAdminUser])
 def add_config(req):
-    print(req.FILES["nethunt"])
+    print(req.FILES["nethunt"],req.POST)
     # temp = Temp(temp=req.FILES["nethunt"])
     # temp.save()
     # data = json.loads(req.body)
