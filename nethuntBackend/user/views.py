@@ -64,8 +64,25 @@ def add_candidate(req):
     data = json.loads(req.body)
     college = College.objects.get(id=int(data["college"]))
     print(data)
+    user = {
+            "email": data["email"],
+            "password": data["password"],
+            "first_name": data["first_name"],
+            "last_name": data["last_name"],
+            "role": "Candidate"
+        }
+    user = NethuntUserSerializer(data=user)
+    print(user)
+    if user.is_valid():
+        print("test")
+        tempUser = user.save()
+        phone = data["phone"]
+        candidate = Candidate(user=tempUser,phone= phone,college=college)
+        candidate.save()
+        print("Added")
+        return Response({"result": True}) 
     # NethuntUserSerializer(data= {})
-    return Response({"test": "testing"})
+    return Response({"result": False})
 @api_view(["POST"])
 def auth_user(request, *args, **kwargs):
     print(request)

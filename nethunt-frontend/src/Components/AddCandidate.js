@@ -34,6 +34,7 @@ export default function AddCandidate() {
       password: data.get('password'),
       first_name: data.get('first_name'),
       last_name: data.get('last_name'),
+      phone: data.get('phone'),
       college:colleges.filter(item=>item.collegeName === college)[0].id
     };
     const response = await api.post("/user/add_candidate",{
@@ -114,6 +115,15 @@ export default function AddCandidate() {
                 label="Confirm Password"
                 id="cpassword"
                 autoComplete="password"
+              />
+               <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="phone"
+                type="number"
+                label="Phone"
+                id="phone"
               />
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">College</InputLabel>

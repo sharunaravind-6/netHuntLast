@@ -27,7 +27,7 @@ export default function SearchCandidate() {
                 {
                     usrs.map(
                         (item) => {
-                            return (<Grid item xs={12} sm={6} md={4} lg={3} padding={1} key={item.id}>
+                            return (<Grid item xs={12} sm={6} md={4}  padding={1} key={item.id}>
                                 <Paper elevation={10} sx={{ padding: 3 }}>
                                     <Stack sx={{ display: "flex", alignItems: "center", }}>
                                         <StyledBadge

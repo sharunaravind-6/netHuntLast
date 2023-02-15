@@ -71,4 +71,7 @@ def add_config(req):
         data = Info(event=event,year=year,coordinator1=coordinator1,coordinator2=coordinator2,startBy=startBy,endBy=endBy,easyScore=easyScore,moderateScore=moderateScore,hardScore=hardScore,commonMailId=commonMailId)
         data.save()
         return Response({"configured": True})
+    else:
+        NethuntUser.objects.fetch(role="Coordinator").delete()
+        return Response({"configured": False})  
     return Response({"configured": False})
