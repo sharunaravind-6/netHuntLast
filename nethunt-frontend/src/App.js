@@ -27,12 +27,14 @@ import Page404 from './Pages/404';
 import AdminProvider from './Store/adminStore';
 import { Paper } from '@mui/material';
 import Settings from './Pages/Admin/Settings';
+import LandingPage from './Pages/LandingPage';
 function App() {
   const { token } = useContext(userContext)
   return (
     <div>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Routes>
+          <Route path="/" element={<LandingPage/>}/>
           <Route path='login' element={<Login />}></Route>
           {(token != null && jwtDecode(token?.access).role === "Candidate") && (
             <Route path="s" element={<DashboardX />}>
