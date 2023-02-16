@@ -33,11 +33,11 @@ class CandidateSerializer(serializers.ModelSerializer):
 
 
 
-class CoordinatorSerializer(serializers.ModelField):
-    user = NethuntUserSerializer()
+class CoordinatorSerializer(serializers.ModelSerializer):
+    user = NethuntUserSerializer(read_only=True)
     class Meta:
         model = Coordinator
-    
+        fields = "__all__"
     def create(self,validated_data):
         user = validated_data.pop('user')
         print(user,"test")

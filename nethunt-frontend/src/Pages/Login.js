@@ -30,7 +30,7 @@ export default function SignUp() {
       if (token != null) {
         if (jwt_decode(token.access).role === "Admin") {
           
-          navigate("/a")
+          navigate("/a/dashboard")
         } else if (jwt_decode(token.access).role === "Candidate") {
           navigate("/s/dashboard")
         }

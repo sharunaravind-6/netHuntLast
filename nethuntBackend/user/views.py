@@ -5,12 +5,12 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import (IsAuthenticated,IsAdminUser)
-from .models import (Candidate,College)
+from .models import (Candidate,College,Coordinator)
 from game.models import Info
 import json
 
 from .serializers import (
-    CandidateSerializer, NethuntUserSerializer,CollegeSerializer)
+    CandidateSerializer, NethuntUserSerializer,CollegeSerializer,CoordinatorSerializer)
 # Create your views here.
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -83,17 +83,15 @@ def add_candidate(req):
         return Response({"result": True}) 
     # NethuntUserSerializer(data= {})
     return Response({"result": False})
-@api_view(["POST"])
-def auth_user(request, *args, **kwargs):
-    print(request)
-    
-    # valid_data = VerifyJSONWebTokenSerializer().validate(data)
-    # user = valid_data['user']
-    return Response({"test": "testing"})
 
-@api_view(["POST"])
-def add_coordinators(request):
-    pass
+
+@api_view(["GET"])
+def view_coordinators(request):
+    coordinators = Coordinator.objects.all()
+    # print(coordinators)
+    data = CoordinatorSerializer(coordinators,many=True).data
+    return Response(data)
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
