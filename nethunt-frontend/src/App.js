@@ -28,13 +28,14 @@ import AdminProvider from './Store/adminStore';
 import { Paper } from '@mui/material';
 import Settings from './Pages/Admin/Settings';
 import LandingPage from './Pages/LandingPage';
+import CoordinatorsDashboard from './Pages/Coordinator/CDashboard';
 function App() {
   const { token } = useContext(userContext)
   return (
     <div>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Routes>
-          <Route path="/" element={<LandingPage/>}/>
+          <Route path="/" element={<LandingPage />} />
           <Route path='login' element={<Login />}></Route>
           {(token != null && jwtDecode(token?.access).role === "Candidate") && (
             <Route path="s" element={<DashboardX />}>
@@ -42,6 +43,11 @@ function App() {
               <Route path="help" element={<Help />}></Route>
               <Route path="scoreboard" element={<ScoreBoardX />}></Route>
               <Route path="profile" element={<ProfileX />}></Route>
+            </Route>)}
+
+
+          {(token != null && jwtDecode(token?.access).role === "Coordinator") && (
+            <Route path="c" element={<CoordinatorsDashboard />}>
             </Route>)}
           <Route path="q" element={<Questions />}>
             <Route path="" element={<Question />}></Route>

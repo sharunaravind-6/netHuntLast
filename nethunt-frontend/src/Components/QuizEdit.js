@@ -2,7 +2,6 @@ import { AddCircleRounded, DeleteRounded, EditRounded, EmojiObjectsRounded, Keyb
 import { Stack, Divider, Grid, IconButton, List, ListItem, ListItemButton, ListItemSecondaryAction, ListItemText, Paper, Toolbar, Typography, FormControl, InputLabel, Input, InputAdornment } from "@mui/material";
 import { useEffect, useState } from "react";
 export default function QuizEdit(props) {
-    const [quiz,setQuiz] = useState()
     return (
         <Stack sx={{ gap: 3 }}>
             <Paper>
