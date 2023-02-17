@@ -1,65 +1,11 @@
-import { AddCircleRounded, ArrowLeftRounded, ArrowRightAltRounded, ArrowRightAltSharp, ChildCareRounded, DeleteRounded, EditRounded, EmojiObjectsRounded, KeyboardArrowRightRounded, Visibility } from "@mui/icons-material";
-import { Stack, AppBar, Box, Divider, Grid, IconButton, List, ListItem, ListItemButton, ListItemSecondaryAction, ListItemText, Paper, Toolbar, Typography, Container, FormControl, InputLabel, Input, InputAdornment } from "@mui/material";
-import { useEffect } from "react";
+import { AddCircleRounded, DeleteRounded, EditRounded, EmojiObjectsRounded, KeyboardArrowRightRounded, Visibility } from "@mui/icons-material";
+import { Stack, Divider, Grid, IconButton, List, ListItem, ListItemButton, ListItemSecondaryAction, ListItemText, Paper, Toolbar, Typography, FormControl, InputLabel, Input, InputAdornment } from "@mui/material";
+import { useEffect, useState } from "react";
 export default function QuizEdit(props) {
-
+    const [quiz,setQuiz] = useState()
     return (
         <Stack sx={{ gap: 3 }}>
             <Paper>
-                <Grid container padding={2}>
-                    <Grid item xs={12}>
-                        <Toolbar>
-                            <Typography variant="h5" flexGrow={1}>
-                                Instructions
-                            </Typography>
-                            <IconButton>
-                                <AddCircleRounded />
-                            </IconButton>
-                        </Toolbar>
-                    </Grid>
-                    <Grid item xs={1} />
-                    <Grid item xs={10}>
-                        <Paper elevation={12}>
-                            <List>
-                                <ListItemButton>
-                                    <ListItemText>
-                                        1st Instruction
-                                    </ListItemText>
-                                    <ListItemSecondaryAction>
-                                        <Stack direction={"row"}>
-                                            <ListItemButton>
-                                                <EditRounded />
-                                            </ListItemButton>
-                                            <ListItemButton>
-                                                <DeleteRounded />
-                                            </ListItemButton>
-                                        </Stack>
-                                    </ListItemSecondaryAction>
-                                </ListItemButton>
-                                <Divider />
-                                <ListItemButton>
-                                    <ListItemText>
-                                        2nd Instruction
-                                    </ListItemText>
-                                    <ListItemSecondaryAction>
-                                        <Stack direction={"row"}>
-                                            <ListItemButton>
-                                                <EditRounded />
-                                            </ListItemButton>
-                                            <ListItemButton>
-                                                <DeleteRounded />
-                                            </ListItemButton>
-                                        </Stack>
-                                    </ListItemSecondaryAction>
-                                </ListItemButton>
-                                <Divider />
-                            </List>
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={1} />
-                    <Divider />
-                </Grid>
-                <Divider/>
                 <Grid container>
                     <Grid item xs={12}>
                         <Toolbar>

@@ -702,8 +702,8 @@ export default function QuizSettings() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Backdrop open={loading}>
-        <LinearProgress/>
+      <Backdrop open={loading} sx={{ zIndex: 10 }}>
+        <LinearProgress />
       </Backdrop>
       <Grid container>
         <Grid item xs={0} sm={0} md={3} />

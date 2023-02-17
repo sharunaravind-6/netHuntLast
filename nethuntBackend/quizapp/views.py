@@ -26,55 +26,63 @@ def is_configured(req):
 @permission_classes([IsAdminUser])
 def add_config(req):
     # print(req.FILES[])
-    data = json.loads(req.POST["data"])
-    coordinators = data["coordinators"]
-    for index, coordinator in zip(range(len(coordinators)), coordinators):
-        user = {
-            "email": coordinator["coordinatorEmail"],
-            "password": coordinator["coordinatorPassword"],
-            "first_name": coordinator["coordinatorFirstName"],
-            "last_name": coordinator["coordinatorLastName"],
-            "role": "Coordinator"
-        }
-        user = NethuntUserSerializer(data=user)
-        if user.is_valid():
-            tempUser = user.save()
-            coordinator = Coordinator(user=tempUser,image = req.FILES["coordinator"+str(index+1)],phone= coordinator["coordinatorPhone"])
-            coordinator.save()
+    try:
+        data = json.loads(req.POST["data"])
+        coordinators = data["coordinators"]
+        for index, coordinator in zip(range(len(coordinators)), coordinators):
+            user = {
+                "email": coordinator["coordinatorEmail"],
+                "password": coordinator["coordinatorPassword"],
+                "first_name": coordinator["coordinatorFirstName"],
+                "last_name": coordinator["coordinatorLastName"],
+                "role": "Coordinator"
+            }
+            user = NethuntUserSerializer(data=user)
+            if user.is_valid():
+                tempUser = user.save()
+                coordinator = Coordinator(user=tempUser,image = req.FILES["coordinator"+str(index+1)],phone= coordinator["coordinatorPhone"])
+                coordinator.save()
+            else:
+                NethuntUser.objects.fetch(role="Coordinator").delete()
+                return Response({"configured": False})   
+        storedCoordinators = Coordinator.objects.all()
+        if  storedCoordinators.count()== 2:
+            
+            eventInfo = data["eventInfo"]
+            event = eventInfo["event"]
+            year = int(eventInfo["year"])
+            commonMailId = eventInfo["commonMailId"] 
+
+            eventLogo = req.FILES["event"]  
+            logo = req.FILES["nethunt"]
+            
+            coordinator1 = storedCoordinators[0]
+            coordinator2 = storedCoordinators[1]
+
+            timings = data["quizTimings"]
+            startBy = datetime.strptime(timings["startsBy"], '%Y-%m-%dT%H:%M')
+            endBy = datetime.strptime(timings["endsBy"], '%Y-%m-%dT%H:%M')
+
+            scorings = data["quizScores"]
+            easyScore = int(scorings["easy"])
+            moderateScore = int(scorings["medium"])
+            hardScore = int(scorings["hard"])
+            
+            practiceQuiz = Quiz(name="practice")
+            practiceQuiz.save()
+            practice = Quiz.objects.get(name="practice")
+            mainQuiz = Quiz(name="main")
+            mainQuiz.save()
+            main = Quiz.objects.get(name="main")
+            print(main,practice)
+            data = Info(event=event,year=year,coordinator1=coordinator1,coordinator2=coordinator2,startBy=startBy,endBy=endBy,easyScore=easyScore,moderateScore=moderateScore,hardScore=hardScore,commonMailId=commonMailId,practiceQuiz=practice,mainQuiz=main)
+            data.save()
+            return Response({"configured": True})
         else:
             NethuntUser.objects.fetch(role="Coordinator").delete()
-            return Response({"configured": False})   
-    storedCoordinators = Coordinator.objects.all()
-    if  storedCoordinators.count()== 2:
-        
-        eventInfo = data["eventInfo"]
-        event = eventInfo["event"]
-        year = int(eventInfo["year"])
-        commonMailId = eventInfo["commonMailId"] 
-
-        eventLogo = req.FILES["event"]  
-        logo = req.FILES["nethunt"]
-        
-        coordinator1 = storedCoordinators[0]
-        coordinator2 = storedCoordinators[1]
-
-        timings = data["quizTimings"]
-        startBy = datetime.strptime(timings["startsBy"], '%Y-%m-%dT%H:%M')
-        endBy = datetime.strptime(timings["endsBy"], '%Y-%m-%dT%H:%M')
-
-        scorings = data["quizScores"]
-        easyScore = int(scorings["easy"])
-        moderateScore = int(scorings["medium"])
-        hardScore = int(scorings["hard"])
-        
-        practiceQuiz = Quiz(name="practice")
-        practice = practiceQuiz.save()
-        mainQuiz = Quiz(name="main")
-        main = mainQuiz.save()
-        data = Info(event=event,year=year,coordinator1=coordinator1,coordinator2=coordinator2,startBy=startBy,endBy=endBy,easyScore=easyScore,moderateScore=moderateScore,hardScore=hardScore,commonMailId=commonMailId,practiceQuiz=practice,mainQuiz=main)
-        data.save()
-        return Response({"configured": True})
-    else:
+            Quiz.objects.all().delete()
+            return Response({"configured": False}) 
+    except:
         NethuntUser.objects.fetch(role="Coordinator").delete()
-        return Response({"configured": False})  
+        Quiz.objects.all().delete()
     return Response({"configured": False})

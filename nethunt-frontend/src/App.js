@@ -54,7 +54,7 @@ function App() {
               <Route path="qsettings" element={<QuizSettings />}></Route>
               <Route path="usr" element={<Candidate />}></Route>
               <Route path="crd" element={<CoordinatorsAdmin />}></Route>
-              <Route path="quiz" element={<Paper><Outlet /></Paper>}>
+              <Route path="quiz" element={<Paper elevation={3}><Outlet /></Paper>}>
                 <Route path="v" element={<QuizDisplay />}></Route>
                 <Route path="e" element={<QuizEdit />}></Route>
                 <Route path="q" element={<QuestionAdmin />}></Route>
