@@ -1,12 +1,12 @@
 from django.shortcuts import render
-from .models import Info
+from .models import Info,Quiz
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from user.models import (Coordinator,NethuntUser)
 from user.serializers import (CoordinatorSerializer)
 from user.serializers import NethuntUserSerializer
-from game.models import Info
+from quizapp.models import Info
 import json
 import copy
 from datetime import datetime
@@ -67,8 +67,11 @@ def add_config(req):
         moderateScore = int(scorings["medium"])
         hardScore = int(scorings["hard"])
         
-
-        data = Info(event=event,year=year,coordinator1=coordinator1,coordinator2=coordinator2,startBy=startBy,endBy=endBy,easyScore=easyScore,moderateScore=moderateScore,hardScore=hardScore,commonMailId=commonMailId)
+        practiceQuiz = Quiz(name="practice")
+        practice = practiceQuiz.save()
+        mainQuiz = Quiz(name="main")
+        main = mainQuiz.save()
+        data = Info(event=event,year=year,coordinator1=coordinator1,coordinator2=coordinator2,startBy=startBy,endBy=endBy,easyScore=easyScore,moderateScore=moderateScore,hardScore=hardScore,commonMailId=commonMailId,practiceQuiz=practice,mainQuiz=main)
         data.save()
         return Response({"configured": True})
     else:

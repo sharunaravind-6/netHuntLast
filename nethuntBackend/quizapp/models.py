@@ -5,6 +5,20 @@ import datetime
 
 # class Temp(models.Model):
 #     temp = models.FileField(upload_to="images") 
+class Quiz(models.Model):
+    name = models.CharField(max_length=200)
+    no_of_questions = models.IntegerField(default=30)
+    hint1_revealed = models.IntegerField(default=50)
+    hint2_revealed = models.IntegerField(default=100)
+
+    class Meta:
+        verbose_name = ("quiz")
+        verbose_name_plural = ("quizzes")
+
+    def get_absolute_url(self):
+        return reverse("quiz_detail", kwargs={"pk": self.pk})
+
+
 class Info(models.Model):
     class Event(models.TextChoices):
         LOGIN = "Login","LOGIN"
@@ -23,19 +37,8 @@ class Info(models.Model):
     moderateScore = models.IntegerField(default=500)
     hardScore = models.IntegerField(default=1000)
     commonMailId = models.EmailField(max_length=254)
-
-class Quiz(models.Model):
-    name = models.CharField(max_length=200)
-    no_of_questions = models.IntegerField()
-    hint1_revealed = models.IntegerField()
-    hint2_revealed = models.IntegerField()
-
-    class Meta:
-        verbose_name = ("quiz")
-        verbose_name_plural = ("quizzes")
-
-    def get_absolute_url(self):
-        return reverse("quiz_detail", kwargs={"pk": self.pk})
+    practiceQuiz = models.ForeignKey(Quiz,models.CASCADE,related_name="practice")
+    mainQuiz = models.ForeignKey(Quiz,models.CASCADE,related_name="main")
 
 
 class Question(models.Model):

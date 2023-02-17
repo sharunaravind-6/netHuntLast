@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import (IsAuthenticated,IsAdminUser)
 from .models import (Candidate,College,Coordinator)
-from game.models import Info
+# from quiz.models import Info
 import json
 
 from .serializers import (

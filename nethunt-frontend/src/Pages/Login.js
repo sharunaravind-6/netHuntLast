@@ -29,7 +29,6 @@ export default function SignUp() {
     if (loading) {
       if (token != null) {
         if (jwt_decode(token.access).role === "Admin") {
-          
           navigate("/a/dashboard")
         } else if (jwt_decode(token.access).role === "Candidate") {
           navigate("/s/dashboard")
@@ -56,7 +55,7 @@ export default function SignUp() {
       let data = await response.json()
       setTokenReuse(data)
       if (jwt_decode(data.access).role === "Admin") {
-        navigate("/a")
+        navigate("/a/dashboard")
       } else if (jwt_decode(data.access).role === "Candidate") {
         navigate("/s/dashboard")
       }
