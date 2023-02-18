@@ -33,7 +33,7 @@ export default function SignUp() {
         } else if (jwt_decode(token.access).role === "Candidate") {
           navigate("/s/dashboard")
         } else if (jwt_decode(token.access).role === "Coordinator") {
-          navigate("/c/dashboard")
+          navigate("/c")
         }
       }
     }

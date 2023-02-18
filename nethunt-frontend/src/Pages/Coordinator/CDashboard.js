@@ -17,26 +17,8 @@ export default function CoordinatorsDashboard(props) {
     const { logout } = useContext(userContext)
     const navigate = useNavigate()
     const api = useAxios()
-    const { config, setConfig } = useContext(AdminContext)
     const [initialLoading, setInitialLoading] = useState(true)
-    useEffect(
-        () => {
-            if (initialLoading) {
-                if (config === null) {
-                    api.get("/game/config").then(
-                        response => {
-                            setConfig("yes")
-                            if (!response?.data?.configured) {
-                                navigate("config")
-                            }
-                        }
-                    )
-                }
-            }
-            setInitialLoading(false)
-        },
-        [initialLoading]
-    )
+   
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -132,7 +114,7 @@ export default function CoordinatorsDashboard(props) {
                     <List>
                         <ListItem disablePadding>
                             <ListItemButton onClick={() => {
-                                navigate("dashboard")
+                                navigate("")
                                 setOpenDrawer(false);
                             }}>
                                 <ListItemIcon>
@@ -179,19 +161,6 @@ export default function CoordinatorsDashboard(props) {
                                     <FaceRounded />
                                 </ListItemIcon>
                                 <ListItemText primary={"Candidates"} />
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding>
-                            <ListItemButton onClick={() => {
-                                setLoading(true);
-                                navigate("crd")
-                                setOpenDrawer(false);
-                                setLoading(false);
-                            }}>
-                                <ListItemIcon>
-                                    <SupervisedUserCircleRounded />
-                                </ListItemIcon>
-                                <ListItemText primary={"Coordinators"} />
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
