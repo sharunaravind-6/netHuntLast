@@ -32,6 +32,7 @@ import CoordinatorsDashboard from './Pages/Coordinator/CDashboard';
 import ViewCandidates from './Components/ViewCandidate';
 import CoordinatorProvider from './Store/coordinatorStore';
 import ViewCollege from './Components/ViewCollege';
+import AddQuestion from './Components/Parts/AddQuestion';
 function App() {
   const { token } = useContext(userContext)
   return (
@@ -53,7 +54,7 @@ function App() {
             <Route path="c" element={<CoordinatorProvider><CoordinatorsDashboard /></CoordinatorProvider>}>
               <Route path="usr" element={<ViewCandidates />}></Route>
               <Route path="college" element={<ViewCollege />}></Route>
-
+              <Route path="quiz" element={<AddQuestion />}></Route>
             </Route>)}
           <Route path="q" element={<Questions />}>
             <Route path="" element={<Question />}></Route>
