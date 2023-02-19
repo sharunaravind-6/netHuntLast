@@ -27,6 +27,17 @@ def get_questions(req):
     return Response({"data": QuestionSerializer(Question.objects.all(),many=True).data})
 
 @api_view(["POST"])
+def add_question(req):
+    try:
+        data = json.loads(req.POST["data"])
+        # print(req.FILES)
+        quiz = Quiz.objects.get(name=data["quiz"])
+        question = Question(answer=data["answer"],hint1=data["hint1"],hint2=data["hint2"],difficulty=data["difficultyLevel"],quiz=quiz,image=req.FILES["question"])
+        question.save()
+        return Response({"added":True})
+    except:
+        return Response({"added":False})
+@api_view(["POST"])
 @permission_classes([IsAdminUser])
 def add_config(req):
     # print(req.FILES[])
@@ -74,10 +85,10 @@ def add_config(req):
             
             practiceQuiz = Quiz(name="practice")
             practiceQuiz.save()
-            practice = Quiz.objects.get(name="practice")
+            practice = Quiz.objects.get(name="Practice")
             mainQuiz = Quiz(name="main")
             mainQuiz.save()
-            main = Quiz.objects.get(name="main")
+            main = Quiz.objects.get(name="Main")
             print(main,practice)
             data = Info(event=event,year=year,coordinator1=coordinator1,coordinator2=coordinator2,startBy=startBy,endBy=endBy,easyScore=easyScore,moderateScore=moderateScore,hardScore=hardScore,commonMailId=commonMailId,practiceQuiz=practice,mainQuiz=main)
             data.save()

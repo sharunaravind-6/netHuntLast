@@ -1,7 +1,7 @@
-import { AddPhotoAlternateRounded, EmojiObjectsRounded, QuestionAnswerOutlined, QuizRounded, SpeedRounded } from "@mui/icons-material";
+import { AddPhotoAlternateRounded, ContactSupportOutlined, EmojiObjectsRounded, QuestionAnswerOutlined, QuizRounded, SpeedRounded } from "@mui/icons-material";
 import { Box, Button, FormControl, Grid, Input, InputAdornment, InputLabel, MenuItem, Paper, Select, Stack, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
-
+import useAxios from "./../../utils/useAxios"
 export default function AddQuestion() {
     const [question, setQuestion] = useState({
         quiz: "",
@@ -11,6 +11,21 @@ export default function AddQuestion() {
         hint2: "",
         difficultyLevel: "",
     })
+    const api = useAxios()
+    const handleSubmit = async ()=>{
+        console.log(question)
+        const form = new FormData()
+        form.append("question",question["img"])
+        form.append("data",JSON.stringify(question))
+        const response =await api.post("/game/add_question",form, {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            },
+            body: question
+          })
+        const data = response.data
+        console.log(data)
+    }
     const [dispQuestion, setDispQuestion] = useState(null)
     return (<Paper sx={{ padding: 2 }}><Stack padding={2} sx={{ gap: 3 }}>
         <FormControl fullWidth>
@@ -119,6 +134,7 @@ export default function AddQuestion() {
         <Toolbar>
             <Box flexGrow={1} />
             <Button variant="contained" sx={{ width: { sm: "100%", md: "20%" } }}
+                onClick = {handleSubmit}
                 disabled={
                     !(
                         question.answer !== "" &&
