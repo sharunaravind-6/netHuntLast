@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from user.models import (Coordinator,NethuntUser)
 from user.serializers import (CoordinatorSerializer)
 from user.serializers import NethuntUserSerializer
-from quizapp.models import Info
+from quizapp.models import Info,Question
+from .serializers import QuestionSerializer,QuizSerializer
 import json
 import copy
 from datetime import datetime
@@ -21,6 +22,9 @@ def is_configured(req):
         return Response({"configured": True})
     return Response({"configured": False})
 
+@api_view(["GET"])
+def get_questions(req):
+    return Response({"data": QuestionSerializer(Question.objects.all(),many=True).data})
 
 @api_view(["POST"])
 @permission_classes([IsAdminUser])

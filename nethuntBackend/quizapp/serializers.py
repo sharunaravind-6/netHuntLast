@@ -1,4 +1,5 @@
-from .models import Info
+from .models import (Info,Question,Quiz)
+from rest_framework import serializers
 class InformationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Info
@@ -8,3 +9,14 @@ class InformationSerializer(serializers.ModelSerializer):
     #     user = NethuntUser.objects.create(**user)
     #     coordinator = coordinator.objects.create(user=user, **validated_data)
     #     return coordinator
+class QuizSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Quiz
+        fields = "__all__"
+
+class QuestionSerializer(serializers.ModelSerializer):
+    quiz = QuizSerializer(read_only=True)
+    class Meta:
+        model =  Question
+        fields = "__all__"
+
