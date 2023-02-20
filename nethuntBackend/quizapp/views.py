@@ -13,7 +13,16 @@ import copy
 from datetime import datetime
 
 # Create your views here.
+@api_view(["GET"])
+def get_startDate(req):
+    if (Info.objects.all().count() >= 1):
+        return Response({"configured": True,"startDateTime":Info.objects.all()[0].startBy})
+    return Response({"configured": False})
 
+@api_view(["GET"])
+def get_endDate(req):
+    return Response({"configured": True,"endDateTime":Info.objects.all()[0].endBy})
+    
 
 @api_view(["GET"])
 @permission_classes([IsAdminUser])

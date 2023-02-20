@@ -1,5 +1,5 @@
 import { ArrowForwardRounded, PlayCircleFilledRounded, } from "@mui/icons-material";
-import { Avatar, Container, CssBaseline, Grid, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Paper, Stack, Toolbar, Typography } from "@mui/material";
+import { Avatar, CircularProgress, Container, CssBaseline, Grid, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Paper, Stack, Toolbar, Typography } from "@mui/material";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./../Theme/LightTheme";
 import Dashboard1Img from "./../Images/Dashboard_1.svg";
@@ -10,8 +10,11 @@ import Dashboard5Img from "./../Images/Dashboard_5.svg";
 import Dashboard6Img from "./../Images/Dashboard_6.svg";
 
 import CircularProgressWithLabel from "./CircluarProgressWithLabel";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { userContext } from "../Store/user";
+import Timer from "./Parts/Timer";
+import axios from "axios";
+import { serverHost } from "../utils/server";
 export default function Home(props) {
     const dashboardImg = [
         Dashboard1Img,
@@ -22,6 +25,23 @@ export default function Home(props) {
         Dashboard6Img,
     ]
     const { userDetails } = useContext(userContext)
+    const [endBy, setEndBy] = useState(null)
+    const [loading, setLoading] = useState(true)
+    useEffect(
+        () => {
+            if (loading) {
+                const response = axios.get(serverHost + "/game/endBy").then(
+                    (res) => {
+                        console.log(res.data)
+                        if (res.data?.configured) {
+                            setEndBy(res.data?.endDateTime)
+                        }
+                    }
+                )
+            }
+            setLoading(false)
+        },[]
+    )
     return (<ThemeProvider theme={theme}>
         <CssBaseline />
         <Paper sx={{padding:4}}>
@@ -43,6 +63,7 @@ export default function Home(props) {
                             <Typography variant="h4" component="p" align="center" mt={3}>
                                 ENDS IN
                             </Typography>
+                            {endBy !== null ? <Timer timing={endBy}/>:<CircularProgress/>}
                         </Stack>
                     </Grid>
                 </Grid>
@@ -61,7 +82,7 @@ export default function Home(props) {
                                 <ListItemIcon>
                                     <CircularProgressWithLabel value={30} />
                                 </ListItemIcon>
-                                <ListItemText>Sample</ListItemText>
+                                <ListItemText>Practice</ListItemText>
                                 <IconButton>
                                     <PlayCircleFilledRounded />
                                 </IconButton>
@@ -70,7 +91,7 @@ export default function Home(props) {
                                 <ListItemIcon>
                                     <CircularProgressWithLabel value={45} />
                                 </ListItemIcon>
-                                <ListItemText>Final</ListItemText>
+                                <ListItemText>Main</ListItemText>
                                 <IconButton>
                                     <PlayCircleFilledRounded />
                                 </IconButton>
