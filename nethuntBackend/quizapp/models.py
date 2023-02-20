@@ -1,5 +1,5 @@
 from django.db import models
-from user.models import Coordinator
+from user.models import (Coordinator,NethuntUser)
 import datetime
 # Create your models here.
 
@@ -60,3 +60,22 @@ class Question(models.Model):
 
     def get_absolute_url(self):
         return reverse("question_detail", kwargs={"pk": self.pk})
+
+
+class CurrentStatus(models.Model):
+    usr = models.ForeignKey(NethuntUser, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    level = models.IntegerField(default=0)
+
+class Progress(models.Model):
+    usr = models.ForeignKey(NethuntUser, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    level = models.IntegerField(default=0)
+    hits = models.IntegerField(default=0)
+
+class Log(models.Model):
+    usr = models.ForeignKey(NethuntUser, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    level = models.IntegerField(default=0)
+    tried_word = models.CharField(max_length=40)
+    time = models.DateTimeField()

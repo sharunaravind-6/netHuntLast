@@ -2,8 +2,8 @@ import { Grid, Paper, Typography } from "@mui/material";
 import { useState } from "react";
 const CalanderPaper = ({ children }) => {
     return (<Grid item xs={12} md={3} padding={2}>
-        <Paper sx={{ position: "relative", textAlign: "center", minHeight: "10vh", padding: 2 ,}}>
-            <Typography sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)" ,fontFamily: "'Tourney', cursive;",fontSize:"3rem"}}>
+        <Paper sx={{ position: "relative", textAlign: "center", minHeight: "10vh", padding: 2, }}>
+            <Typography sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", fontFamily: "'Tourney', cursive;", }}>
                 {children}
             </Typography>
         </Paper>
@@ -42,16 +42,20 @@ export default function Timer(props) {
     return (
         <Grid container padding={2}>
             <CalanderPaper>
-                {days}
+                Days<br />
+                <Typography sx={{fontSize:"2rem"}}>{days}</Typography>
             </CalanderPaper>
             <CalanderPaper>
-                {hours}
+                hours<br />
+                <Typography sx={{fontSize:"2rem"}}>{hours}</Typography>
             </CalanderPaper>
             <CalanderPaper>
-                {minutes}
+                minutes<br />
+                <Typography sx={{fontSize:"2rem"}}>{minutes}</Typography>
             </CalanderPaper>
             <CalanderPaper>
-                {seconds}
+                seconds<br />
+                <Typography sx={{fontSize:"2rem"}}>{seconds}</Typography>
             </CalanderPaper>
         </Grid>
     )

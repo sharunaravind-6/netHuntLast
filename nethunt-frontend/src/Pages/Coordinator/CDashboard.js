@@ -126,7 +126,7 @@ export default function CoordinatorsDashboard(props) {
                         <ListItem disablePadding>
                             <ListItemButton onClick={() => {
                                 setLoading(true);
-                                navigate("quiz/v");
+                                navigate("quiz");
                                 setOpenDrawer(false);
                                 setLoading(false);
                             }}>
