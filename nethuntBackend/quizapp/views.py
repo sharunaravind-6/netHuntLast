@@ -11,8 +11,11 @@ from .serializers import QuestionSerializer,QuizSerializer
 import json
 import copy
 from datetime import datetime
-from .discordBot import DiscordBot
-
+import discord
+from discord.ext import commands
+# import tracemalloc
+# tracemalloc.start()
+bot = commands.Bot(command_prefix='!',intents=discord.Intents.default())
 # from quizapp.discordBot import client
 # Create your views here.
 @api_view(["GET"])
@@ -24,11 +27,22 @@ def get_startDate(req):
 @api_view(["GET"])
 def get_endDate(req):
     return Response({"configured": True,"endDateTime":Info.objects.all()[0].endBy})
-    
-# @api_view(["POST"])
-# def get_log(req):
-#     DiscordBot("testing").start()
-#     return Response({"test":"working"})
+
+
+async def send_message(channel_id, message):
+    bot = commands.Bot(command_prefix='!',intents=discord.Intents.default())
+
+    async def send(channel_id, message):
+        channel = bot.get_channel(channel_id)
+        await channel.send(message)
+    await bot.start("MTA3NzQ4MzcwNDg4MjA1NzIzNg.GXDPhh.YrYSDV8NJWAbjpFjcTqxxtM5PLv2GxXhqVPTLo")
+    await send(channel_id, message)
+    await bot.logout()
+
+@api_view(["POST"])
+async def get_log(req):
+    await send_message(1077512613132521563, "Hello, world!")
+    return Response({"info":"Message sent!"})
 
 @api_view(["POST"])
 def get_quiz_status(req):
