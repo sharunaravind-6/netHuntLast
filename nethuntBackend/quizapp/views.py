@@ -11,7 +11,9 @@ from .serializers import QuestionSerializer,QuizSerializer
 import json
 import copy
 from datetime import datetime
+from .discordBot import DiscordBot
 
+# from quizapp.discordBot import client
 # Create your views here.
 @api_view(["GET"])
 def get_startDate(req):
@@ -23,7 +25,14 @@ def get_startDate(req):
 def get_endDate(req):
     return Response({"configured": True,"endDateTime":Info.objects.all()[0].endBy})
     
+# @api_view(["POST"])
+# def get_log(req):
+#     DiscordBot("testing").start()
+#     return Response({"test":"working"})
 
+@api_view(["POST"])
+def get_quiz_status(req):
+    pass
 @api_view(["GET"])
 @permission_classes([IsAdminUser])
 def is_configured(req):

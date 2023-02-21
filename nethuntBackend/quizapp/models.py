@@ -66,13 +66,13 @@ class CurrentStatus(models.Model):
     usr = models.ForeignKey(NethuntUser, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     level = models.IntegerField(default=0)
-
+    score = models.IntegerField(default=0)
 class Progress(models.Model):
     usr = models.ForeignKey(NethuntUser, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     level = models.IntegerField(default=0)
     hits = models.IntegerField(default=0)
-
+    points = models.IntegerField(default=0)
 class Log(models.Model):
     usr = models.ForeignKey(NethuntUser, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)

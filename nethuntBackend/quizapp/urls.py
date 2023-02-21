@@ -6,5 +6,6 @@ urlpatterns = [
     path("set_config", views.add_config),
     path("add_question",views.add_question),
     path("startBy",views.get_startDate),
-    path("endBy",views.get_endDate)
+    path("endBy",views.get_endDate),
+    # path("bottest",views.get_log)
 ]

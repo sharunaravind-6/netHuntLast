@@ -8,7 +8,7 @@ import Dashboard3Img from "./../Images/Dashboard_3.svg";
 import Dashboard4Img from "./../Images/Dashboard_4.svg";
 import Dashboard5Img from "./../Images/Dashboard_5.svg";
 import Dashboard6Img from "./../Images/Dashboard_6.svg";
-
+import useAxios from "../utils/useAxios";
 import CircularProgressWithLabel from "./CircluarProgressWithLabel";
 import { useContext, useEffect, useState } from "react";
 import { userContext } from "../Store/user";
@@ -40,11 +40,15 @@ export default function Home(props) {
                 )
             }
             setLoading(false)
-        },[]
+        }, []
     )
+    const api = useAxios()
+    const handleOpenQuestion = (quiz) => {
+        console.log(userDetails.user.email, quiz)
+    }
     return (<ThemeProvider theme={theme}>
         <CssBaseline />
-        <Paper sx={{padding:4}}>
+        <Paper sx={{ padding: 4 }}>
             <Paper elevation={16} sx={{ padding: 2 }}>
                 <Grid container>
                     <Grid item xs={12} md={3}>
@@ -63,7 +67,7 @@ export default function Home(props) {
                             <Typography variant="h4" component="p" align="center" mt={3}>
                                 ENDS IN
                             </Typography>
-                            {endBy !== null ? <Timer timing={endBy}/>:<CircularProgress/>}
+                            {endBy !== null ? <Timer timing={endBy} /> : <CircularProgress />}
                         </Stack>
                     </Grid>
                 </Grid>
@@ -83,7 +87,7 @@ export default function Home(props) {
                                     <CircularProgressWithLabel value={30} />
                                 </ListItemIcon>
                                 <ListItemText>Practice</ListItemText>
-                                <IconButton>
+                                <IconButton onClick={()=>{handleOpenQuestion("Practice")}}>
                                     <PlayCircleFilledRounded />
                                 </IconButton>
                             </ListItemButton>
@@ -92,7 +96,7 @@ export default function Home(props) {
                                     <CircularProgressWithLabel value={45} />
                                 </ListItemIcon>
                                 <ListItemText>Main</ListItemText>
-                                <IconButton>
+                                <IconButton onClick={()=>{handleOpenQuestion("Main")}}>
                                     <PlayCircleFilledRounded />
                                 </IconButton>
                             </ListItemButton>
