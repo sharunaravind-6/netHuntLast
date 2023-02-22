@@ -11,11 +11,9 @@ from .serializers import QuestionSerializer,QuizSerializer
 import json
 import copy
 from datetime import datetime
-import discord
-from discord.ext import commands
+import requests
 # import tracemalloc
 # tracemalloc.start()
-bot = commands.Bot(command_prefix='!',intents=discord.Intents.default())
 # from quizapp.discordBot import client
 # Create your views here.
 @api_view(["GET"])
@@ -29,20 +27,26 @@ def get_endDate(req):
     return Response({"configured": True,"endDateTime":Info.objects.all()[0].endBy})
 
 
-async def send_message(channel_id, message):
-    bot = commands.Bot(command_prefix='!',intents=discord.Intents.default())
-
-    async def send(channel_id, message):
-        channel = bot.get_channel(channel_id)
-        await channel.send(message)
-    await bot.start("MTA3NzQ4MzcwNDg4MjA1NzIzNg.GXDPhh.YrYSDV8NJWAbjpFjcTqxxtM5PLv2GxXhqVPTLo")
-    await send(channel_id, message)
-    await bot.logout()
 
 @api_view(["POST"])
-async def get_log(req):
-    await send_message(1077512613132521563, "Hello, world!")
-    return Response({"info":"Message sent!"})
+def get_log(req):
+    url = "https://discord.com/api/webhooks/1077878410271019008/vwKfxy-5NL8az1_Xwlf6zwpWQ0B18hAzUj03wqJU9t8mjs5H3RZ7ZVTo7DUQTQOLB9jA" # Replace with your own webhook URL
+    message = "Hello, world!" # Replace with your own message
+
+    payload = {
+        "content": message
+    }
+
+    headers = {
+        "Content-Type": "application/json"
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+
+    if response.status_code == 204:
+        return Response({"info":"Message sent to Discord channel."})
+    else:
+        return Response({"info":"Failed to send message to Discord channel."})
 
 @api_view(["POST"])
 def get_quiz_status(req):
