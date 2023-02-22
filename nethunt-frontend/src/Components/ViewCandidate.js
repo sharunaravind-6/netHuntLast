@@ -3,7 +3,7 @@ import { Avatar, Grid, Paper, Typography, Stack, Divider, Box, Container } from 
 import { useContext, useEffect, useState } from "react"
 import { CoordinatorContext } from "../Store/coordinatorStore"
 import StyledBadge from "./Parts/StyledBadge"
-
+import StudentSVG from "./../Images/Students.svg"
 export default function ViewCandidates() {
     const { fetchUsers, usrs } = useContext(CoordinatorContext)
     const [loading, setLoading] = useState(true)
@@ -19,10 +19,13 @@ export default function ViewCandidates() {
     return (
         <Paper>
             <Grid container padding={3} >
-                <Grid item xs={12} padding={2}>
-                    <Typography variant="h5">
-                        Candidates
+                <Grid item xs={12} sm={12} md={12}>
+                <Box sx={{display:"flex",alignContent:"center",alignItems:"center",justifyContent:"center",flexDirection:{"md":"row","xs":"column"}}}>
+                    <img src={StudentSVG} width="250px"/>
+                    <Typography sx={{fontFamily: "'Tourney', cursive;",fontSize:"2rem"}}>
+                        Participants List
                     </Typography>
+                </Box>
                 </Grid>
                 {
                     usrs.map(

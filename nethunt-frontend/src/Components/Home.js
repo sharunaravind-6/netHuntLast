@@ -44,8 +44,11 @@ export default function Home(props) {
     )
     const api = useAxios()
     const handleOpenQuestion =async (quiz) => {
-        const response =await api.post("/game/bottest")
-        console.log(userDetails.user.email, quiz,response)
+        const response =await api.post("/game/progress",{
+            email:userDetails.user.email,
+            quiz:quiz
+        })
+        console.log(response.data)
     }
     return (<ThemeProvider theme={theme}>
         <CssBaseline />
