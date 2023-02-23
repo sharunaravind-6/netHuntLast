@@ -15,6 +15,7 @@ import { userContext } from "../Store/user";
 import Timer from "./Parts/Timer";
 import axios from "axios";
 import { serverHost } from "../utils/server";
+import { useNavigate } from "react-router-dom";
 export default function Home(props) {
     const dashboardImg = [
         Dashboard1Img,
@@ -42,18 +43,7 @@ export default function Home(props) {
             setLoading(false)
         }, []
     )
-    const api = useAxios()
-    const handleOpenQuestion =async (quiz) => {
-        console.log({
-            email:userDetails.user.email,
-            quiz:quiz
-        })
-        const response =await api.post("/game/progress",{
-            email:userDetails.user.email,
-            quiz:quiz
-        })
-        console.log(response.data)
-    }
+    const navigate = useNavigate()
     return (<ThemeProvider theme={theme}>
         <CssBaseline />
         <Paper sx={{ padding: 4 }}>
@@ -95,7 +85,9 @@ export default function Home(props) {
                                     <CircularProgressWithLabel value={30} />
                                 </ListItemIcon>
                                 <ListItemText>Practice</ListItemText>
-                                <IconButton onClick={()=>{handleOpenQuestion("Practice")}}>
+                                <IconButton onClick={()=>{
+                                    
+                                }}>
                                     <PlayCircleFilledRounded />
                                 </IconButton>
                             </ListItemButton>
@@ -104,7 +96,9 @@ export default function Home(props) {
                                     <CircularProgressWithLabel value={45} />
                                 </ListItemIcon>
                                 <ListItemText>Main</ListItemText>
-                                <IconButton onClick={()=>{handleOpenQuestion("Main")}}>
+                                <IconButton onClick={()=>{
+
+                                }}>
                                     <PlayCircleFilledRounded />
                                 </IconButton>
                             </ListItemButton>

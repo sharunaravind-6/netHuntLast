@@ -34,6 +34,7 @@ import CoordinatorProvider from './Store/coordinatorStore';
 import ViewCollege from './Components/ViewCollege';
 import AddQuestion from './Components/Parts/AddQuestion';
 import Quiz from './Pages/Coordinator/Quiz';
+import PracticeQuestion from './Components/PracticeQuestion';
 function App() {
   const { token } = useContext(userContext)
   return (
@@ -52,14 +53,19 @@ function App() {
 
 
           {(token != null && jwtDecode(token?.access).role === "Coordinator") && (
-            <Route path="c" element={<CoordinatorProvider><CoordinatorsDashboard /></CoordinatorProvider>}>
-              <Route path="usr" element={<ViewCandidates />}></Route>
-              <Route path="college" element={<ViewCollege />}></Route>
-              <Route path="quiz" element={<Quiz />}></Route>
-            </Route>)}
-          <Route path="q" element={<Questions />}>
-            <Route path="" element={<Question />}></Route>
-          </Route>
+            <>
+              <Route path="c" element={<CoordinatorProvider><CoordinatorsDashboard /></CoordinatorProvider>}>
+                <Route path="usr" element={<ViewCandidates />}></Route>
+                <Route path="college" element={<ViewCollege />}></Route>
+                <Route path="quiz" element={<Quiz />}></Route>
+              </Route>
+              <Route path="q" element={<Questions />}>
+                <Route path="practice" element={<PracticeQuestion />}></Route>
+                <Route path="main" element={<Question />}></Route>
+              </Route>
+            </>
+          )}
+
 
           {(token != null && jwtDecode(token?.access).role === "Admin") && (
             <Route path="a" element={<AdminProvider><AdminMain /></AdminProvider>} >

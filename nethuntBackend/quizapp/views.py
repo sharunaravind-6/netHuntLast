@@ -55,7 +55,9 @@ def get_quiz_status(req):
     if current_status.count() == 0:
         CurrentStatus(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"])).save()
         Progress(usr==NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"])).save()
-        return #question for 0 th question
+        question = Question.objects.all()[current_status[0].level]
+        questionSerializer = QuestionSerializer(question,).data
+        return Response({"problem":False,"question":questionSerializer})
     elif current_status.count() == 1:
         progress = Progress.objects.filter(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
         if progress.count() == 0:
@@ -63,11 +65,13 @@ def get_quiz_status(req):
             if current_status[0].level + 1 > Question.objects.all().count():
                 return Response({"problem":True,"end":True,"multipleCurrentStatus":False,"multipleProgress":False})    
             else:
-                question = QuestionSerializer(Question.objects.all()[current_status[0].level],many=False).data
-                return Response({"problem":False,"question":question})
+                question = Question.objects.all()[current_status[0].level]
+                questionSerializer = QuestionSerializer(question,).data
+                return Response({"problem":False,"question":questionSerializer})
         elif progress.count() == 1:
-            question = QuestionSerializer(data=Question.objects.all()[current_status[0].level],many=False).data
-            return Response({"problem":False,"question":question})
+            question = Question.objects.all()[current_status[0].level]
+            questionSerializer = QuestionSerializer(question,).data
+            return Response({"problem":False,"question":questionSerializer})
         else :
             return Response({"problem":True,"end":False,"multipleCurrentStatus":False,"multipleProgress":True})
     else:

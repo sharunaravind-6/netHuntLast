@@ -8,13 +8,13 @@ import useAxios from "../utils/useAxios";
 import QuestionImg from "./../Images/QuestionSample.svg";
 import QuestionFooter from "./QuestionFooter";
 
-export default function Question() {
-    const  {userDetails} = useContext(UserContextProvider)
+export default function PracticeQuestion() {
     const api = useAxios()
+    const  {userDetails} = useContext(UserContextProvider)
     const handleOpenQuestion =async (quiz) => {
         console.log({
             email:userDetails.user.email,
-            quiz:"Main"
+            quiz:"Practice"
         })
         const response =await api.post("/game/progress",{
             email:userDetails.user.email,
@@ -25,7 +25,6 @@ export default function Question() {
             
         }
     }
-
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
