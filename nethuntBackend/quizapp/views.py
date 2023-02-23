@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from user.models import (Coordinator,NethuntUser)
 from user.serializers import (CoordinatorSerializer)
 from user.serializers import NethuntUserSerializer
-from quizapp.models import Info,Question,Progress
+from quizapp.models import Info,Question,Progress,CurrentStatus
 from .serializers import QuestionSerializer,QuizSerializer
 import json
 import copy
@@ -51,15 +51,27 @@ def get_log(req):
 @api_view(["POST"])
 def get_quiz_status(req):
     data = json.loads(req.body)
-    progress = Progress.objects.filter(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"]))
-    if progress.count() == 0:
-        Progress.objects.create(usr==NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"])).save()
-    elif progress.count() == 1:
-        #do the respective tasks
-        pass
+    current_status = CurrentStatus.objects.filter(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"]))
+    if current_status.count() == 0:
+        CurrentStatus(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"])).save()
+        Progress(usr==NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"])).save()
+        return #question for 0 th question
+    elif current_status.count() == 1:
+        progress = Progress.objects.filter(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
+        if progress.count() == 0:
+            Progress(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level).save()
+            if current_status[0].level + 1 > Question.objects.all().count():
+                return Response({"problem":True,"end":True,"multipleCurrentStatus":False,"multipleProgress":False})    
+            else:
+                question = QuestionSerializer(Question.objects.all()[current_status[0].level],many=False).data
+                return Response({"problem":False,"question":question})
+        elif progress.count() == 1:
+            question = QuestionSerializer(data=Question.objects.all()[current_status[0].level],many=False).data
+            return Response({"problem":False,"question":question})
+        else :
+            return Response({"problem":True,"end":False,"multipleCurrentStatus":False,"multipleProgress":True})
     else:
-        #something went wrong contact the admin
-        pass
+        return Response({"problem":True,"end":False,"multipleCurrentStatus":True,"multipleProgress":False})
     print(progress)
     return Response({"test":"testing"})
 @api_view(["GET"])

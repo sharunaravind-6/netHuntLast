@@ -44,6 +44,10 @@ export default function Home(props) {
     )
     const api = useAxios()
     const handleOpenQuestion =async (quiz) => {
+        console.log({
+            email:userDetails.user.email,
+            quiz:quiz
+        })
         const response =await api.post("/game/progress",{
             email:userDetails.user.email,
             quiz:quiz
