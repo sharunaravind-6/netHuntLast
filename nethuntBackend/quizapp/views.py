@@ -12,10 +12,8 @@ import json
 import copy
 from datetime import datetime
 import requests
-# import tracemalloc
-# tracemalloc.start()
-# from quizapp.discordBot import client
-# Create your views here.
+import base64
+
 @api_view(["GET"])
 def get_startDate(req):
     if (Info.objects.all().count() >= 1):
@@ -70,7 +68,9 @@ def get_quiz_status(req):
                 return Response({"problem":False,"question":questionSerializer})
         elif progress.count() == 1:
             question = Question.objects.all()[current_status[0].level]
+            # print(question.image.read())
             questionSerializer = QuestionSerializer(question,).data
+            questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
             return Response({"problem":False,"question":questionSerializer})
         else :
             return Response({"problem":True,"end":False,"multipleCurrentStatus":False,"multipleProgress":True})

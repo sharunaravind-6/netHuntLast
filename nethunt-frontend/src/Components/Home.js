@@ -86,7 +86,7 @@ export default function Home(props) {
                                 </ListItemIcon>
                                 <ListItemText>Practice</ListItemText>
                                 <IconButton onClick={()=>{
-                                    
+                                    navigate("../../q/practice")
                                 }}>
                                     <PlayCircleFilledRounded />
                                 </IconButton>
@@ -97,7 +97,7 @@ export default function Home(props) {
                                 </ListItemIcon>
                                 <ListItemText>Main</ListItemText>
                                 <IconButton onClick={()=>{
-
+                                    navigate("../../q/main")
                                 }}>
                                     <PlayCircleFilledRounded />
                                 </IconButton>

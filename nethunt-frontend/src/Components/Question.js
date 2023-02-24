@@ -1,6 +1,6 @@
 import { Box, Button, Chip, CssBaseline, Divider, Paper, TextField, ThemeProvider, Toolbar, Typography } from "@mui/material";
 import { useContext } from "react";
-import { UserContextProvider } from "../Store/user";
+import { userContext, } from "../Store/user";
 
 import { theme } from "../Theme/LightTheme";
 import useAxios from "../utils/useAxios";
@@ -9,7 +9,7 @@ import QuestionImg from "./../Images/QuestionSample.svg";
 import QuestionFooter from "./QuestionFooter";
 
 export default function Question() {
-    const  {userDetails} = useContext(UserContextProvider)
+    const  {userDetails} = useContext(userContext)
     const api = useAxios()
     const handleOpenQuestion =async (quiz) => {
         console.log({

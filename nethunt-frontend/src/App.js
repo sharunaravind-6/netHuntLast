@@ -44,12 +44,19 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path='login' element={<Login />}></Route>
           {(token != null && jwtDecode(token?.access).role === "Candidate") && (
-            <Route path="s" element={<DashboardX />}>
-              <Route path="dashboard" element={<Home />}></Route>
-              <Route path="help" element={<Help />}></Route>
-              <Route path="scoreboard" element={<ScoreBoardX />}></Route>
-              <Route path="profile" element={<ProfileX />}></Route>
-            </Route>)}
+            <>
+              <Route path="s" element={<DashboardX />}>
+                <Route path="dashboard" element={<Home />}></Route>
+                <Route path="help" element={<Help />}></Route>
+                <Route path="scoreboard" element={<ScoreBoardX />}></Route>
+                <Route path="profile" element={<ProfileX />}></Route>
+              </Route>
+              <Route path="q" element={<Questions />}>
+                <Route path="practice" element={<PracticeQuestion />}></Route>
+                <Route path="main" element={<Question />}></Route>
+              </Route>
+            </>
+          )}
 
 
           {(token != null && jwtDecode(token?.access).role === "Coordinator") && (
@@ -58,10 +65,6 @@ function App() {
                 <Route path="usr" element={<ViewCandidates />}></Route>
                 <Route path="college" element={<ViewCollege />}></Route>
                 <Route path="quiz" element={<Quiz />}></Route>
-              </Route>
-              <Route path="q" element={<Questions />}>
-                <Route path="practice" element={<PracticeQuestion />}></Route>
-                <Route path="main" element={<Question />}></Route>
               </Route>
             </>
           )}
