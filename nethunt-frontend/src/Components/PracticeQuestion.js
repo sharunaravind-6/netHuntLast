@@ -10,8 +10,10 @@ import QuestionImg from "./../Images/QuestionSample.svg";
 
 export default function PracticeQuestion() {
     const api = useAxios()
-    const [question,setQuestion] = useState(null)
+    const [hits, setHits] = useState(0)
+    const [question, setQuestion] = useState(null)
     const { userDetails } = useContext(userContext)
+    const [loading, setLoading] = useState(true)
     const handleOpenQuestion = async () => {
         console.log({
             email: userDetails?.user.email,
@@ -24,18 +26,22 @@ export default function PracticeQuestion() {
         return response.data
     }
     useEffect(
-        () => { 
-          handleOpenQuestion().then(
-            res=>{
-                console.log(res)
-                if(res?.problem === false){
-                    console.log(res.question)
-                    setQuestion(res?.question)
-                }
+        () => {
+            if (loading) {
+                handleOpenQuestion().then(
+                    res => {
+                        console.log(res)
+                        if (res?.problem === false) {
+                            console.log(res)
+                            setHits(res?.progress?.hits)
+                            setQuestion(res?.question)
+                        }
+                    }
+                )
             }
-          )          
-       },
-        []
+            setLoading(false)
+        },
+        [loading]
     )
     return (
         <ThemeProvider theme={theme}>
@@ -43,11 +49,11 @@ export default function PracticeQuestion() {
             <Paper elevation={24} sx={{ position: "relative", marginTop: 3, padding: 2, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", marginLeft: { xs: 6 } }}>
                 <Toolbar sx={{ width: "100%" }}>
                     <Paper sx={{ padding: 1, position: "absolute", right: "10px", top: "5px" }}>
-                        HITS 1
+                        HITS {hits}
                     </Paper>
                 </Toolbar>
                 <Box sx={{ width: { xs: "250px", sm: "600px" }, position: "relative" }}>
-                    <img src={"data:image/png;base64,"+question?.image} width="100%" />
+                    <img src={"data:image/png;base64," + question?.image} width="100%" />
                 </Box>
                 <Divider />
                 <Box sx={{ width: "100%", display: "flex", marginTop: { md: 3, xs: 10 } }}>

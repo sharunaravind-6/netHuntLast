@@ -7,7 +7,7 @@ from user.models import (Coordinator,NethuntUser)
 from user.serializers import (CoordinatorSerializer)
 from user.serializers import NethuntUserSerializer
 from quizapp.models import Info,Question,Progress,CurrentStatus
-from .serializers import QuestionSerializer,QuizSerializer
+from .serializers import QuestionSerializer,QuizSerializer,ProgressSerializer,CurrentStatusSerializer
 import json
 import copy
 from datetime import datetime
@@ -47,31 +47,39 @@ def get_log(req):
         return Response({"info":"Failed to send message to Discord channel."})
 
 @api_view(["POST"])
+def get_quiz_info(req):
+    data = json.loads(req.body)
+    status = CurrentStatus(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]))
+    statusSerializer = CurrentStatusSerializer(status).data
+    return Response({"status":statusSerializer})
+@api_view(["POST"])
 def get_quiz_status(req):
     data = json.loads(req.body)
     current_status = CurrentStatus.objects.filter(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"]))
     if current_status.count() == 0:
+        #the user is a freash one starting the quiz, who doeesn't have the current status to track his progress
         CurrentStatus(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"])).save()
-        Progress(usr==NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"])).save()
-        question = Question.objects.all()[current_status[0].level]
+        progress = Progress(usr==NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"])).save()
+        progressSerializer = ProgressSerializer(progress,).data
+        question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[current_status[0].level]
         questionSerializer = QuestionSerializer(question,).data
-        return Response({"problem":False,"question":questionSerializer})
+        questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
+        return Response({"problem":False,"question":questionSerializer,"progress":progressSerializer,})
     elif current_status.count() == 1:
+        #person who already played the quiz with the current level stored in the current status
         progress = Progress.objects.filter(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
-        if progress.count() == 0:
-            Progress(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level).save()
-            if current_status[0].level + 1 > Question.objects.all().count():
-                return Response({"problem":True,"end":True,"multipleCurrentStatus":False,"multipleProgress":False})    
+        print(progress.count())
+        if progress.count() == 1:
+            if current_status[0].level +1 > Question.objects.all().count():
+                return Response({"problem":True,"end":True,"multipleCurrentStatus":False,"multipleProgress":False}) 
+            #has record for the current level
             else:
-                question = Question.objects.all()[current_status[0].level]
+                question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[current_status[0].level]
                 questionSerializer = QuestionSerializer(question,).data
-                return Response({"problem":False,"question":questionSerializer})
-        elif progress.count() == 1:
-            question = Question.objects.all()[current_status[0].level]
-            # print(question.image.read())
-            questionSerializer = QuestionSerializer(question,).data
-            questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
-            return Response({"problem":False,"question":questionSerializer})
+                questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
+                progressX = Progress(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
+                progressSerializer = ProgressSerializer(progressX,).data
+                return Response({"problem":False,"question":questionSerializer,"progress":progressSerializer})
         else :
             return Response({"problem":True,"end":False,"multipleCurrentStatus":False,"multipleProgress":True})
     else:

@@ -1,12 +1,25 @@
 import { InfoRounded } from "@mui/icons-material";
 import { Box, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Paper, Grid, CardHeader, Card, CardContent, Switch, Stepper, Step, StepContent, StepLabel, ButtonGroup, Button, Chip, Badge } from "@mui/material";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import ContactUS from "../Components/ContactUs";
 import QuestionFooter from "../Components/QuestionFooter";
+import useAxios from "../utils/useAxios";
 
 
 import { theme } from "./../Theme/LightTheme";
 export default function Questions(props) {
+    const [loading,setLoading] = useState(true)
+    const api = useAxios()
+    const [noOfQues,setNoOfQues] = useState(0)
+    useEffect(
+        ()=>{
+            if(loading){
+                api.post("game/status")
+            }
+            setLoading(false)
+        },[loading]
+    )
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
