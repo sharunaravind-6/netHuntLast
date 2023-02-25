@@ -51,7 +51,8 @@ def get_quiz_info(req):
     data = json.loads(req.body)
     status = CurrentStatus(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]))
     statusSerializer = CurrentStatusSerializer(status).data
-    return Response({"status":statusSerializer})
+    noOfQuestion = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count()
+    return Response({"status":statusSerializer,"total_ques":noOfQuestion})
 @api_view(["POST"])
 def get_quiz_status(req):
     data = json.loads(req.body)

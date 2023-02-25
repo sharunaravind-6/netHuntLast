@@ -1,7 +1,7 @@
 import { InfoRounded } from "@mui/icons-material";
 import { Box, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Paper, Grid, CardHeader, Card, CardContent, Switch, Stepper, Step, StepContent, StepLabel, ButtonGroup, Button, Chip, Badge } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import ContactUS from "../Components/ContactUs";
 import QuestionFooter from "../Components/QuestionFooter";
 import useAxios from "../utils/useAxios";
@@ -9,16 +9,39 @@ import useAxios from "../utils/useAxios";
 
 import { theme } from "./../Theme/LightTheme";
 export default function Questions(props) {
-    const [loading,setLoading] = useState(true)
+    const [loading, setLoading] = useState(true)
     const api = useAxios()
-    const [noOfQues,setNoOfQues] = useState(0)
+    const [noOfQues, setNoOfQues] = useState([])
+    const [score, setScore] = useState(0)
+
+    const location = useLocation()
+    console.log()
     useEffect(
-        ()=>{
-            if(loading){
-                api.post("game/status")
+        () => {
+            const pathname = location.pathname.split("/")
+            if (loading) {
+                api.post("game/status", {
+                    quiz: pathname[pathname.length - 1] === "main" ? "Main" : "Practice"
+                }).then(
+                    res => {
+                        const data = res.data
+                        setScore(data.status.score)
+                        setNoOfQues(data.total_ques)
+                        let steps = []
+                        for (let i = 0; i < data.total_ques; i++) {
+                            steps.push(
+                                <Step key={i}>
+                                    <StepLabel></StepLabel>
+                                </Step>
+                            )
+                        }
+                        setNoOfQues(steps)
+                        console.log(res.data)
+                    }
+                )
             }
             setLoading(false)
-        },[loading]
+        }, [loading]
     )
     return (
         <ThemeProvider theme={theme}>
@@ -32,7 +55,7 @@ export default function Questions(props) {
                     </Box>
                     <Box sx={{ display: "flex", alignContent: "center", alignItems: "center", flexDirection: "row" }}>
                         <Typography>
-                            SCORE 1010
+                            SCORE {score}
                         </Typography>
                         {/* <InfoRounded sx={{marginRight:{xs:2,sm:4}}}/> */}
                         <Button variant="contained">
@@ -49,69 +72,7 @@ export default function Questions(props) {
                 }}>
                     <Toolbar />
                     <Stepper orientation="vertical" sx={{ padding: 1, width: "100%", height: "100%", }}>
-                        <Step>
-                            <StepLabel></StepLabel>
-                        </Step>
-                        <Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step>
-                        <Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step><Step>
-                            <StepLabel></StepLabel>
-                        </Step>
+                        {noOfQues}
                     </Stepper>
                 </Drawer>
                 <Container >
