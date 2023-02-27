@@ -53,6 +53,18 @@ def get_quiz_info(req):
     statusSerializer = CurrentStatusSerializer(status).data
     noOfQuestion = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count()
     return Response({"status":statusSerializer,"total_ques":noOfQuestion})
+
+@api_view(["POST"])
+def check_answer(req):
+    data = json.loads(req.body)
+    current_status = CurrentStatus.objects.filter(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"]))
+    progress = Progress.objects.filter(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
+    question = Question.objects.filter(quiz=data["quiz"])[current_status[0].level]
+    if question.answer == data["try"]:
+        Progress(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level+1).save()
+        current_status.update(level=current_status[0].level+1)
+    else:
+        progress.update(hits=progress[0].hits+1)
 @api_view(["POST"])
 def get_quiz_status(req):
     data = json.loads(req.body)
@@ -60,7 +72,7 @@ def get_quiz_status(req):
     if current_status.count() == 0:
         #the user is a freash one starting the quiz, who doeesn't have the current status to track his progress
         CurrentStatus(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"])).save()
-        progress = Progress(usr==NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"])).save()
+        progress = Progress(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"])).save()
         progressSerializer = ProgressSerializer(progress,).data
         question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[current_status[0].level]
         questionSerializer = QuestionSerializer(question,).data
