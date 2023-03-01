@@ -57,14 +57,17 @@ def get_quiz_info(req):
 @api_view(["POST"])
 def check_answer(req):
     data = json.loads(req.body)
-    current_status = CurrentStatus.objects.filter(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"]))
-    progress = Progress.objects.filter(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
-    question = Question.objects.filter(quiz=data["quiz"])[current_status[0].level]
+    current_status = CurrentStatus.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]))
+    progress = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
+    question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[current_status[0].level]
+    print(question)
     if question.answer == data["try"]:
-        Progress(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level+1).save()
+        Progress(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level+1).save()
         current_status.update(level=current_status[0].level+1)
     else:
+        print(progress)
         progress.update(hits=progress[0].hits+1)
+    return Response({"test":"testing"})
 @api_view(["POST"])
 def get_quiz_status(req):
     data = json.loads(req.body)

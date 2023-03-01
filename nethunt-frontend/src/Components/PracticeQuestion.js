@@ -1,5 +1,6 @@
 import { Box, Button, Chip, CssBaseline, Divider, Paper, TextField, ThemeProvider, Toolbar, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { userContext, } from "../Store/user";
 
 import { theme } from "../Theme/LightTheme";
@@ -14,6 +15,23 @@ export default function PracticeQuestion() {
     const [question, setQuestion] = useState(null)
     const { userDetails } = useContext(userContext)
     const [loading, setLoading] = useState(true)
+    const [answer,setAnswer] = useState("")
+    const location = useLocation()
+    function hasSpecialCharsAndCapitalLetters(string) {
+        var regex = /[^a-z]+|[A-Z]+|\s+/g;
+        return regex.test(string);
+      }
+      const handleSubmit = async ()=>{
+        if(answer === "" || hasSpecialCharsAndCapitalLetters(answer)){
+            return
+        }
+        const pathname = location.pathname.split("/")
+        const response = await api.post("game/check_answer", {
+            quiz: pathname[pathname.length - 1] === "main" ? "Main" : "Practice",
+            try:answer
+        })
+        console.log(response.data)
+      }
     const handleOpenQuestion = async () => {
         console.log({
             email: userDetails?.user.email,
@@ -57,8 +75,10 @@ export default function PracticeQuestion() {
                 </Box>
                 <Divider />
                 <Box sx={{ width: "100%", display: "flex", marginTop: { md: 3, xs: 10 } }}>
-                    <TextField label={"Guess"} sx={{ width: "100%" }} focused />
-                    <Button variant="contained">Hit!</Button>
+                    <TextField label={"Guess"} sx={{ width: "100%" }} onChange={(event)=>{
+                        setAnswer(event.target.value)
+                    }} focused />
+                    <Button variant="contained" disabled={answer === "" || hasSpecialCharsAndCapitalLetters(answer)} onClick={handleSubmit}>Hit!</Button>
                 </Box>
             </Paper>
             {/* <QuestionFooter/> */}
