@@ -31,6 +31,19 @@ export default function PracticeQuestion() {
             try:answer
         })
         console.log(response.data)
+        if(response.data.passed){
+            if(response.data.end){
+                //navigate to scoreboard
+            }else{
+                //move to next question
+                setQuestion(response.data.question)
+                setHits(response.data.progress.hits)
+            }
+        }else{
+            //same question but need to update hits
+            setHits(response.data.progress.hits)
+        }
+        setAnswer("")
       }
     const handleOpenQuestion = async () => {
         console.log({
@@ -75,7 +88,7 @@ export default function PracticeQuestion() {
                 </Box>
                 <Divider />
                 <Box sx={{ width: "100%", display: "flex", marginTop: { md: 3, xs: 10 } }}>
-                    <TextField label={"Guess"} sx={{ width: "100%" }} onChange={(event)=>{
+                    <TextField label={"Guess"} sx={{ width: "100%" }} value={answer} onChange={(event)=>{
                         setAnswer(event.target.value)
                     }} focused />
                     <Button variant="contained" disabled={answer === "" || hasSpecialCharsAndCapitalLetters(answer)} onClick={handleSubmit}>Hit!</Button>

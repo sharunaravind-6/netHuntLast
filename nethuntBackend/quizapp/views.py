@@ -60,14 +60,22 @@ def check_answer(req):
     current_status = CurrentStatus.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]))
     progress = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
     question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[current_status[0].level]
-    print(question)
+    # print(question)
     if question.answer == data["try"]:
         Progress(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level+1).save()
         current_status.update(level=current_status[0].level+1)
+        if current_status[0].level +1 > Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count():
+            return Response({"passed":True,"end":True})
+        else:
+            progressX = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
+            progressSerializer = ProgressSerializer(progressX[0],).data
+            question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[current_status[0].level]
+            return Response({"passed" : True,"end":False,"question":question,"progress":progressSerializer})
     else:
-        print(progress)
-        progress.update(hits=progress[0].hits+1)
-    return Response({"test":"testing"})
+        # print(progress)
+        progress.update(hits=progress[0].hits+1)  
+        progressSerializer = ProgressSerializer(progress[0],).data
+        return Response({"passed":False,"progress":progressSerializer})
 @api_view(["POST"])
 def get_quiz_status(req):
     data = json.loads(req.body)

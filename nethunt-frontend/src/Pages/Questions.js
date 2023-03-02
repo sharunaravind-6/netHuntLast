@@ -71,7 +71,7 @@ export default function Questions(props) {
                     '& .MuiDrawer-paper': { boxSizing: 'border-box', }
                 }}>
                     <Toolbar />
-                    <Stepper orientation="vertical" sx={{ padding: 1, width: "100%", height: "100%", }}>
+                    <Stepper orientation="vertical" sx={{ padding: 1, width: "100%", height: "100%", }} activeStep={1}>
                         {noOfQues}
                     </Stepper>
                 </Drawer>
