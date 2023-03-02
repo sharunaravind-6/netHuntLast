@@ -13,7 +13,7 @@ import copy
 from datetime import datetime
 import requests
 import base64
-
+from django.utils import timezone
 @api_view(["GET"])
 def get_startDate(req):
     if (Info.objects.all().count() >= 1):
@@ -26,13 +26,11 @@ def get_endDate(req):
 
 
 
-@api_view(["POST"])
-def get_log(req):
+def send_log_data(msg):
     url = "https://discord.com/api/webhooks/1077878410271019008/vwKfxy-5NL8az1_Xwlf6zwpWQ0B18hAzUj03wqJU9t8mjs5H3RZ7ZVTo7DUQTQOLB9jA" # Replace with your own webhook URL
-    message = "Hello, world!" # Replace with your own message
 
     payload = {
-        "content": message
+        "content": msg
     }
 
     headers = {
@@ -60,6 +58,7 @@ def check_answer(req):
     current_status = CurrentStatus.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]))
     progress = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
     question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[current_status[0].level]
+    send_log_data("User : "+req.user.email + "\nCorrent Answer : "+ question.answer + "\nGuessed One : "+data["try"] + "\n Time "+str(timezone.now()))
     # print(question)
     if question.answer == data["try"]:
         Progress(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level+1).save()

@@ -12,5 +12,4 @@ urlpatterns = [
     path("progress",views.get_quiz_status),
     path("status",views.get_quiz_info),
     path("check_answer",views.check_answer),
-    path("bottest",views.get_log)
 ]

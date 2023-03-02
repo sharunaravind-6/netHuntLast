@@ -13,7 +13,7 @@ export default function Questions(props) {
     const api = useAxios()
     const [noOfQues, setNoOfQues] = useState([])
     const [score, setScore] = useState(0)
-
+    const [current_question,set_current_question] = useState(0)
     const location = useLocation()
     console.log()
     useEffect(
