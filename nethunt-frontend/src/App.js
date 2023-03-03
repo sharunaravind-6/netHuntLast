@@ -21,7 +21,7 @@ import QuizDisplay from './Components/QuizDisplay';
 import QuizEdit from './Components/QuizEdit';
 import QuestionAdmin from './Components/QuestionsAdmin';
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
 import Page404 from './Pages/404';
 import AdminProvider from './Store/adminStore';
@@ -36,6 +36,36 @@ import AddQuestion from './Components/Parts/AddQuestion';
 import Quiz from './Pages/Coordinator/Quiz';
 import PracticeQuestion from './Components/PracticeQuestion';
 function App() {
+  function preventConsoleOpening(){
+    document.addEventListener('keydown', function (event) {
+      if (event.ctrlKey && event.shiftKey && event.key === "I") {
+        event.preventDefault(); // Prevent console from opening
+      }
+      if(event.key === 'Escape'){
+        // console.log("Im here")
+        event.preventDefault()
+      }
+      if(event.key === "F11"){
+        event.preventDefault()
+      }
+      console.log(event.key)
+    })
+  }
+  function preventRightClick() {
+    document.addEventListener('contextmenu', (event)=>{
+      event.preventDefault();
+    });
+  }
+  useEffect(
+    () => {
+      preventConsoleOpening()
+      preventRightClick()
+      return ()=>{
+        document.removeEventListener('keydown',preventConsoleOpening);
+        document.removeEventListener('contextmenu',preventRightClick)
+      }
+    },[]
+  )
   const { token } = useContext(userContext)
   return (
     <div>
