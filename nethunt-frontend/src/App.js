@@ -35,6 +35,7 @@ import ViewCollege from './Components/ViewCollege';
 import AddQuestion from './Components/Parts/AddQuestion';
 import Quiz from './Pages/Coordinator/Quiz';
 import PracticeQuestion from './Components/PracticeQuestion';
+import PracticeQuestions from './Components/Questions/PracticeQuestions';
 function App() {
   function preventConsoleOpening(){
     document.addEventListener('keydown', function (event) {
@@ -58,12 +59,12 @@ function App() {
   }
   useEffect(
     () => {
-      preventConsoleOpening()
-      preventRightClick()
-      return ()=>{
-        document.removeEventListener('keydown',preventConsoleOpening);
-        document.removeEventListener('contextmenu',preventRightClick)
-      }
+      // preventConsoleOpening()
+      // preventRightClick()
+      // return ()=>{
+      //   document.removeEventListener('keydown',preventConsoleOpening);
+      //   document.removeEventListener('contextmenu',preventRightClick)
+      // }
     },[]
   )
   const { token } = useContext(userContext)
@@ -81,8 +82,8 @@ function App() {
                 <Route path="scoreboard" element={<ScoreBoardX />}></Route>
                 <Route path="profile" element={<ProfileX />}></Route>
               </Route>
-              <Route path="q" element={<Questions />}>
-                <Route path="practice" element={<PracticeQuestion />}></Route>
+              <Route path="q" element={<Outlet/>}>
+                <Route path="practice" element={<PracticeQuestions />}></Route>
                 <Route path="main" element={<Question />}></Route>
               </Route>
             </>
