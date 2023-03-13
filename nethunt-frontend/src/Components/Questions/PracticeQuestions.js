@@ -71,11 +71,12 @@ export default function PracticeQuestions(props) {
                         setQuestion(data?.current_question)
                         set_current_question(data?.status?.level)
                         console.log(res.data)
+
+                        setLoading(false)
                     }
                 )
             }
-            setLoading(false)
-        }, [loading]
+        }, []
     )
     return (
         <ThemeProvider theme={theme}>

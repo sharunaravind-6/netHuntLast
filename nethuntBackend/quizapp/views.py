@@ -52,14 +52,16 @@ def get_quiz_info(req):
     if current_status.count() == 0:
         #the user is a freash one starting the quiz, who doeesn't have the current status to track his progress
         CurrentStatus(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"])).save()
-        progress = Progress(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"])).save()
-        progressSerializer = ProgressSerializer(progress,).data
+        Progress(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"])).save()
     elif current_status.count() == 1:
         #person who already played the quiz with the current level stored in the current status
         progress = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
-        print(progress.count())
+        if progress.count() == 0:
+            Progress(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level).save()
+            
+        progress = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
         if progress.count() == 1:
-            if current_status[0].level +1 > Question.objects.all().count():
+            if current_status[0].level +1 > Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count():
                 return Response({"problem":True,"end":True,"multipleCurrentStatus":False,"multipleProgress":False}) 
             #has record for the current level
             else:
@@ -68,7 +70,8 @@ def get_quiz_info(req):
                 questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
                 progressX = Progress(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
                 progressSerializer = ProgressSerializer(progressX,).data
-    status = CurrentStatus(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]))
+    
+    status = CurrentStatus.objects.get(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]))
     statusSerializer = CurrentStatusSerializer(status).data
     noOfQuestion = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count()
     question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[statusSerializer["level"]]
@@ -120,7 +123,7 @@ def get_quiz_status(req):
     elif current_status.count() == 1:
         #person who already played the quiz with the current level stored in the current status
         progress = Progress.objects.filter(usr=NethuntUser.objects.get(email=data["email"]),quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
-        print(progress.count())
+        print(progress.count(),"Sanjay")
         if progress.count() == 1:
             if current_status[0].level +1 > Question.objects.all().count():
                 return Response({"problem":True,"end":True,"multipleCurrentStatus":False,"multipleProgress":False}) 
