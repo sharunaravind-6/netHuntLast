@@ -1,11 +1,12 @@
 import { InfoRounded } from "@mui/icons-material";
-import { Box, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Paper, Grid, CardHeader, Card, CardContent, Switch, Stepper, Step, StepContent, StepLabel, ButtonGroup, Button, Chip, Badge, TextField } from "@mui/material";
+import { Box, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Paper, Grid, CardHeader, Card, CardContent, Switch, Stepper, Step, StepContent, StepLabel, ButtonGroup, Button, Chip, Badge, TextField, Backdrop, CircularProgress, Dialog, Modal } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { userContext } from "../../Store/user";
 import { theme } from "../../Theme/LightTheme";
 import useAxios from "../../utils/useAxios";
 import QuestionFooter from "../QuestionFooter";
+import WaitingSVG from "./../../Images/Waiting.svg";
 export default function PracticeQuestions(props) {
     const [loading, setLoading] = useState(true)
     const api = useAxios()
@@ -13,16 +14,19 @@ export default function PracticeQuestions(props) {
     const [score, setScore] = useState(0)
     const [current_question, set_current_question] = useState(0)
     const location = useLocation()
-
+    const [loader, setLoader] = useState(false)
     const [hits, setHits] = useState(0)
     const [question, setQuestion] = useState(null)
     const { userDetails } = useContext(userContext)
     const [answer, setAnswer] = useState("")
+    const [starter, setStarter] = useState(true)
+    const [nextQues,setNextQuesNavInit] = useState(false) 
     function hasSpecialCharsAndCapitalLetters(string) {
         var regex = /[^a-z]+|[A-Z]+|\s+/g;
         return regex.test(string);
     }
     const handleSubmit = async () => {
+        setLoader(true)
         if (answer === "" || hasSpecialCharsAndCapitalLetters(answer)) {
             return
         }
@@ -46,36 +50,46 @@ export default function PracticeQuestions(props) {
             setHits(response.data.progress.hits)
         }
         setAnswer("")
+        setLoader(false)
+    }
+    const moveToNextQuestion = ()=>{
+
+    }
+    const openQuestion = () => {
+        setLoader(true)
+        setStarter(false)
+        const pathname = location.pathname.split("/")
+        api.post("game/status", {
+            quiz: pathname[pathname.length - 1] === "main" ? "Main" : "Practice"
+        }).then(
+            res => {
+                const data = res.data
+                if (!data?.problem) {
+                    setScore(data.status.score)
+                    setNoOfQues(data.total_ques)
+                    let steps = []
+                    for (let i = 0; i < data.total_ques; i++) {
+                        steps.push(
+                            <Step key={i}>
+                                <StepLabel></StepLabel>
+                            </Step>
+                        )
+                    }
+                    setNoOfQues(steps)
+                    setHits(data?.progress?.hits)
+                    setQuestion(data?.current_question)
+                    set_current_question(data?.status?.level)
+                    console.log(res.data)
+                }
+                setLoader(false)
+            }
+        )
     }
     useEffect(
         () => {
-            const pathname = location.pathname.split("/")
-            if (loading) {
-                api.post("game/status", {
-                    quiz: pathname[pathname.length - 1] === "main" ? "Main" : "Practice"
-                }).then(
-                    res => {
-                        const data = res.data
-                        setScore(data.status.score)
-                        setNoOfQues(data.total_ques)
-                        let steps = []
-                        for (let i = 0; i < data.total_ques; i++) {
-                            steps.push(
-                                <Step key={i}>
-                                    <StepLabel></StepLabel>
-                                </Step>
-                            )
-                        }
-                        setNoOfQues(steps)
-                        setHits(data?.progress?.hits)
-                        setQuestion(data?.current_question)
-                        set_current_question(data?.status?.level)
-                        console.log(res.data)
 
-                        setLoading(false)
-                    }
-                )
-            }
+
+
         }, []
     )
     return (
@@ -119,7 +133,11 @@ export default function PracticeQuestions(props) {
                                 </Paper>
                             </Toolbar>
                             <Box sx={{ width: { xs: "250px", sm: "600px" }, position: "relative" }}>
-                                <img src={"data:image/png;base64," + question?.image} width="100%" />
+                                {question !== null ?
+                                    <img src={"data:image/png;base64," + question?.image} width="100%" />
+                                    :
+                                    <img src={WaitingSVG} width="100%" />
+                                }
                             </Box>
                             <Divider />
                             <Box sx={{ width: "100%", display: "flex", marginTop: { md: 3, xs: 10 } }}>
@@ -132,6 +150,81 @@ export default function PracticeQuestions(props) {
                     </Box>
                 </Container>
                 <QuestionFooter />
+                <Backdrop open={loader}>
+                    <CircularProgress />
+                </Backdrop>
+                <Backdrop open={starter}>
+                    <Modal
+                        open={starter}
+                        aria-labelledby="keep-mounted-modal-title"
+                        aria-describedby="keep-mounted-modal-description"
+                    >
+                        <Box sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: 400,
+                            bgcolor: 'background.paper',
+                            border: '2px solid #000',
+                            boxShadow: 24,
+                            p: 4,
+                        }}>
+                            <Typography id="keep-mounted-modal-title" variant="h6" component="h2" sx={{ textAlign: "center" }}>
+                                Welcome to NETHUNT! <br />
+                                Please read the following instructions carefully before proceeding:
+                            </Typography>
+                            <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+                                <ul>
+                                    <li>
+                                        Ensure that you have a stable internet connection before starting the quiz.
+                                    </li>
+                                    <li>
+                                        Do not refresh or close the quiz window while attempting the quiz.
+                                    </li>
+                                    <li>
+                                        You will have a specific time limit to complete the quiz. Please keep an eye on the timer provided on the home page.
+                                    </li>
+                                    <li>
+                                        Cheating or attempting to cheat during the quiz will result in disqualification.
+                                    </li>
+                                </ul>
+
+                                With that said, we hope you are ready to test your knowledge and wish you the best of luck!<br />
+                                <Button fullWidth onClick={openQuestion}>Proceed</Button>
+                            </Typography>
+                        </Box>
+                    </Modal>
+                </Backdrop>
+
+
+                <Backdrop open={nextQues}>
+                    <Modal
+                        open={nextQues}
+                        aria-labelledby="keep-mounted-modal-title"
+                        aria-describedby="keep-mounted-modal-description"
+                    >
+                        <Box sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: 400,
+                            bgcolor: 'background.paper',
+                            border: '2px solid #000',
+                            boxShadow: 24,
+                            p: 4,
+                        }}>
+                            <Typography id="keep-mounted-modal-title" variant="h6" component="h2" sx={{ textAlign: "center" }}>
+                               
+                            </Typography>
+                            <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+                               
+                                 <Button fullWidth onClick={moveToNextQuestion}>Proceed</Button>
+                            </Typography>
+                        </Box>
+                    </Modal>
+                </Backdrop>
             </Box>
         </ThemeProvider>);
 }

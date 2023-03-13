@@ -53,34 +53,36 @@ def get_quiz_info(req):
         #the user is a freash one starting the quiz, who doeesn't have the current status to track his progress
         CurrentStatus(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"])).save()
         Progress(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"])).save()
+        
+        status = CurrentStatus.objects.get(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]))
+        statusSerializer = CurrentStatusSerializer(status).data
+        
+        noOfQuestion = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count()
+        
+        question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[statusSerializer["level"]]
+        questionSerializer = QuestionSerializer(question,).data
+        questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
+
+        progress = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=statusSerializer["level"])
+        progressSerializer = ProgressSerializer(progress[0],).data
+        
+        return Response({"problem":False,"status":statusSerializer,"total_ques":noOfQuestion,"current_question":questionSerializer,"progress":progressSerializer})
     elif current_status.count() == 1:
         #person who already played the quiz with the current level stored in the current status
         progress = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
-        if progress.count() == 0:
-            Progress(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level).save()
-            
-        progress = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
-        if progress.count() == 1:
-            if current_status[0].level +1 > Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count():
-                return Response({"problem":True,"end":True,"multipleCurrentStatus":False,"multipleProgress":False}) 
-            #has record for the current level
-            else:
-                question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[current_status[0].level]
-                questionSerializer = QuestionSerializer(question,).data
-                questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
-                progressX = Progress(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
-                progressSerializer = ProgressSerializer(progressX,).data
-    
-    status = CurrentStatus.objects.get(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]))
-    statusSerializer = CurrentStatusSerializer(status).data
-    noOfQuestion = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count()
-    question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[statusSerializer["level"]]
-    questionSerializer = QuestionSerializer(question,).data
-    questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
+        if current_status[0].level +1 > Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count():
+            return Response({"problem":True,"end":True})
+        else:
+            status = CurrentStatus.objects.get(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]))
+            statusSerializer = CurrentStatusSerializer(status).data
+            noOfQuestion = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count()
+            question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[statusSerializer["level"]]
+            questionSerializer = QuestionSerializer(question,).data
+            questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
 
-    progress = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=statusSerializer["level"])
-    progressSerializer = ProgressSerializer(progress[0],).data
-    return Response({"status":statusSerializer,"total_ques":noOfQuestion,"current_question":questionSerializer,"progress":progressSerializer})
+            progress = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=statusSerializer["level"])
+            progressSerializer = ProgressSerializer(progress[0],).data
+            return Response({"problem":False,"status":statusSerializer,"total_ques":noOfQuestion,"current_question":questionSerializer,"progress":progressSerializer})
 
 @api_view(["POST"])
 def check_answer(req):
