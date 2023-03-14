@@ -7,6 +7,7 @@ import { theme } from "../../Theme/LightTheme";
 import useAxios from "../../utils/useAxios";
 import QuestionFooter from "../QuestionFooter";
 import WaitingSVG from "./../../Images/Waiting.svg";
+import CongratsSVG from "./../../Images/Appreciation.svg"
 export default function PracticeQuestions(props) {
     const [loading, setLoading] = useState(true)
     const api = useAxios()
@@ -20,7 +21,26 @@ export default function PracticeQuestions(props) {
     const { userDetails } = useContext(userContext)
     const [answer, setAnswer] = useState("")
     const [starter, setStarter] = useState(true)
-    const [nextQues,setNextQuesNavInit] = useState(false) 
+    const [nextQuesInit, setNextQuesNavInit] = useState(false)
+    const appreciationText = ["Hooray! You did it!",
+        "Way to go, champ!",
+        "Woohoo! Congrats on completing the level!",
+        "You rock!",
+        "Awesome job!",
+        "You're amazing!",
+        "Go, you!",
+        "Hip hip hooray!",
+        "All right, all right, all right!",
+        "That's the way to do it!",
+        "Yes, yes, yes!",
+        "You're a star!",
+        "Keep up the great work!",
+        "That was incredible!",
+        "You're on fire!",
+        "You're a winner!",
+        "Bravo, bravo!",
+        "That's how it's done!",
+        "You're unstoppable!"]
     function hasSpecialCharsAndCapitalLetters(string) {
         var regex = /[^a-z]+|[A-Z]+|\s+/g;
         return regex.test(string);
@@ -41,9 +61,12 @@ export default function PracticeQuestions(props) {
                 //navigate to scoreboard
             } else {
                 //move to next question
+                setLoader(true)
+                setNextQuesNavInit(true)
                 setQuestion(response.data.question)
                 setHits(response.data.progress.hits)
                 set_current_question(response.data?.progress?.level)
+                setLoader(false)
             }
         } else {
             //same question but need to update hits
@@ -52,8 +75,8 @@ export default function PracticeQuestions(props) {
         setAnswer("")
         setLoader(false)
     }
-    const moveToNextQuestion = ()=>{
-
+    const moveToNextQuestion = () => {
+        setNextQuesNavInit(false)
     }
     const openQuestion = () => {
         setLoader(true)
@@ -174,7 +197,7 @@ export default function PracticeQuestions(props) {
                                 Welcome to NETHUNT! <br />
                                 Please read the following instructions carefully before proceeding:
                             </Typography>
-                            <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+                            <div id="keep-mounted-modal-description" sx={{ mt: 2 }}>
                                 <ul>
                                     <li>
                                         Ensure that you have a stable internet connection before starting the quiz.
@@ -192,15 +215,15 @@ export default function PracticeQuestions(props) {
 
                                 With that said, we hope you are ready to test your knowledge and wish you the best of luck!<br />
                                 <Button fullWidth onClick={openQuestion}>Proceed</Button>
-                            </Typography>
+                            </div>
                         </Box>
                     </Modal>
                 </Backdrop>
 
 
-                <Backdrop open={nextQues}>
+                <Backdrop open={nextQuesInit}>
                     <Modal
-                        open={nextQues}
+                        open={nextQuesInit}
                         aria-labelledby="keep-mounted-modal-title"
                         aria-describedby="keep-mounted-modal-description"
                     >
@@ -209,19 +232,21 @@ export default function PracticeQuestions(props) {
                             top: '50%',
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
-                            width: 400,
+                            width: { xs: "300px", sm: "650px" },
                             bgcolor: 'background.paper',
                             border: '2px solid #000',
                             boxShadow: 24,
                             p: 4,
                         }}>
                             <Typography id="keep-mounted-modal-title" variant="h6" component="h2" sx={{ textAlign: "center" }}>
-                               
+                                {appreciationText[Math.floor(appreciationText.length * Math.random())]}
                             </Typography>
-                            <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-                               
-                                 <Button fullWidth onClick={moveToNextQuestion}>Proceed</Button>
-                            </Typography>
+                            <div id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+                                <Box sx={{ width: { xs: "250px", sm: "600px" }, position: "relative" }}>
+                                    <img src={CongratsSVG} width="100%" />
+                                </Box>
+                                <Button fullWidth onClick={moveToNextQuestion}>Proceed</Button>
+                            </div>
                         </Box>
                     </Modal>
                 </Backdrop>
