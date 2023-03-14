@@ -30,7 +30,7 @@ def send_log_data(msg):
     url = "https://discord.com/api/webhooks/1077878410271019008/vwKfxy-5NL8az1_Xwlf6zwpWQ0B18hAzUj03wqJU9t8mjs5H3RZ7ZVTo7DUQTQOLB9jA" # Replace with your own webhook URL
 
     payload = {
-        "content": msg
+        "content": msg 
     }
 
     headers = {
@@ -70,7 +70,9 @@ def get_quiz_info(req):
     elif current_status.count() == 1:
         #person who already played the quiz with the current level stored in the current status
         progress = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
-        if progress.count() == 0:
+        if progress.count() == 0 and current_status[0].level +1 > Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count():
+            return Response({"problem":True,"end":True})
+        else:
             Progress(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level).save()
         progress = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)    
         if progress.count() == 1:
@@ -95,7 +97,7 @@ def check_answer(req):
     current_status = CurrentStatus.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]))
     progress = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
     question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[current_status[0].level]
-    send_log_data("User : "+req.user.email + "\nCorrent Answer : "+ question.answer + "\nGuessed One : "+data["try"] + "\n Time "+str(timezone.now()))
+    send_log_data(".\n\nUser : "+req.user.email + "\nCorrent Answer : "+ question.answer + "\nGuessed One : "+data["try"] + "\n Time "+str(timezone.now())+"\n")
     # print(question)
     if question.answer == data["try"]:
         Progress(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level+1).save()

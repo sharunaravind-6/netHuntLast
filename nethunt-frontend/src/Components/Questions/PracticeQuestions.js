@@ -1,12 +1,13 @@
 import { InfoRounded } from "@mui/icons-material";
 import { Box, Container, AppBar, Toolbar, Typography, IconButton, Avatar, styled, Menu, MenuItem, Divider, ListItemIcon, ListItemText, Drawer, List, ListItemButton, ListItem, CssBaseline, ThemeProvider, Paper, Grid, CardHeader, Card, CardContent, Switch, Stepper, Step, StepContent, StepLabel, ButtonGroup, Button, Chip, Badge, TextField, Backdrop, CircularProgress, Dialog, Modal } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { userContext } from "../../Store/user";
 import { theme } from "../../Theme/LightTheme";
 import useAxios from "../../utils/useAxios";
 import QuestionFooter from "../QuestionFooter";
 import WaitingSVG from "./../../Images/Waiting.svg";
+import WaitBusSVG from "./../../Images/WaitBus.svg";
 import CongratsSVG from "./../../Images/Appreciation.svg"
 export default function PracticeQuestions(props) {
     const [loading, setLoading] = useState(true)
@@ -22,6 +23,15 @@ export default function PracticeQuestions(props) {
     const [answer, setAnswer] = useState("")
     const [starter, setStarter] = useState(true)
     const [nextQuesInit, setNextQuesNavInit] = useState(false)
+    const [finished, setFinished] = useState(false)
+    const navigate = useNavigate()
+    const overText = [
+        "The game is far from over, so don't forget to check back frequently until the final date!",
+        "Keep checking the page until the last date because the game is still in progress!",
+        "Don't give up just yet - the game is still going and we encourage you to check back regularly until the end date.",
+        "Stay tuned until the end date because the game is still running and anything can happen!",
+        "Don't miss out on your chance to win - keep checking the page until the very end!",
+    ]
     const appreciationText = ["Hooray! You did it!",
         "Way to go, champ!",
         "Woohoo! Congrats on completing the level!",
@@ -59,6 +69,7 @@ export default function PracticeQuestions(props) {
         if (response.data.passed) {
             if (response.data.end) {
                 //navigate to scoreboard
+                setFinished(true)
             } else {
                 //move to next question
                 setLoader(true)
@@ -103,6 +114,10 @@ export default function PracticeQuestions(props) {
                     setQuestion(data?.current_question)
                     set_current_question(data?.status?.level)
                     console.log(res.data)
+                }else{
+                    if(data?.end){
+                        setFinished(true)
+                    }
                 }
                 setLoader(false)
             }
@@ -246,6 +261,36 @@ export default function PracticeQuestions(props) {
                                     <img src={CongratsSVG} width="100%" />
                                 </Box>
                                 <Button fullWidth onClick={moveToNextQuestion}>Proceed</Button>
+                            </div>
+                        </Box>
+                    </Modal>
+                </Backdrop>
+
+                <Backdrop open={finished}>
+                    <Modal
+                        open={finished}
+                        aria-labelledby="keep-mounted-modal-title"
+                        aria-describedby="keep-mounted-modal-description"
+                    >
+                        <Box sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: { xs: "300px", sm: "650px" },
+                            bgcolor: 'background.paper',
+                            border: '2px solid #000',
+                            boxShadow: 24,
+                            p: 4,
+                        }}>
+                            <Typography id="keep-mounted-modal-title" variant="h6" component="h2" sx={{ textAlign: "center" }}>
+                                {overText[Math.floor(overText.length * Math.random())]}
+                            </Typography>
+                            <div id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+                                <Box sx={{ width: { xs: "250px", sm: "600px" }, position: "relative" }}>
+                                    <img src={WaitBusSVG} width="100%" />
+                                </Box>
+                                <Button fullWidth onClick={()=>{navigate("/s/dashboard")}}>Go to Home</Button>
                             </div>
                         </Box>
                     </Modal>
