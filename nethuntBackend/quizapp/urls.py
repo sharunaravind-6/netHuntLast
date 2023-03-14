@@ -9,7 +9,7 @@ urlpatterns = [
     path("add_question",views.add_question),
     path("startBy",views.get_startDate),
     path("endBy",views.get_endDate),
-    path("progress",views.get_quiz_status),
+    # path("progress",views.get_quiz_status),
     path("status",views.get_quiz_info),
     path("check_answer",views.check_answer),
 ]

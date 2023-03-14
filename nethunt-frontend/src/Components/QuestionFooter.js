@@ -13,9 +13,9 @@ export default function QuestionFooter(props) {
                     <ButtonGroup>
                         <Button onClick={() => {
                             setTimeout(() => {
-                                snackbarRef.current.enqueueSnackbar('Hint 1',{autoHideDuration:3000});
+                                snackbarRef.current.enqueueSnackbar("Hint 1 " + props.hint1,{autoHideDuration:3000});
                             }, 500);
-                            snackbarRef.current.enqueueSnackbar('Hint 2',{autoHideDuration:3000});
+                            snackbarRef.current.enqueueSnackbar("Hint 2 " +props.hint2,{autoHideDuration:3000});
                         }}><EmojiObjectsRounded /></Button>
                         <Button onClick={() => { setOpenModal(true) }}><InfoRounded /></Button>
                     </ButtonGroup>

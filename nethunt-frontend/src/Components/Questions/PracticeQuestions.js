@@ -80,7 +80,8 @@ export default function PracticeQuestions(props) {
                 setLoader(false)
             }
         } else {
-            //same question but need to update hits
+            //same question but need to update hits and reveal hits if hits exceed reveal limit
+            setQuestion(response.data.question)
             setHits(response.data.progress.hits)
         }
         setAnswer("")
@@ -187,7 +188,7 @@ export default function PracticeQuestions(props) {
                         </Paper>
                     </Box>
                 </Container>
-                <QuestionFooter />
+                <QuestionFooter hint1 = {question?.hint1} hint2 = {question?.hint2}/>
                 <Backdrop open={loader}>
                     <CircularProgress />
                 </Backdrop>
