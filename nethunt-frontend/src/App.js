@@ -111,7 +111,8 @@ function App() {
               <Route path="quiz" element={<Paper elevation={3}><Outlet /></Paper>}>
                 <Route path="v" element={<QuizDisplay />}></Route>
                 <Route path="e" element={<QuizEdit />}></Route>
-                <Route path="q" element={<QuestionAdmin />}></Route>
+                <Route path="practice" element={<QuestionAdmin />}></Route>
+                <Route path="main" element={<QuestionAdmin />}></Route>
               </Route>
               <Route path="score" element={<ScoreBoardX />}></Route>
             </Route>

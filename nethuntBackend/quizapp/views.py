@@ -14,6 +14,8 @@ from datetime import datetime
 import requests
 import base64
 from django.utils import timezone
+from django.contrib.auth import get_user_model
+
 @api_view(["GET"])
 def get_startDate(req):
     if (Info.objects.all().count() >= 1):
@@ -118,7 +120,7 @@ def check_answer(req):
         #update score
         # scoring strategy upto first hint user gets a penalty of 1 point deduction and after that with a penalty of 2 for easy
         # scoring strategy upto first hint user gets a penalty of 2 point deduction and after that with a penalty of 3 for moderate
-        
+
         current_status.update(level=current_status[0].level+1)
         if current_status[0].level +1 > Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count():
             return Response({"passed":True,"end":True})
@@ -265,3 +267,14 @@ def add_config(req):
         NethuntUser.objects.fetch(role="Coordinator").delete()
         Quiz.objects.all().delete()
     return Response({"configured": False})
+@api_view(["POST"])
+def fetchQuestions(req):
+    data = json.loads(req.body)
+    User = get_user_model()
+    user = User.objects.get(email=req.user.email)
+    if user.check_password(data["password"]):
+        questions =  Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))
+        questionSerializer = QuestionSerializer(questions,many=True).data
+        # print(questionSerializer)
+        return Response({"questions":questionSerializer,"correct":True})
+    return Response({"correct":False}) 
