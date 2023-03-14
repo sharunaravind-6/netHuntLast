@@ -114,6 +114,11 @@ def check_answer(req):
     # print(question)
     if question.answer == data["try"]:
         Progress(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level+1).save()
+
+        #update score
+        # scoring strategy upto first hint user gets a penalty of 1 point deduction and after that with a penalty of 2 for easy
+        # scoring strategy upto first hint user gets a penalty of 2 point deduction and after that with a penalty of 3 for moderate
+        
         current_status.update(level=current_status[0].level+1)
         if current_status[0].level +1 > Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count():
             return Response({"passed":True,"end":True})

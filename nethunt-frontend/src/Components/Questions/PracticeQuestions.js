@@ -9,8 +9,10 @@ import QuestionFooter from "../QuestionFooter";
 import WaitingSVG from "./../../Images/Waiting.svg";
 import WaitBusSVG from "./../../Images/WaitBus.svg";
 import CongratsSVG from "./../../Images/Appreciation.svg"
+import ByeSVG from "./../../Images/Bye.svg";
 export default function PracticeQuestions(props) {
     const [loading, setLoading] = useState(true)
+    const [exit, setExit] = useState(false)
     const api = useAxios()
     const [noOfQues, setNoOfQues] = useState([])
     const [score, setScore] = useState(0)
@@ -115,8 +117,8 @@ export default function PracticeQuestions(props) {
                     setQuestion(data?.current_question)
                     set_current_question(data?.status?.level)
                     console.log(res.data)
-                }else{
-                    if(data?.end){
+                } else {
+                    if (data?.end) {
                         setFinished(true)
                     }
                 }
@@ -147,7 +149,10 @@ export default function PracticeQuestions(props) {
                                 SCORE {score}
                             </Typography>
                             {/* <InfoRounded sx={{marginRight:{xs:2,sm:4}}}/> */}
-                            <Button variant="contained">
+                            <Button variant="contained" onClick={() => {
+                                setExit(true)
+                            }
+                            }>
                                 PAUSE
                             </Button>
                         </Box>
@@ -188,7 +193,7 @@ export default function PracticeQuestions(props) {
                         </Paper>
                     </Box>
                 </Container>
-                <QuestionFooter hint1 = {question?.hint1} hint2 = {question?.hint2}/>
+                <QuestionFooter hint1={question?.hint1} hint2={question?.hint2} />
                 <Backdrop open={loader}>
                     <CircularProgress />
                 </Backdrop>
@@ -291,7 +296,42 @@ export default function PracticeQuestions(props) {
                                 <Box sx={{ width: { xs: "250px", sm: "600px" }, position: "relative" }}>
                                     <img src={WaitBusSVG} width="100%" />
                                 </Box>
-                                <Button fullWidth onClick={()=>{navigate("/s/dashboard")}}>Go to Home</Button>
+                                <Button fullWidth onClick={() => { navigate("/s/dashboard") }}>Go to Home</Button>
+                            </div>
+                        </Box>
+                    </Modal>
+                </Backdrop>
+                <Backdrop open={exit}>
+                    <Modal
+                        open={exit}
+                        aria-labelledby="keep-mounted-modal-title"
+                        aria-describedby="keep-mounted-modal-description"
+                    >
+                        <Box sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: { xs: "300px", sm: "650px" },
+                            bgcolor: 'background.paper',
+                            border: '2px solid #000',
+                            boxShadow: 24,
+                            p: 4,
+                        }}>
+                            <Typography id="keep-mounted-modal-title" variant="h6" component="h2" sx={{ textAlign: "center" }}>
+                                Just to confirm, are you exiting the quiz? <br/>
+                            </Typography>
+                            <Typography id="keep-mounted-modal-description" sx={{ mt: 2 , textAlign: "justify" }}>
+                            If so, please note that your progress will be saved and you may resume the quiz at any time.<br/> 
+                                Thank you for taking the quiz.
+                            </Typography>
+                            <div id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+                                <Box sx={{ width: { xs: "250px", sm: "600px" }, position: "relative" }}>
+                                    <img src={ByeSVG} width="100%" />
+                                </Box>
+                                <Button fullWidth onClick={() => { setExit(false) }} variant="contained">CONTINUE</Button>
+                                <Button fullWidth onClick={() => { navigate("../../s/dashboard") }}>PAUSE</Button>
+                                
                             </div>
                         </Box>
                     </Modal>
