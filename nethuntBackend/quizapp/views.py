@@ -53,20 +53,24 @@ def play_goes_offline(req):
 # @permission_classes([IsAdminUser])
 @api_view(["GET"])
 def adminHome(req):
-    WEBHOOK_URL = 'https://discord.com/api/webhooks/1085529836879093790/UBL5G5MusKjb-RRdSEvlTBnPmzJeKf_pl22Y5I51r-CUGhhpMwAXVHHUEE_pqofu_iex'
-    headers = {
-    'Content-Type': 'application/json',
-    'User-Agent': 'Fetch-Latest_Bot',
-    'Authorization': 'Bot UBL5G5MusKjb-RRdSEvlTBnPmzJeKf_pl22Y5I51r-CUGhhpMwAXVHHUEE_pqofu_iex'
-    }
-    payload = {
-        'limit': 10
-    }
-    response = requests.get(WEBHOOK_URL +"/messages", headers=headers, params=payload)
-    messages = json.loads(response.text)
-    for message in messages:
-        print(message)
-    return Response({"messages":messages})
+    token = "MTA3NzQ4MzcwNDg4MjA1NzIzNg.GTKikQ.YddsExwFt2lgjSDb9CMKN8KwZ49yOEyPBI_7s8"
+    channel_id = "1077512613132521563"
+
+    # Construct the API endpoint URL for fetching channel messages
+    endpoint_url = f"https://discord.com/api/channels/{channel_id}/messages"
+
+    # Make a GET request to the endpoint URL to fetch the recent messages
+    headers = {"Authorization": f"Bot {token}"}
+    params = {"limit": 30}  # Fetch the 10 most recent messages
+    response = requests.get(endpoint_url, headers=headers, params=params)
+
+    # Parse the response JSON data
+    data = json.loads(response.text)
+
+    # Print the recent messages
+    for message in data:
+        print(message["content"])
+    return Response({"messages":data})
 @api_view(["POST"])
 def get_quiz_info(req):
     data = json.loads(req.body)
