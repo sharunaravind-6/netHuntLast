@@ -92,7 +92,7 @@ export default function QuizDisplay(props) {
                         <Typography>Practice Quiz</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <QuizEdit />
+                        <QuizEdit quiz="Practice"/>
                     </AccordionDetails>
                 </Accordion>
                 <Accordion expanded={quiz === 'main'} onChange={handleChange('main')}>
@@ -100,7 +100,7 @@ export default function QuizDisplay(props) {
                         <Typography>Main Quiz</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <QuizEdit />
+                        <QuizEdit quiz="Main"/>
                     </AccordionDetails>
                 </Accordion>
             </Paper>

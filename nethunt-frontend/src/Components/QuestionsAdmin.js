@@ -1,7 +1,8 @@
-import { AddCircleRounded, ArrowLeftRounded, ArrowRightAltRounded, ArrowRightAltSharp, EmojiObjectsRounded, ExpandMoreRounded, KeyboardArrowRightRounded, KeyRounded, SpeedRounded } from "@mui/icons-material";
-import { Stack, AppBar, Box, Divider, Grid, IconButton, List, ListItem, ListItemButton, ListItemSecondaryAction, ListItemText, Paper, Toolbar, Typography, Accordion, AccordionSummary, AccordionDetails, FormControl, InputLabel, Input, InputAdornment, Button, Backdrop, Modal } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { AddCircleRounded, EmojiObjectsRounded, ExpandMoreRounded, KeyRounded, SpeedRounded } from "@mui/icons-material";
+import { Stack, Box, Grid, IconButton, Paper, Toolbar, Typography, Accordion, AccordionSummary, AccordionDetails, FormControl, InputLabel, Input, InputAdornment, Button, Backdrop, Modal, CircularProgress } from "@mui/material";
+import React, {  useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { server, serverHost } from "../utils/server";
 import useAxios from "../utils/useAxios";
 import SampleImage from "./../Images/QuestionSample.svg"
 export default function QuestionAdmin(props) {
@@ -9,25 +10,31 @@ export default function QuestionAdmin(props) {
     const [displayQues, setDisplayQues] = useState(true)
     const api = useAxios()
     const [loader, setLoader] = useState(false)
-    const [ques,setQues] = useState([])
+    const [questions,setQuestions] = useState([])
     const location = useLocation()
-    const fetchQuestions = () => {
+    async function fetchQuestions()  {
         const pathname = location.pathname.split("/")
         const quiz = pathname[pathname.length - 1]
-        api.post("/game/fetchQues", {
+        setLoader(true)
+        const response = await api.post("/game/fetchQues", {
             password: secretKey,
-            quiz: quiz == "main" ? "Main" : "Practice"
-        }).then(response => {
-            if (response?.data?.correct) {
-                setDisplayQues(false)
-            }
+            quiz: quiz === "main" ? "Main" : "Practice"
+        })
+        setLoader(false)
+        if (response?.data?.correct) {
+            setDisplayQues(false)
             setLoader(true)
-            console.log(response.data)
+            setQuestions(["test"])
+            setQuestions(response?.data?.questions)
             setLoader(false)
-            setQues([response.data.questions])
-            console.log(ques, [...response.data.questions].slice())
-        });
+        }
+        setSecretKey("")
     }
+    useEffect(
+        ()=>{
+            console.log("Updated questions",questions)
+        },[questions]
+    )
     return (
         <Paper>
             <Grid container padding={2}>
@@ -44,31 +51,32 @@ export default function QuestionAdmin(props) {
                 <Grid item xs={1} />
                 <Grid item xs={10}>
                     <Paper elevation={4} sx={{ minHeight: "50vh", padding: 2 }}>
-                        <Accordion>
+                       {questions.map(item=>{
+                        return (<Accordion key={item.id}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreRounded />}
                                 aria-controls="panel1a-content"
                                 id="panel1a-header"
                             >
-                                <Typography>Answer 1</Typography>
+                                <Typography>{item.answer}</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Grid container padding={3}>
                                     <Grid item xs={12} sm={6}>
                                         <Box sx={{ position: "relative" }}>
-                                            <img src={SampleImage} width="100%" />
+                                            <img src={server+ item.image} width="100%" />
                                         </Box>
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Stack padding={2} sx={{ gap: 3 }}>
                                             <FormControl>
                                                 <InputLabel htmlFor="hint1">
-                                                    Hint 1
+                                                    Hint 1 
                                                 </InputLabel>
                                                 <Input
                                                     fullWidth
                                                     disabled
-                                                    defaultValue={"Sample hint2"}
+                                                    defaultValue={item.hint1}
                                                     startAdornment={
                                                         <InputAdornment position="start">
                                                             <EmojiObjectsRounded />
@@ -83,7 +91,7 @@ export default function QuestionAdmin(props) {
                                                 <Input
                                                     fullWidth
                                                     disabled
-                                                    defaultValue={"Sample hint2"}
+                                                    defaultValue={item.hint2}
                                                     startAdornment={
                                                         <InputAdornment position="start">
                                                             <EmojiObjectsRounded />
@@ -99,7 +107,7 @@ export default function QuestionAdmin(props) {
                                                     id="hint2"
                                                     fullWidth
                                                     disabled
-                                                    defaultValue={"Easy"}
+                                                    defaultValue={item.difficulty}
                                                     startAdornment={
                                                         <InputAdornment position="start">
                                                             <SpeedRounded />
@@ -111,7 +119,8 @@ export default function QuestionAdmin(props) {
                                     </Grid>
                                 </Grid>
                             </AccordionDetails>
-                        </Accordion>
+                        </Accordion>)
+                       })}
                     </Paper>
                 </Grid>
                 <Grid item xs={1} />
@@ -170,6 +179,9 @@ export default function QuestionAdmin(props) {
                         </div>
                     </Box>
                 </Modal>
+            </Backdrop>
+            <Backdrop open={loader}>
+                <CircularProgress/>
             </Backdrop>
         </Paper>)
 }
