@@ -12,5 +12,7 @@ urlpatterns = [
     # path("progress",views.get_quiz_status),
     path("status",views.get_quiz_info),
     path("check_answer",views.check_answer),
-    path("fetchQues",views.fetchQuestions)
+    path("fetchQues",views.fetchQuestions),
+    path("update_offine",views.play_goes_offline),
+    path("admin_home",views.adminHome)
 ]

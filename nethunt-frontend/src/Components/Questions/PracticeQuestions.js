@@ -319,10 +319,10 @@ export default function PracticeQuestions(props) {
                             p: 4,
                         }}>
                             <Typography id="keep-mounted-modal-title" variant="h6" component="h2" sx={{ textAlign: "center" }}>
-                                Just to confirm, are you exiting the quiz? <br/>
+                                Just to confirm, are you exiting the quiz? <br />
                             </Typography>
-                            <Typography id="keep-mounted-modal-description" sx={{ mt: 2 , textAlign: "justify" }}>
-                            If so, please note that your progress will be saved and you may resume the quiz at any time.<br/> 
+                            <Typography id="keep-mounted-modal-description" sx={{ mt: 2, textAlign: "justify" }}>
+                                If so, please note that your progress will be saved and you may resume the quiz at any time.<br />
                                 Thank you for taking the quiz.
                             </Typography>
                             <div id="keep-mounted-modal-description" sx={{ mt: 2 }}>
@@ -330,8 +330,13 @@ export default function PracticeQuestions(props) {
                                     <img src={ByeSVG} width="100%" />
                                 </Box>
                                 <Button fullWidth onClick={() => { setExit(false) }} variant="contained">CONTINUE</Button>
-                                <Button fullWidth onClick={() => { navigate("../../s/dashboard") }}>PAUSE</Button>
-                                
+                                <Button fullWidth onClick={async () => {
+                                    const response = await api.get("game/update_offine")
+                                    if (response?.data?.updated) {
+                                        navigate("../../s/dashboard")
+                                    }
+                                }}>PAUSE</Button>
+
                             </div>
                         </Box>
                     </Modal>

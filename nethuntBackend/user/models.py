@@ -71,6 +71,10 @@ class Candidate(models.Model):
     current_level = models.IntegerField(default=1)
     status = models.CharField(default="offline", max_length=10)
     phone = models.CharField(max_length=10, validators=[validPhone])
+    def update(self, **kwargs):
+        for field, value in kwargs.items():
+            setattr(self, field, value)
+        self.save()
 
 class NethuntCoordinatorManager(models.Manager):
     def get_queryset(self):

@@ -1,12 +1,42 @@
 import { ArrowForwardRounded, CircleRounded, MailRounded, PhoneRounded } from "@mui/icons-material";
-import { Avatar, Box, Checkbox, Container, CssBaseline, Divider, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Paper, Stack, Toolbar, Typography } from "@mui/material";
+import { Avatar, Box, Checkbox, CircularProgress, Container, CssBaseline, Divider, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Paper, Stack, Toolbar, Typography } from "@mui/material";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
+import { AdminContext } from "../Store/adminStore";
+import { serverHost } from "../utils/server";
+import useAxios from "../utils/useAxios";
 import { theme } from "./../Theme/LightTheme";
-import HelpImg from "./../Images/Help.svg";
+import Timer from "./Parts/Timer";
 export default function AdminHome(props) {
-
+    const api = useAxios()
+    const {fetchUsers,usrs} = useContext(AdminContext)
+    const [loading,setLoading] = useState(true) 
+    const [endBy,setEndBy] = useState(null)
+    useEffect(
+        ()=>{
+            fetchUsers()
+        },
+        []
+    )
+    useEffect(
+        () => {
+            if (loading) {
+                const response = axios.get(serverHost + "/game/endBy").then(
+                    (res) => {
+                        console.log(res.data)
+                        if (res.data?.configured) {
+                            setEndBy(res.data?.endDateTime)
+                        }
+                    }
+                )
+            }
+            setLoading(false)
+        }, []
+    )
     return (<ThemeProvider theme={theme}>
         <CssBaseline />
+        {endBy !== null ? <Timer timing={endBy} /> : <CircularProgress />}
         <Container maxWidth="false">
             <Grid container padding={3}>
                 <Grid item md={9}>
@@ -24,24 +54,23 @@ export default function AdminHome(props) {
                         </Typography>
                         <Divider/>
                         <List dense sx={{ width: '100%' }}>
-                            {[0, 1, 2, 3,4,5,6,7,8,9,10].map((value) => {
+                            {usrs.map((value) => {
                                 const labelId = `checkbox-list-secondary-label-${value}`;
                                 return (
                                     <ListItem
-                                        key={value}
+                                        key={value.id}
                                         secondaryAction={
-                                            <CircleRounded sx={{fill: value%2==0?"red":"green",width:"10px"}}/>
+                                            <CircleRounded sx={{fill: value.status === "offline" ?"red":"green",width:"10px"}}/>
                                         }
                                         disablePadding
                                     >
                                         <ListItemButton>
                                             <ListItemAvatar>
-                                                <Avatar
-                                                    alt={`Avatar n°${value + 1}`}
-                                                    src={`/static/images/avatar/${value + 1}.jpg`}
-                                                />
+                                                <Avatar>
+                                                {value.user.first_name[0]  + value.user.last_name[0]}
+                                                    </Avatar>
                                             </ListItemAvatar>
-                                            <ListItemText id={labelId} primary={`User ${value + 1}`} />
+                                            <ListItemText id={labelId} primary={`${value.user.first_name + " " + value.user.last_name}`} />
                                         </ListItemButton>
                                     </ListItem>
                                 );

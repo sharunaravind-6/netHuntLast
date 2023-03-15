@@ -3,7 +3,7 @@ from .models import Info,Quiz
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
-from user.models import (Coordinator,NethuntUser)
+from user.models import (Coordinator,NethuntUser,Candidate)
 from user.serializers import (CoordinatorSerializer)
 from user.serializers import NethuntUserSerializer
 from quizapp.models import Info,Question,Progress,CurrentStatus
@@ -45,11 +45,32 @@ def send_log_data(msg):
         return Response({"info":"Message sent to Discord channel."})
     else:
         return Response({"info":"Failed to send message to Discord channel."})
+@api_view(["GET"])
+def play_goes_offline(req):
+    Candidate.objects.get(user=req.user).update(status="offline")
+    return Response({"updated":True})
 
+# @permission_classes([IsAdminUser])
+@api_view(["GET"])
+def adminHome(req):
+    WEBHOOK_URL = 'https://discord.com/api/webhooks/1085529836879093790/UBL5G5MusKjb-RRdSEvlTBnPmzJeKf_pl22Y5I51r-CUGhhpMwAXVHHUEE_pqofu_iex'
+    headers = {
+    'Content-Type': 'application/json',
+    'User-Agent': 'Fetch-Latest_Bot',
+    'Authorization': 'Bot UBL5G5MusKjb-RRdSEvlTBnPmzJeKf_pl22Y5I51r-CUGhhpMwAXVHHUEE_pqofu_iex'
+    }
+    payload = {
+        'limit': 10
+    }
+    response = requests.get(WEBHOOK_URL +"/messages", headers=headers, params=payload)
+    messages = json.loads(response.text)
+    for message in messages:
+        print(message)
+    return Response({"messages":messages})
 @api_view(["POST"])
 def get_quiz_info(req):
     data = json.loads(req.body)
-    
+    Candidate.objects.get(user=req.user).update(status="online")
     current_status = CurrentStatus.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]))
     if current_status.count() == 0:
         #the user is a freash one starting the quiz, who doeesn't have the current status to track his progress

@@ -96,6 +96,8 @@ function App() {
                 <Route path="usr" element={<ViewCandidates />}></Route>
                 <Route path="college" element={<ViewCollege />}></Route>
                 <Route path="quiz" element={<Quiz />}></Route>
+                <Route path='practice' element = {<QuestionAdmin/>}></Route>
+                <Route path='main' element = {<QuestionAdmin/>}></Route>
               </Route>
             </>
           )}
