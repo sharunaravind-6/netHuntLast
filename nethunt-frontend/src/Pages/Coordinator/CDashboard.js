@@ -114,7 +114,7 @@ export default function CoordinatorsDashboard(props) {
                     <List>
                         <ListItem disablePadding>
                             <ListItemButton onClick={() => {
-                                navigate("")
+                                navigate("dashboard")
                                 setOpenDrawer(false);
                             }}>
                                 <ListItemIcon>

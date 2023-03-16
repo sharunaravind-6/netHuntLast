@@ -33,7 +33,7 @@ export default function SignUp() {
         } else if (jwt_decode(token.access).role === "Candidate") {
           navigate("/s/dashboard")
         } else if (jwt_decode(token.access).role === "Coordinator") {
-          navigate("/c")
+          navigate("/c/dashboard")
         }
       }
     }
@@ -61,7 +61,7 @@ export default function SignUp() {
       } else if (jwt_decode(data.access).role === "Candidate") {
         navigate("/s/dashboard")
       } else if (jwt_decode(data.access).role === "Coordinator") {
-        navigate("/c")
+        navigate("/c/dashboard")
       }
       return { token: data, data: jwt_decode(data.access) }
     } else {
