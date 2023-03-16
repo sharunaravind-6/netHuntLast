@@ -313,7 +313,16 @@ def fetchQuestions(req):
         return Response({"questions":questionSerializer,"correct":True})
     return Response({"correct":False}) 
 @api_view(["POST"])
-def deleteQuestions(req):
+def deleteQuestion(req):
     data = json.loads(req.body)
     Question.objects.filter(id=data["questionId"]).delete()
     return Response({"deleted":True}) 
+@api_view(["POST"])
+def updateQuestion(req):
+    data = json.loads(req.body)
+    print(data)
+    updateData = {**data}
+    del updateData["quiz"]
+    del updateData["ques"]
+    Question.objects.get(id=data["ques"]).update(**updateData)
+    return Response({"updated":True}) 

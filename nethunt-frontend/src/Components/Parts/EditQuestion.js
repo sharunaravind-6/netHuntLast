@@ -2,44 +2,58 @@ import { AddPhotoAlternateRounded, ContactSupportOutlined, EmojiObjectsRounded, 
 import { Backdrop, Box, Button, CircularProgress, FormControl, Grid, Input, InputAdornment, InputLabel, MenuItem, Modal, Paper, Select, Stack, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
 import useAxios from "./../../utils/useAxios"
+import SuccessSnackbar from "./SuccessSnackbar";
 export default function EditQuestion() {
     const [question, setQuestion] = useState({
         quiz: "",
         img: null,
         answer: "",
-        ques: null,
+        ques: "",
         hint1: "",
         hint2: "",
         difficultyLevel: "",
     })
-    const [loader,setLoader] = useState(false)
-    const [are_you_sure,set_are_you_sure] = useState(false)
+    const [success,setSuccess] = useState(false)
+    const [loader, setLoader] = useState(false)
+    const [are_you_sure, set_are_you_sure] = useState(false)
     const api = useAxios()
     const [questions, setQuestions] = useState([])
-    const [operation,setOperation] = useState("")
+    const [operation, setOperation] = useState("")
+    const [message,setMessage] = useState("")
     const fetchQuizQuestions = async (quiz) => {
         const response = await api.post("/game/disp_q_update", { quiz: quiz })
         setQuestions(response?.data?.questions)
     }
-    const deleteQuestion =async ()=>{
-        const response = await api.post("/game/delete_ques",{questionId: question.ques})
-        console.log(response?.data)
-        
-    }
-    const handleSubmit = async () => {
-        console.log(question)
-        const form = new FormData()
-        form.append("question", question["img"])
-        form.append("data", JSON.stringify(question))
-        const response = await api.post("/game/add_question", form, {
-            headers: {
-                "Content-Type": "multipart/form-data"
-            },
-            body: question
-        })
-        const data = response.data
+    const updateQuestion = async () => {
+        setLoader(true)
+        let data = {};
+        for (let key in question) {
+            if (question[key] !== "" && question[key] !== null) {
+                data[key] = question[key]
+            }
+        }
         console.log(data)
+        const response = await api.post("/game/update_ques", { ...data })
+        console.log(response?.data)
+        setLoader(false)
+        set_are_you_sure(false)
+        if(response?.data?.updated){
+            setMessage("Question successfully updated")
+            setSuccess(true)
+        }
     }
+    const deleteQuestion = async () => {
+        setLoader(true)
+        const response = await api.post("/game/delete_ques", { questionId: question.ques })
+        console.log(response?.data)
+        if(response?.data?.deleted){
+            setMessage("Question successfully deleted")
+            setSuccess(true)
+        }
+        setLoader(false)
+        set_are_you_sure(false)
+    }
+    
 
     const [dispQuestion, setDispQuestion] = useState(null)
     return (<Paper sx={{ padding: 2 }}><Stack padding={2} sx={{ gap: 3 }}>
@@ -178,26 +192,20 @@ export default function EditQuestion() {
         </FormControl>
         <Toolbar>
             <Box flexGrow={1} />
-            <Button variant="contained" sx={{ width: { sm: "100%", md: "20%" }, mr: 3 }}
-                onClick={()=>{set_are_you_sure(true);
-                setOperation("DELETE")}}
+            <Button variant="contained"
+                disabled={question.ques === null}
+                sx={{ width: { sm: "100%", md: "20%" }, mr: 3 }}
+                onClick={() => {
+                    set_are_you_sure(true);
+                    setOperation("DELETE")
+                }}
             >DELETE</Button>
             <Button variant="contained" sx={{ width: { sm: "100%", md: "20%" } }}
-                onClick={handleSubmit}
-                disabled={
-                    !(
-                        question.answer !== "" &&
-                        question.answer !== null &&
-                        question.hint1 !== "" &&
-                        question.hint1 !== null &&
-                        question.hint2 !== "" &&
-                        question.hint2 !== null &&
-                        question.img !== "" &&
-                        question.img !== null &&
-                        question.difficultyLevel !== "" &&
-                        question.difficultyLevel !== null
-                    )
-                }
+                disabled={question.ques === null}
+                onClick={() => {
+                    set_are_you_sure(true);
+                    setOperation("UPDATE")
+                }}
             >Update</Button>
         </Toolbar>
     </Stack>
@@ -207,7 +215,7 @@ export default function EditQuestion() {
         <Backdrop open={are_you_sure}>
             <Modal
                 open={are_you_sure}
-                onClose={()=>{set_are_you_sure(false)}}
+                onClose={() => { set_are_you_sure(false) }}
                 aria-labelledby="keep-mounted-modal-title"
                 aria-describedby="keep-mounted-modal-description"
             >
@@ -225,11 +233,21 @@ export default function EditQuestion() {
                     <Typography id="keep-mounted-modal-title" variant="h6" component="h2" sx={{ textAlign: "center" }}>
                         Are you sure ?
                     </Typography>
-                    <Button variant="contained" fullWidth onClick={deleteQuestion}>
+                    <Button variant="contained" fullWidth onClick={() => {
+                        console.log()
+                        if (operation === "DELETE"){
+                            deleteQuestion()
+                        }if (operation === "UPDATE"){
+                            updateQuestion()
+                        }
+                    }
+                    }
+                    >
                         {operation}
                     </Button>
                 </Box>
             </Modal>
         </Backdrop>
+        <SuccessSnackbar open={success} onClose={()=>{setSuccess(false)}} message = {message}/>
     </Paper>)
 }

@@ -53,7 +53,10 @@ class Question(models.Model):
         HARD = "Hard","HARD"
     difficulty = models.CharField(max_length=50,choices=Difficulty.choices,default=Difficulty.EASY)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
-
+    def update(self, **kwargs):
+        for field, value in kwargs.items():
+            setattr(self, field, value)
+        self.save()
     class Meta:
         verbose_name = ("question")
         verbose_name_plural = ("questions")
