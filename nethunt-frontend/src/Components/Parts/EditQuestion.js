@@ -1,5 +1,5 @@
 import { AddPhotoAlternateRounded, ContactSupportOutlined, EmojiObjectsRounded, QuestionAnswerOutlined, QuizRounded, SpeedRounded } from "@mui/icons-material";
-import { Box, Button, FormControl, Grid, Input, InputAdornment, InputLabel, MenuItem, Paper, Select, Stack, Toolbar, Typography } from "@mui/material";
+import { Backdrop, Box, Button, CircularProgress, FormControl, Grid, Input, InputAdornment, InputLabel, MenuItem, Modal, Paper, Select, Stack, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
 import useAxios from "./../../utils/useAxios"
 export default function EditQuestion() {
@@ -7,31 +7,38 @@ export default function EditQuestion() {
         quiz: "",
         img: null,
         answer: "",
-        ques:"",
+        ques: null,
         hint1: "",
         hint2: "",
         difficultyLevel: "",
     })
+    const [loader,setLoader] = useState(false)
+    const [are_you_sure,set_are_you_sure] = useState(false)
     const api = useAxios()
-    const [questions,setQuestions] = useState([])
-    const fetchQuizQuestions = async (quiz)=>{
-        const response = await api.post("/game/disp_q_update",{quiz:quiz})
+    const [questions, setQuestions] = useState([])
+    const [operation,setOperation] = useState("")
+    const fetchQuizQuestions = async (quiz) => {
+        const response = await api.post("/game/disp_q_update", { quiz: quiz })
         setQuestions(response?.data?.questions)
     }
-    const handleSubmit = async ()=>{
+    const deleteQuestion = ()=>{
+
+    }
+    const handleSubmit = async () => {
         console.log(question)
         const form = new FormData()
-        form.append("question",question["img"])
-        form.append("data",JSON.stringify(question))
-        const response =await api.post("/game/add_question",form, {
+        form.append("question", question["img"])
+        form.append("data", JSON.stringify(question))
+        const response = await api.post("/game/add_question", form, {
             headers: {
-              "Content-Type": "multipart/form-data"
+                "Content-Type": "multipart/form-data"
             },
             body: question
-          })
+        })
         const data = response.data
         console.log(data)
     }
+
     const [dispQuestion, setDispQuestion] = useState(null)
     return (<Paper sx={{ padding: 2 }}><Stack padding={2} sx={{ gap: 3 }}>
         <FormControl fullWidth>
@@ -41,11 +48,11 @@ export default function EditQuestion() {
                 id="quiz-select"
                 label="Quiz"
                 value={question.quiz}
-                onChange={(event) => { 
-                    setQuestion((oldData) => { return { ...oldData, quiz: event.target.value } }) 
+                onChange={(event) => {
+                    setQuestion((oldData) => { return { ...oldData, quiz: event.target.value } })
                     // console.log(event.target.value === "Main"?"main":"practice")
                     fetchQuizQuestions(event.target.value)
-            }}
+                }}
                 startAdornment={
                     <InputAdornment position="start">
                         <QuizRounded />
@@ -63,10 +70,10 @@ export default function EditQuestion() {
                 id="ques-select"
                 label="Ques"
                 value={question.ques}
-                onChange={(event) => { 
-                    setQuestion((oldData) => { return { ...oldData, ques: event.target.value } }) 
-                    
-            }}
+                onChange={(event) => {
+                    setQuestion((oldData) => { return { ...oldData, ques: event.target.value } })
+
+                }}
                 startAdornment={
                     <InputAdornment position="start">
                         <QuizRounded />
@@ -74,9 +81,9 @@ export default function EditQuestion() {
                 }
             >
                 {
-                    questions.map(item=>{
+                    questions.map(item => {
                         return (
-                            <MenuItem key = {item.id} value={item.answer}>{item.answer}</MenuItem>
+                            <MenuItem key={item.id} value={item.id}>{item.answer}</MenuItem>
                         )
                     })
                 }
@@ -169,11 +176,12 @@ export default function EditQuestion() {
         </FormControl>
         <Toolbar>
             <Box flexGrow={1} />
-            <Button variant="contained" sx={{ width: { sm: "100%", md: "20%" },mr:3 }}
-                onClick = {handleSubmit}
+            <Button variant="contained" sx={{ width: { sm: "100%", md: "20%" }, mr: 3 }}
+                onClick={()=>{set_are_you_sure(true);
+                setOperation("DELETE")}}
             >DELETE</Button>
             <Button variant="contained" sx={{ width: { sm: "100%", md: "20%" } }}
-                onClick = {handleSubmit}
+                onClick={handleSubmit}
                 disabled={
                     !(
                         question.answer !== "" &&
@@ -188,8 +196,38 @@ export default function EditQuestion() {
                         question.difficultyLevel !== null
                     )
                 }
-            >Add</Button>
+            >Update</Button>
         </Toolbar>
     </Stack>
+        <Backdrop open={loader}>
+            <CircularProgress />
+        </Backdrop>
+        <Backdrop open={are_you_sure}>
+            <Modal
+                open={are_you_sure}
+                onClose={()=>{set_are_you_sure(false)}}
+                aria-labelledby="keep-mounted-modal-title"
+                aria-describedby="keep-mounted-modal-description"
+            >
+                <Box sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 400,
+                    bgcolor: 'background.paper',
+                    border: '2px solid #000',
+                    boxShadow: 24,
+                    p: 4,
+                }}>
+                    <Typography id="keep-mounted-modal-title" variant="h6" component="h2" sx={{ textAlign: "center" }}>
+                        Are you sure ?
+                    </Typography>
+                    <Button variant="contained" fullWidth>
+                        {operation}
+                    </Button>
+                </Box>
+            </Modal>
+        </Backdrop>
     </Paper>)
 }
