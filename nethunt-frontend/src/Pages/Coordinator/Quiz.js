@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import QuizDisplay from '../../Components/QuizDisplay';
 import AddQuestion from '../../Components/Parts/AddQuestion';
+import EditQuestion from '../../Components/Parts/EditQuestion';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -63,7 +64,7 @@ export default function BasicTabs() {
                 <AddQuestion />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <AddQuestion />
+                <EditQuestion />
             </TabPanel>
         </Box>
     );
