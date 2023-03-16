@@ -14,5 +14,6 @@ urlpatterns = [
     path("check_answer",views.check_answer),
     path("fetchQues",views.fetchQuestions),
     path("update_offine",views.play_goes_offline),
-    path("admin_home",views.adminHome)
+    path("admin_home",views.adminHome),
+    path("disp_q_update",views.fetch_questions_for_edit)
 ]

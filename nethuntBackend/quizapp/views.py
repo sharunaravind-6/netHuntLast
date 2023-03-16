@@ -293,8 +293,17 @@ def add_config(req):
         Quiz.objects.all().delete()
     return Response({"configured": False})
 @api_view(["POST"])
+def fetch_questions_for_edit(req):
+    data = json.loads(req.body)
+    print(data["quiz"])
+    questions =  Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))
+    questionSerializer = QuestionSerializer(questions,many=True).data
+    return Response({"questions":questionSerializer,"correct":True})
+
+@api_view(["POST"])
 def fetchQuestions(req):
     data = json.loads(req.body)
+    # print(data)
     User = get_user_model()
     user = User.objects.get(email=req.user.email)
     if user.check_password(data["password"]):

@@ -7,11 +7,17 @@ export default function EditQuestion() {
         quiz: "",
         img: null,
         answer: "",
+        ques:"",
         hint1: "",
         hint2: "",
         difficultyLevel: "",
     })
     const api = useAxios()
+    const [questions,setQuestions] = useState([])
+    const fetchQuizQuestions = async (quiz)=>{
+        const response = await api.post("/game/disp_q_update",{quiz:quiz})
+        setQuestions(response?.data?.questions)
+    }
     const handleSubmit = async ()=>{
         console.log(question)
         const form = new FormData()
@@ -37,7 +43,8 @@ export default function EditQuestion() {
                 value={question.quiz}
                 onChange={(event) => { 
                     setQuestion((oldData) => { return { ...oldData, quiz: event.target.value } }) 
-
+                    // console.log(event.target.value === "Main"?"main":"practice")
+                    fetchQuizQuestions(event.target.value)
             }}
                 startAdornment={
                     <InputAdornment position="start">
@@ -50,14 +57,14 @@ export default function EditQuestion() {
             </Select>
         </FormControl>
         <FormControl fullWidth>
-            <InputLabel id="year-select-label">Quiz</InputLabel>
+            <InputLabel id="year-select-label">Choose question</InputLabel>
             <Select
-                labelId="quiz-select-label"
-                id="quiz-select"
-                label="Quiz"
-                value={question.quiz}
+                labelId="ques-select-label"
+                id="ques-select"
+                label="Ques"
+                value={question.ques}
                 onChange={(event) => { 
-                    setQuestion((oldData) => { return { ...oldData, quiz: event.target.value } }) 
+                    setQuestion((oldData) => { return { ...oldData, ques: event.target.value } }) 
                     
             }}
                 startAdornment={
@@ -66,8 +73,13 @@ export default function EditQuestion() {
                     </InputAdornment>
                 }
             >
-                <MenuItem value={"Practice"}>{"Practice"}</MenuItem>
-                <MenuItem value={"Main"}>{"Main"}</MenuItem>
+                {
+                    questions.map(item=>{
+                        return (
+                            <MenuItem key = {item.id} value={item.answer}>{item.answer}</MenuItem>
+                        )
+                    })
+                }
             </Select>
         </FormControl>
         <Paper elevation={16} sx={{ padding: 3 }}>
