@@ -21,8 +21,10 @@ export default function EditQuestion() {
         const response = await api.post("/game/disp_q_update", { quiz: quiz })
         setQuestions(response?.data?.questions)
     }
-    const deleteQuestion = ()=>{
-
+    const deleteQuestion =async ()=>{
+        const response = await api.post("/game/delete_ques",{questionId: question.ques})
+        console.log(response?.data)
+        
     }
     const handleSubmit = async () => {
         console.log(question)
@@ -223,7 +225,7 @@ export default function EditQuestion() {
                     <Typography id="keep-mounted-modal-title" variant="h6" component="h2" sx={{ textAlign: "center" }}>
                         Are you sure ?
                     </Typography>
-                    <Button variant="contained" fullWidth>
+                    <Button variant="contained" fullWidth onClick={deleteQuestion}>
                         {operation}
                     </Button>
                 </Box>
