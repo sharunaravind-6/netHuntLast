@@ -312,3 +312,8 @@ def fetchQuestions(req):
         # print(questionSerializer)
         return Response({"questions":questionSerializer,"correct":True})
     return Response({"correct":False}) 
+@api_view(["POST"])
+def deleteQuestions(req):
+    data = json.loads(req.body)
+    Question.objects.filter(id=data["questionId"]).delete()
+    return Response({"deleted":True}) 
