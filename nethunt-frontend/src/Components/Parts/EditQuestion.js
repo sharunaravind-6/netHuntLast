@@ -49,6 +49,7 @@ export default function EditQuestion() {
         if(response?.data?.deleted){
             setMessage("Question successfully deleted")
             setSuccess(true)
+            fetchQuizQuestions(question.quiz)
         }
         setLoader(false)
         set_are_you_sure(false)
@@ -207,6 +208,7 @@ export default function EditQuestion() {
                     setOperation("UPDATE")
                 }}
             >Update</Button>
+            {/* <Button onClick={()=>{setSuccess(true)}}>Test</Button> */}
         </Toolbar>
     </Stack>
         <Backdrop open={loader}>
@@ -248,6 +250,7 @@ export default function EditQuestion() {
                 </Box>
             </Modal>
         </Backdrop>
-        <SuccessSnackbar open={true} onClose={()=>{setSuccess(false)}} message = {message}/>
+        {/* <Button onClick={setSuccess(true)}>Test</Button> */}
+        <SuccessSnackbar open={success} onClose={()=>{setSuccess(false)}} message = {message}/>
     </Paper>)
 }

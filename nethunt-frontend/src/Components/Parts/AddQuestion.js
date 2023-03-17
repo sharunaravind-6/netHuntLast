@@ -2,6 +2,7 @@ import { AddPhotoAlternateRounded, ContactSupportOutlined, EmojiObjectsRounded, 
 import { Box, Button, FormControl, Grid, Input, InputAdornment, InputLabel, MenuItem, Paper, Select, Stack, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
 import useAxios from "./../../utils/useAxios"
+import SuccessSnackbar from "./SuccessSnackbar";
 export default function AddQuestion() {
     const [question, setQuestion] = useState({
         quiz: "",
@@ -11,6 +12,7 @@ export default function AddQuestion() {
         hint2: "",
         difficultyLevel: "",
     })
+    const [success,setSuccess] = useState(false)
     const api = useAxios()
     const handleSubmit = async ()=>{
         console.log(question)
@@ -24,6 +26,18 @@ export default function AddQuestion() {
             body: question
           })
         const data = response.data
+        if (data?.added){
+            setSuccess(true)
+            setQuestion({
+                quiz: "",
+                img: null,
+                answer: "",
+                hint1: "",
+                hint2: "",
+                difficultyLevel: "",
+            })
+            setDispQuestion("")
+        }
         console.log(data)
     }
     const [dispQuestion, setDispQuestion] = useState(null)
@@ -70,6 +84,7 @@ export default function AddQuestion() {
             <Input
                 id="answer"
                 fullWidth
+                value={question.answer}
                 onChange={(event) => { setQuestion((oldData) => { return { ...oldData, answer: event.target.value } }) }}
                 startAdornment={
                     <InputAdornment position="start">
@@ -87,6 +102,7 @@ export default function AddQuestion() {
                 id="hint1"
                 onChange={(event) => { setQuestion((oldData) => { return { ...oldData, hint1: event.target.value } }) }}
                 fullWidth
+                value={question.hint1}
                 startAdornment={
                     <InputAdornment position="start">
                         <EmojiObjectsRounded />
@@ -101,6 +117,7 @@ export default function AddQuestion() {
             <Input
                 id="hint2"
                 fullWidth
+                value={question.hint2}
                 onChange={(event) => { setQuestion((oldData) => { return { ...oldData, hint2: event.target.value } }) }}
                 startAdornment={
                     <InputAdornment position="start">
@@ -151,6 +168,7 @@ export default function AddQuestion() {
                 }
             >Add</Button>
         </Toolbar>
+        <SuccessSnackbar open={success} onClose={()=>{setSuccess(false)}} message = {"Successfully added the question"}/>
     </Stack>
     </Paper>)
 }
