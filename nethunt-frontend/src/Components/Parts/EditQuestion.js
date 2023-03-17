@@ -248,6 +248,6 @@ export default function EditQuestion() {
                 </Box>
             </Modal>
         </Backdrop>
-        <SuccessSnackbar open={success} onClose={()=>{setSuccess(false)}} message = {message}/>
+        <SuccessSnackbar open={true} onClose={()=>{setSuccess(false)}} message = {message}/>
     </Paper>)
 }
