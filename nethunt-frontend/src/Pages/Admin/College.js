@@ -49,7 +49,6 @@ const filter = createFilterOptions();
 
 export default function College() {
     const {colleges,fetchCollege} = React.useContext(AdminContext)
-    
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
     const [searchValue, setSearchValue] = React.useState("");
@@ -150,7 +149,7 @@ export default function College() {
                     <Paper elevation={5} sx={{ marginTop: 3 }}>
                         <List dense>
                             {colleges.map(item => {
-                                return (<React.Fragment key={item.collegeName}>
+                                return (<React.Fragment key={item.id}>
                                     <ListItem >
                                         <ListItemText
                                             primary={item.collegeName}

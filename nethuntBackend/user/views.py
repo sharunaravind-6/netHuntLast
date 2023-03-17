@@ -31,8 +31,8 @@ def add_college(request, *args, **kwargs):
     if college.is_valid(raise_exception=True):
         temp = college.save()
         print(temp)
-        return Response({"info": "Successfully added new college!"})
-    return Response({"info":"Error in adding new college"})
+        return Response({"info": "Successfully added new college!","added":True})
+    return Response({"info":"Error in adding new college","added":False})
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def view_user(request, *args, **kwargs):

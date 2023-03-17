@@ -18,10 +18,16 @@ import { userContext } from '../Store/user';
 import { serverHost } from '../utils/server';
 import { Backdrop, CircularProgress } from '@mui/material';
 import useAxios from '../utils/useAxios';
+import SuccessSnackbar from './Parts/SuccessSnackbar';
 export default function AddCollege() {
   const { token } = React.useContext(userContext)
   const [loading, setLoading] = React.useState(false)
   const api = useAxios()
+  const [college, setCollege] = React.useState({
+    collegeName: "",
+    collegeCity: ""
+  })
+  const [success, setSuccess] = React.useState(false)
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -34,7 +40,15 @@ export default function AddCollege() {
     const response = await api.post("/user/add_college", {
       ...dataX
     })
-    const feedback = await response.data;
+    const feedback = response.data;
+    console.log(feedback)
+    if (feedback.added) {
+      setSuccess(true)
+      setCollege({
+        collegeName: "",
+        collegeCity: ""
+      })
+    }
     setLoading(false)
   };
 
@@ -67,6 +81,15 @@ export default function AddCollege() {
               <TextField
                 margin="normal"
                 required
+                value={college.collegeName}
+                onChange={(event) => {
+                  setCollege(prevData => {
+                    return {
+                      ...prevData,
+                      collegeName: event.target.value
+                    }
+                  })
+                }}
                 fullWidth
                 id="collegeName"
                 label="College Name"
@@ -82,6 +105,15 @@ export default function AddCollege() {
                 label="City"
                 id="collegeCity"
                 autoComplete="collegeCity"
+                value={college.collegeCity}
+                onChange={(event) => {
+                  setCollege(prevData => {
+                    return {
+                      ...prevData,
+                      collegeCity: event.target.value
+                    }
+                  })
+                }}
               />
               <Button
                 type="submit"
@@ -95,9 +127,11 @@ export default function AddCollege() {
           </Box>
         </Grid>
       </Grid>
+      <SuccessSnackbar open={success} onClose={() => { setSuccess(false) }} message={"Successfully added new college"} />
       <Backdrop open={loading}>
         <CircularProgress />
       </Backdrop>
+
     </ThemeProvider>
   );
 }
