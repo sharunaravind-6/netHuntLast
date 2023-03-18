@@ -56,7 +56,9 @@ export default function College() {
     const [loading, setLoading] = React.useState(false)
     const [success, setSuccess] = React.useState(false)
     React.useEffect(() => {
+        setLoading(true)
         fetchCollege()
+        setLoading(false)
     }, [])
     const handleChange = (event, newValue) => {
         setValue(newValue);

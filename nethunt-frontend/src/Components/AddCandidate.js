@@ -14,32 +14,61 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { AdminContext } from '../Store/adminStore';
 import useAxios from '../utils/useAxios';
 
-export default function AddCandidate() {
+export default function AddCandidate(props) {
   const [college, setCollege] = React.useState('');
   const { colleges, fetchCollege } = React.useContext(AdminContext)
   const [loading, setLoading] = React.useState(true)
+  const [user, setUser] = React.useState(
+    {
+      email: "",
+      password: "",
+      first_name: "",
+      last_name: "",
+      phone: "",
+      college: "",
+      dummy: "",
+    }
+  )
   const api = useAxios()
   React.useEffect(
     () => {
-      if (colleges===null)
+      if (colleges === null)
         fetchCollege()
       setLoading(false)
     },
     [loading])
   const handleSubmit = async (event) => {
     event.preventDefault();
+    props.onAddingUserLoading(true)
     const data = new FormData(event.currentTarget);
-    const body ={
+    const body = {
       email: data.get('email'),
       password: data.get('password'),
       first_name: data.get('first_name'),
       last_name: data.get('last_name'),
       phone: data.get('phone'),
-      college:colleges.filter(item=>item.collegeName === college)[0].id
+      college: colleges.filter(item => item.collegeName === college)[0].id
     };
-    const response = await api.post("/user/add_candidate",{
+    const response = await api.post("/user/add_candidate", {
       ...body
     })
+
+    props.onAddingUserLoading(false)
+    if (response.data.added) {
+      props.onAddingUserSuccess(true)
+      setCollege("")
+      setUser(
+        {
+          email: "",
+          password: "",
+          first_name: "",
+          last_name: "",
+          phone: "",
+          college: "",
+          dummy: "",
+        }
+      )
+    }
     console.log(response.data)
   };
 
@@ -76,6 +105,17 @@ export default function AddCandidate() {
                 id="email"
                 label="Email"
                 name="email"
+                value={user.email}
+                onChange={
+                  (event) => {
+                    setUser(prevData => {
+                      return {
+                        ...prevData,
+                        email: event.target.value
+                      }
+                    })
+                  }
+                }
                 autoComplete="email"
                 autoFocus
               />
@@ -87,6 +127,17 @@ export default function AddCandidate() {
                 name="first_name"
                 label="First Name"
                 id="first_name"
+                value={user.first_name}
+                onChange={
+                  (event) => {
+                    setUser(prevData => {
+                      return {
+                        ...prevData,
+                        first_name: event.target.value
+                      }
+                    })
+                  }
+                }
               />
               <TextField
                 margin="normal"
@@ -95,6 +146,17 @@ export default function AddCandidate() {
                 name="last_name"
                 label="Last Name"
                 id="last_name"
+                value={user.last_name}
+                onChange={
+                  (event) => {
+                    setUser(prevData => {
+                      return {
+                        ...prevData,
+                        last_name: event.target.value
+                      }
+                    })
+                  }
+                }
               />
               <TextField
                 margin="normal"
@@ -104,6 +166,17 @@ export default function AddCandidate() {
                 type="password"
                 label="Password"
                 id="password"
+                value={user.password}
+                onChange={
+                  (event) => {
+                    setUser(prevData => {
+                      return {
+                        ...prevData,
+                        password: event.target.value
+                      }
+                    })
+                  }
+                }
                 autoComplete="password"
               />
               <TextField
@@ -115,8 +188,19 @@ export default function AddCandidate() {
                 label="Confirm Password"
                 id="cpassword"
                 autoComplete="password"
+                value={user.dummy}
+                onChange={
+                  (event) => {
+                    setUser(prevData => {
+                      return {
+                        ...prevData,
+                        dummy: event.target.value
+                      }
+                    })
+                  }
+                }
               />
-               <TextField
+              <TextField
                 margin="normal"
                 required
                 fullWidth
@@ -124,6 +208,17 @@ export default function AddCandidate() {
                 type="number"
                 label="Phone"
                 id="phone"
+                value={user.phone}
+                onChange={
+                  (event) => {
+                    setUser(prevData => {
+                      return {
+                        ...prevData,
+                        phone: event.target.value
+                      }
+                    })
+                  }
+                }
               />
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">College</InputLabel>
@@ -131,7 +226,7 @@ export default function AddCandidate() {
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={college}
-                  label="Age"
+                  label="College"
                   onChange={(event) => { setCollege(event.target.value); }}
                 >
                   {

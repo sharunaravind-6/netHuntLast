@@ -80,9 +80,9 @@ def add_candidate(req):
         candidate = Candidate(user=tempUser,phone= phone,college=college)
         candidate.save()
         print("Added")
-        return Response({"result": True}) 
+        return Response({"added": True}) 
     # NethuntUserSerializer(data= {})
-    return Response({"result": False})
+    return Response({"added": False})
 
 
 @api_view(["GET"])

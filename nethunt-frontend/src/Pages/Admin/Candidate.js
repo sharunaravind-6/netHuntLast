@@ -7,7 +7,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Autocomplete, createFilterOptions, Divider, IconButton, List, ListItem, ListItemText, Paper, TextField } from '@mui/material';
+import { Autocomplete, Backdrop, CircularProgress, createFilterOptions, Divider, IconButton, List, ListItem, ListItemText, Paper, TextField } from '@mui/material';
 import { AddRounded, CircleRounded, DeleteRounded, SearchRounded } from '@mui/icons-material';
 import { red } from '@mui/material/colors';
 import AddCollege from '../../Components/AddCollege';
@@ -15,6 +15,7 @@ import AddCandidate from '../../Components/AddCandidate';
 import useAxios from '../../utils/useAxios';
 import { AdminContext } from '../../Store/adminStore';
 import SearchCandidate from '../../Components/SearchCandidate';
+import SuccessSnackbar from '../../Components/Parts/SuccessSnackbar';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -59,6 +60,8 @@ export default function Candidate() {
     }, [])
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
+    const [loading,setLoading] = React.useState(false)
+    const [success,setSuccess] = React.useState(false)
     const [searchValue, setSearchValue] = React.useState("");
     const handleChange = (event, newValue) => {
         console.log(newValue);
@@ -100,7 +103,7 @@ export default function Candidate() {
                     </Paper>
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
-                    <AddCandidate />
+                    <AddCandidate onAddingUserLoading={setLoading} onAddingUserSuccess={setSuccess}/>
                 </TabPanel>
                 <TabPanel value={value} index={2} dir={theme.direction}>
                     <Paper elevation={5} sx={{ marginTop: 3 }}>
@@ -108,6 +111,10 @@ export default function Candidate() {
                     </Paper>
                 </TabPanel>
             </SwipeableViews>
+            <SuccessSnackbar open={success} onClose={()=>{setSuccess(false)}} message = {"Successfully added the user"}/>
+            <Backdrop open={loading}>
+                <CircularProgress/>
+            </Backdrop>
         </Box>
     );
 }
