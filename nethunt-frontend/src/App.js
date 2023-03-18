@@ -37,6 +37,7 @@ import Quiz from './Pages/Coordinator/Quiz';
 import PracticeQuestion from './Components/PracticeQuestion';
 import PracticeQuestions from './Components/Questions/PracticeQuestions';
 import CoordinatorHome from './Pages/Coordinator/CoordinatorHome';
+import RequestCandidate from './Components/RequestCandidate';
 function App() {
   function preventConsoleOpening(){
     document.addEventListener('keydown', function (event) {
@@ -121,6 +122,9 @@ function App() {
               <Route path="score" element={<ScoreBoardX />}></Route>
             </Route>
           )}
+          <Route path='request' element={<RequestCandidate/>}>
+
+          </Route>
           {(token != null && jwtDecode(token?.access).role === "Admin") && (<><Route path="a/config" element={<QuizSettings />}></Route>
             <Route path="a/settings" element={<Settings />}></Route></>
           )}
