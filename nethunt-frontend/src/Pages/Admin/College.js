@@ -6,12 +6,13 @@ import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import { Autocomplete, createFilterOptions, Divider, IconButton, List, ListItem, ListItemText, Paper, TextField } from '@mui/material';
+import { Autocomplete, Backdrop, CircularProgress, createFilterOptions, Divider, IconButton, List, ListItem, ListItemText, Paper, TextField } from '@mui/material';
 import { AddRounded, DeleteRounded, EditRounded, ModeEdit, SearchRounded } from '@mui/icons-material';
 import { red } from '@mui/material/colors';
 import AddCollege from '../../Components/AddCollege';
 import useAxios from '../../utils/useAxios';
 import { AdminContext } from '../../Store/adminStore';
+import SuccessSnackbar from '../../Components/Parts/SuccessSnackbar';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -48,11 +49,12 @@ function a11yProps(index) {
 const filter = createFilterOptions();
 
 export default function College() {
-    const {colleges,fetchCollege} = React.useContext(AdminContext)
+    const { colleges, fetchCollege } = React.useContext(AdminContext)
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
     const [searchValue, setSearchValue] = React.useState("");
-   
+    const [loading, setLoading] = React.useState(false)
+    const [success, setSuccess] = React.useState(false)
     React.useEffect(() => {
         fetchCollege()
     }, [])
@@ -163,7 +165,7 @@ export default function College() {
                     </Paper>
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
-                    <AddCollege />
+                    <AddCollege onAddCollegeLoading={setLoading} onAddCollegeSuccess={setSuccess}/>
                 </TabPanel>
                 <TabPanel value={value} index={2} dir={theme.direction}>
                     <Paper elevation={5} sx={{ marginTop: 3 }}>
@@ -194,6 +196,10 @@ export default function College() {
                     </Paper>
                 </TabPanel>
             </SwipeableViews>
+            <SuccessSnackbar open={success} onClose={() => { setSuccess(false) }} message={"Successfully added new college"} />
+            <Backdrop open={loading}>
+                <CircularProgress />
+            </Backdrop>
         </Box>
     );
 }

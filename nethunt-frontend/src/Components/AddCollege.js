@@ -19,15 +19,15 @@ import { serverHost } from '../utils/server';
 import { Backdrop, CircularProgress } from '@mui/material';
 import useAxios from '../utils/useAxios';
 import SuccessSnackbar from './Parts/SuccessSnackbar';
-export default function AddCollege() {
+export default function AddCollege(props) {
   const { token } = React.useContext(userContext)
-  const [loading, setLoading] = React.useState(false)
+
   const api = useAxios()
   const [college, setCollege] = React.useState({
     collegeName: "",
     collegeCity: ""
   })
-  const [success, setSuccess] = React.useState(false)
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -35,7 +35,7 @@ export default function AddCollege() {
       collegeName: data.get('collegeName'),
       collegeCity: data.get('collegeCity'),
     };
-    setLoading(true)
+    props.onAddCollegeLoading(true)
 
     const response = await api.post("/user/add_college", {
       ...dataX
@@ -43,13 +43,13 @@ export default function AddCollege() {
     const feedback = response.data;
     console.log(feedback)
     if (feedback.added) {
-      setSuccess(true)
+      props.onAddCollegeSuccess(true)
       setCollege({
         collegeName: "",
         collegeCity: ""
       })
     }
-    setLoading(false)
+    props.onAddCollegeLoading(false)
   };
 
   return (
@@ -127,10 +127,6 @@ export default function AddCollege() {
           </Box>
         </Grid>
       </Grid>
-      <SuccessSnackbar open={success} onClose={() => { setSuccess(false) }} message={"Successfully added new college"} />
-      <Backdrop open={loading}>
-        <CircularProgress />
-      </Backdrop>
 
     </ThemeProvider>
   );
