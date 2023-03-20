@@ -76,9 +76,6 @@ class Progress(models.Model):
     level = models.IntegerField(default=0)
     hits = models.IntegerField(default=0)
     points = models.IntegerField(default=0)
-class Log(models.Model):
-    usr = models.ForeignKey(NethuntUser, on_delete=models.CASCADE)
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
-    level = models.IntegerField(default=0)
-    tried_word = models.CharField(max_length=40)
-    time = models.DateTimeField()
+
+class Ordering(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.SET_NULL,null=True)
