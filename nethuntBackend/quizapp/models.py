@@ -78,4 +78,6 @@ class Progress(models.Model):
     points = models.IntegerField(default=0)
 
 class Ordering(models.Model):
+    quiz = models.ForeignKey(Quiz, on_delete=models.SET_DEFAULT,default=None)
     question = models.ForeignKey(Question, on_delete=models.SET_NULL,null=True)
+    userType = models.CharField(max_length=50,default="BASIC")
