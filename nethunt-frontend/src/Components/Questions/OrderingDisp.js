@@ -93,7 +93,7 @@ export default function OrderingDisp(props) {
                         </ListItemIcon>
                         <ListItemText>
                             <FormControl fullWidth>
-                                <InputLabel id="question-select-label">Event</InputLabel>
+                                <InputLabel id="question-select-label">Question</InputLabel>
                                 <Select
                                     labelId="question-select-label"
                                     id="question-select"
