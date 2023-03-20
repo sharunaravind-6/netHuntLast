@@ -1,12 +1,12 @@
-import { EditRounded, EmojiObjectsRounded } from "@mui/icons-material";
-import { Button, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, Modal, Paper, Stack, Toolbar, Typography, } from "@mui/material";
+import { EditRounded, EmojiObjectsRounded, FormatListNumbered, Numbers } from "@mui/icons-material";
+import { Avatar, Backdrop, Box, Button, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, MenuItem, Modal, Paper, Select, Stack, Toolbar, Typography, } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Accordion } from "./../Parts/Accordion";
 import { AccordionDetails } from "./../Parts/AccordionDetails";
 import { AccordionSummary } from "./../Parts/AccordionSummary";
 import QuizEdit from "./../QuizEdit";
 
-function QuizEditUpdate(props) {
+function OrderingModal(props) {
     return (
         <Stack sx={{ gap: 3 }}>
             <Paper>
@@ -14,7 +14,7 @@ function QuizEditUpdate(props) {
                     <Grid item xs={12}>
                         <Toolbar>
                             <Typography variant="h5" flexGrow={1}>
-                                Hints Settings
+                                Update question order
                             </Typography>
                         </Toolbar>
                     </Grid>
@@ -24,40 +24,34 @@ function QuizEditUpdate(props) {
                         <Paper elevation={12}>
                             <Stack padding={2} sx={{ gap: 3 }}>
                                 <FormControl>
-                                    <InputLabel htmlFor="hint1">
-                                        Hint 1 reveals at
+                                    <InputLabel htmlFor="qno">
+                                        Assign question at
                                     </InputLabel>
                                     <Input
-                                        id="hint1"
+                                        id="qno"
                                         type='number'
                                         fullWidth
-                                        
-                                        defaultValue={50}
+                                        disabled
+                                        value={props.id === null?"":props.id}
                                         startAdornment={
                                             <InputAdornment position="start">
-                                                <EmojiObjectsRounded />
+                                                <FormatListNumbered />
                                             </InputAdornment>
                                         }
                                     />
                                 </FormControl>
-                                <FormControl>
-                                    <InputLabel htmlFor="hint2">
-                                        Hint 2 reveals at
-                                    </InputLabel>
-                                    <Input
-                                        id="hint2"
-                                        type='number'
-                                        fullWidth
-                                        
-                                        defaultValue={100}
-                                        startAdornment={
-                                            <InputAdornment position="start">
-                                                <EmojiObjectsRounded />
-                                            </InputAdornment>
-                                        }
-                                    />
+                                <FormControl fullWidth>
+                                    <InputLabel id="ques-select-label">Question</InputLabel>
+                                    <Select
+                                        labelId="ques-select-label"
+                                        id="ques-select"
+                                        label="Question"
+                                    >
+                                        <MenuItem value={"Login"}>Login</MenuItem>
+                                        <MenuItem value={"Thiran"}>Thiran</MenuItem>
+                                    </Select>
                                 </FormControl>
-                                <Button startIcon={<EditRounded />} variant="outlined">
+                                <Button startIcon={<EditRounded />} variant="outlined" onClick={()=>{props.set_are_you_sure(true)}}>
                                     Update
                                 </Button>
                             </Stack>
@@ -72,6 +66,11 @@ function QuizEditUpdate(props) {
 }
 export default function OrderingDisp(props) {
     const [quiz, setQuiz] = useState("")
+    const [edit, setEdit] = useState({
+        allowed: false,
+        id: null,
+    })
+    const [are_you_sure, set_are_you_sure] = useState(false)
     const handleChange = (panel) => (event, newExpanded) => {
         setQuiz(newExpanded ? panel : false);
     };
@@ -84,33 +83,46 @@ export default function OrderingDisp(props) {
 
             </Toolbar>
         </Grid>
-        <Grid item xs={12}>
-
-        </Grid>
         <Grid item xs={1} />
         <Grid item xs={10}>
-            <Paper elevation={0}>
-                <Accordion expanded={quiz === 'practice'} onChange={handleChange('practice')}>
-                    <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-                        <Typography>Practice Quiz</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <QuizEdit quiz="Practice"/>
-                    </AccordionDetails>
-                </Accordion>
-                <Accordion expanded={quiz === 'main'} onChange={handleChange('main')}>
-                    <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-                        <Typography>Main Quiz</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <QuizEdit quiz="Main"/>
-                    </AccordionDetails>
-                </Accordion>
+            <Paper elevation={12}>
+                <List>
+                    <ListItem>
+                        <ListItemIcon>
+                            <Avatar>1</Avatar>
+                        </ListItemIcon>
+                        <ListItemText>
+                            <FormControl fullWidth>
+                                <InputLabel id="question-select-label">Event</InputLabel>
+                                <Select
+                                    labelId="question-select-label"
+                                    id="question-select"
+                                    label="Question"
+                                    disabled
+                                >
+                                    <MenuItem value={"Login"}>Login</MenuItem>
+                                    <MenuItem value={"Thiran"}>Thiran</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </ListItemText>
+                        <ListItemSecondaryAction>
+                            <IconButton onClick={() => {
+                                setEdit({
+                                    allowed: true,
+                                    id: 1
+                                })
+                            }}>
+                                <EditRounded />
+                            </IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                </List>
             </Paper>
         </Grid>
         <Grid item xs={1} />
-        <Modal keepMounted open={false}
+        <Modal keepMounted open={edit.allowed}
             closeAfterTransition
+            onClose={() => { setEdit({ allowed: false, id: null }) }}
         >
             <Paper sx={{
                 position: 'absolute',
@@ -123,9 +135,35 @@ export default function OrderingDisp(props) {
                 boxShadow: 24,
                 p: 4,
             }}>
-                <QuizEditUpdate />
+                <OrderingModal id={edit.id} set_are_you_sure={set_are_you_sure}/>
             </Paper>
-
         </Modal>
+        <Backdrop open={are_you_sure}>
+            <Modal
+                open={are_you_sure}
+                onClose={() => { set_are_you_sure(false) }}
+                aria-labelledby="keep-mounted-modal-title"
+                aria-describedby="keep-mounted-modal-description"
+            >
+                <Box sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 400,
+                    bgcolor: 'background.paper',
+                    border: '2px solid #000',
+                    boxShadow: 24,
+                    p: 4,
+                }}>
+                    <Typography id="keep-mounted-modal-title" variant="h6" component="h2" sx={{ textAlign: "center" }}>
+                        Are you sure ?
+                    </Typography>
+                    <Button variant="contained" fullWidth onClick={() => { }}>
+                        UPDATE
+                    </Button>
+                </Box>
+            </Modal>
+        </Backdrop>
     </Grid>)
 }
