@@ -53,10 +53,10 @@ export default function OrderingQuestions() {
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="View general" {...a11yProps(0)} />
-                    <Tab label="Edit general" {...a11yProps(1)} />
-                    <Tab label="View alumni" {...a11yProps(2)} />
-                    <Tab label="Edit alumni" {...a11yProps(3)} />
+                    <Tab label="General main" {...a11yProps(0)} />
+                    <Tab label="General practice" {...a11yProps(1)} />
+                    <Tab label="Alumni main" {...a11yProps(2)} />
+                    <Tab label="Alumni practice" {...a11yProps(3)} />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
