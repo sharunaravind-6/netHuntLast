@@ -38,6 +38,7 @@ import PracticeQuestion from './Components/PracticeQuestion';
 import PracticeQuestions from './Components/Questions/PracticeQuestions';
 import CoordinatorHome from './Pages/Coordinator/CoordinatorHome';
 import RequestCandidate from './Components/RequestCandidate';
+import OrderingQuestions from './Components/Questions/Ordering';
 function App() {
   function preventConsoleOpening(){
     document.addEventListener('keydown', function (event) {
@@ -101,6 +102,7 @@ function App() {
                 <Route path="quiz" element={<Quiz />}></Route>
                 <Route path='practice' element = {<QuestionAdmin/>}></Route>
                 <Route path='main' element = {<QuestionAdmin/>}></Route>
+                <Route path='ordering' element = {<OrderingQuestions/>}></Route>
               </Route>
             </>
           )}
