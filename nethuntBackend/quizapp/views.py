@@ -330,7 +330,11 @@ def updateQuestion(req):
 @api_view(["GET"])
 def get_ordering(req):
     if Info.objects.all()[0].event == "THIRAN":
-        
-        pass
+        for quiz in ["Main","Practice"]:
+            for i in range(Question.objects.filter(quiz=Quiz.objects.get(name=quiz)).count() - Ordering.objects.filter(quiz=Quiz.objects.get(name=quiz)).count()):
+                Ordering(quiz=Quiz.objects.get(name=quiz)).save()
     if Info.objects.all()[0].event == "LOGIN":
-        pass
+        for quiz in ["Main","Practice"]:
+            for i in range(Question.objects.filter(quiz=Quiz.objects.get(name=quiz)).count() - Ordering.objects.filter(quiz=Quiz.objects.get(name=quiz)).count()):
+                Ordering(quiz=Quiz.objects.get(name=quiz)).save()
+                Ordering(quiz=Quiz.objects.get(name=quiz),userType="ALUMNI").save()
