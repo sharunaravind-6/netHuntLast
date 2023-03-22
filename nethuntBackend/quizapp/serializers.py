@@ -1,4 +1,4 @@
-from .models import (Info,Question,Quiz,Progress,CurrentStatus)
+from .models import (Info,Question,Quiz,Progress,CurrentStatus,Ordering)
 from user.serializers import NethuntUserSerializer
 from rest_framework import serializers
 class InformationSerializer(serializers.ModelSerializer):
@@ -33,4 +33,11 @@ class CurrentStatusSerializer(serializers.ModelSerializer):
     quiz = QuizSerializer(read_only=True)
     class Meta:
         model = CurrentStatus
+        fields = "__all__"
+
+class OrderingSerializer(serializers.ModelSerializer):
+    quiz = QuizSerializer(read_only=True)
+    question = QuestionSerializer(read_only=True)
+    class Meta:
+        model = Ordering
         fields = "__all__"
