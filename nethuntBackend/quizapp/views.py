@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Info,Quiz
+from .models import Info,Quiz,Ordering
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -326,3 +326,7 @@ def updateQuestion(req):
     del updateData["ques"]
     Question.objects.get(id=data["ques"]).update(**updateData)
     return Response({"updated":True}) 
+
+@api_view(["GET"])
+def get_ordering(req):
+    pass
