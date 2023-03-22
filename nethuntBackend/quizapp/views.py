@@ -329,4 +329,8 @@ def updateQuestion(req):
 
 @api_view(["GET"])
 def get_ordering(req):
-    pass
+    if Info.objects.all()[0].event == "THIRAN":
+        
+        pass
+    if Info.objects.all()[0].event == "LOGIN":
+        pass
