@@ -17,5 +17,6 @@ urlpatterns = [
     path("admin_home",views.adminHome),
     path("disp_q_update",views.fetch_questions_for_edit),
     path("delete_ques",views.deleteQuestion),
-    path("update_ques",views.updateQuestion)
+    path("update_ques",views.updateQuestion),
+    path("quetion_ordering",views.get_ordering)
 ]

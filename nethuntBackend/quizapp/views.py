@@ -7,7 +7,7 @@ from user.models import (Coordinator,NethuntUser,Candidate)
 from user.serializers import (CoordinatorSerializer)
 from user.serializers import NethuntUserSerializer
 from quizapp.models import Info,Question,Progress,CurrentStatus
-from .serializers import QuestionSerializer,QuizSerializer,ProgressSerializer,CurrentStatusSerializer
+from .serializers import QuestionSerializer,QuizSerializer,ProgressSerializer,CurrentStatusSerializer,OrderingSerializer
 import json
 import copy
 from datetime import datetime
@@ -333,8 +333,10 @@ def get_ordering(req):
         for quiz in ["Main","Practice"]:
             for i in range(Question.objects.filter(quiz=Quiz.objects.get(name=quiz)).count() - Ordering.objects.filter(quiz=Quiz.objects.get(name=quiz)).count()):
                 Ordering(quiz=Quiz.objects.get(name=quiz)).save()
+        return Response({"alumni":False,"orderingMain":OrderingSerializer(Ordering.objects.filter(quiz=Quiz.objects.get(name="Main")),many=True).data,"orderingPractice":OrderingSerializer(Ordering.objects.filter(quiz=Quiz.objects.get(name="Practice")),many=True).data})
     if Info.objects.all()[0].event == "LOGIN":
         for quiz in ["Main","Practice"]:
             for i in range(Question.objects.filter(quiz=Quiz.objects.get(name=quiz)).count() - Ordering.objects.filter(quiz=Quiz.objects.get(name=quiz)).count()):
                 Ordering(quiz=Quiz.objects.get(name=quiz)).save()
                 Ordering(quiz=Quiz.objects.get(name=quiz),userType="ALUMNI").save()
+        return Response({"alumni":False,"orderingMain":OrderingSerializer(Ordering.objects.filter(quiz=Quiz.objects.get(name="Main"),userType="BASIC"),many=True).data,"orderingPractice":OrderingSerializer(Ordering.objects.filter(quiz=Quiz.objects.get(name="Practice"),userType="BASIC"),many=True).data,"alumniOrderingMain":OrderingSerializer(Ordering.objects.filter(quiz=Quiz.objects.get(name="Main"),userType="ALUMNI"),many=True).data,"alumniOrderingPractice":OrderingSerializer(Ordering.objects.filter(quiz=Quiz.objects.get(name="Practice"),userType="ALUMNI"),many=True).data})
