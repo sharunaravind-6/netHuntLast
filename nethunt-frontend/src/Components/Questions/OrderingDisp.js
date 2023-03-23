@@ -90,7 +90,7 @@ export default function OrderingDisp(props) {
                     {props.ordering.map(item => {
                         return <ListItem>
                             <ListItemIcon>
-                                <Avatar>1</Avatar>
+                                <Avatar>{props.ordering.indexOf(item)+1}</Avatar>
                             </ListItemIcon>
                             <ListItemText>
                                 <FormControl fullWidth>

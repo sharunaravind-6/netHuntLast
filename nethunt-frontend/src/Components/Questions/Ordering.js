@@ -94,16 +94,16 @@ export default function OrderingQuestions() {
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <OrderingDisp ordering={basicOrderingMain} />
+                <OrderingDisp ordering={basicOrderingMain} user="BASIC" quiz="Main"/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <OrderingDisp ordering={basicOrderingPractice} />
+                <OrderingDisp ordering={basicOrderingPractice} user="BASIC" quiz="Practice"/>
             </TabPanel>
             {alumni && <><TabPanel value={value} index={2}>
-                <OrderingDisp ordering={alumniOrderingMain} />
+                <OrderingDisp ordering={alumniOrderingMain} user="ALUMNI" quiz="Main"/>
             </TabPanel>
                 <TabPanel value={value} index={3}>
-                    <OrderingDisp ordering={alumniOrderingPractice} />
+                    <OrderingDisp ordering={alumniOrderingPractice} user="ALUMNI" quiz="Practice"/>
                 </TabPanel>
             </>}
             <Backdrop open={displayQues}>
