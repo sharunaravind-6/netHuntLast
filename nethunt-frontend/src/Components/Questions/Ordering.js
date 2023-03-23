@@ -8,7 +8,7 @@ import QuizDisplay from '../../Components/QuizDisplay';
 import AddQuestion from '../../Components/Parts/AddQuestion';
 import EditQuestion from '../../Components/Parts/EditQuestion';
 import OrderingDisp from './OrderingDisp';
-import { Backdrop, Button, FormControl, Input, InputAdornment, InputLabel, Modal } from '@mui/material';
+import { Backdrop, Button, CircularProgress, FormControl, Input, InputAdornment, InputLabel, Modal } from '@mui/material';
 import { KeyRounded } from '@mui/icons-material';
 import useAxios from '../../utils/useAxios';
 
@@ -47,13 +47,30 @@ function a11yProps(index) {
 
 export default function OrderingQuestions() {
     const [value, setValue] = React.useState(0);
-    const [loading, setLoading] = React.useState(false)
+    const [loader, setLoader] = React.useState(false)
+    const [ordering,setOrdering] = React.useState([])
     const [displayQues, setDisplayQues] = React.useState(true)
     const [secretKey, setSecretKey] = React.useState("")
     const api = useAxios()
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+    async function fetchQuestionsOrdering() {
+        setLoader(true)
+        const response = await api.post("/game/quetion_ordering", {
+            password: secretKey,
+        })
+        setLoader(false)
+        console.log(response.data)
+        if (response?.data?.correct) {
+            setDisplayQues(false)
+            setLoader(true)
+            console.log(response.data)
+            setOrdering(response?.data?.questions)
+            setLoader(false)
+        }
+        setSecretKey("")
+    }
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -123,12 +140,15 @@ export default function OrderingQuestions() {
                             <Box sx={{ width: { xs: "250px", sm: "600px" }, position: "relative" }}>
                                 {/* <img src={ByeSVG} width="100%" /> */}
                             </Box>
-                            <Button fullWidth onClick={fetchQuestions} variant="contained">CONTINUE</Button>
+                            <Button fullWidth onClick={fetchQuestionsOrdering} variant="contained">CONTINUE</Button>
                             <Button fullWidth onClick={() => { }}>EXIT</Button>
 
                         </div>
                     </Box>
                 </Modal>
+            </Backdrop>
+            <Backdrop open={loader}> 
+                <CircularProgress/>
             </Backdrop>
         </Box>
     );
