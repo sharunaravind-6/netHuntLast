@@ -1,6 +1,7 @@
 import { EditRounded, EmojiObjectsRounded, FormatListNumbered, Numbers } from "@mui/icons-material";
-import { Avatar, Backdrop, Box, Button, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, MenuItem, Modal, Paper, Select, Stack, Toolbar, Typography, } from "@mui/material";
+import { Avatar, Backdrop, Box, Button, CircularProgress, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, MenuItem, Modal, Paper, Select, Stack, Toolbar, Typography, } from "@mui/material";
 import { useEffect, useState } from "react";
+import useAxios from "../../utils/useAxios";
 import { Accordion } from "./../Parts/Accordion";
 import { AccordionDetails } from "./../Parts/AccordionDetails";
 import { AccordionSummary } from "./../Parts/AccordionSummary";
@@ -46,9 +47,12 @@ function OrderingModal(props) {
                                         labelId="ques-select-label"
                                         id="ques-select"
                                         label="Question"
+                                        defaultValue={"NULL"}
                                     >
-                                        <MenuItem value={"Login"}>Login</MenuItem>
-                                        <MenuItem value={"Thiran"}>Thiran</MenuItem>
+                                        <MenuItem defaultChecked value={"NULL"}>NULL</MenuItem>
+                                        {props.questions.map(item => {
+                                            return <MenuItem key={item.id} value={item.answer}>{item.answer}</MenuItem>
+                                        })}
                                     </Select>
                                 </FormControl>
                                 <Button startIcon={<EditRounded />} variant="outlined" onClick={() => { props.set_are_you_sure(true) }}>
@@ -66,10 +70,25 @@ function OrderingModal(props) {
 }
 export default function OrderingDisp(props) {
     const [quiz, setQuiz] = useState("")
+    const [questions, setQuestions] = useState([])
+    const [loader, setLoader] = useState(false)
     const [edit, setEdit] = useState({
         allowed: false,
         id: null,
     })
+    const api = useAxios()
+    async function fetchQuestions() {
+        setLoader(true)
+        const response = await api.post("/game/questions_for_ordering", {
+            quiz: props.quiz === "Main" ? "Main" : "Practice"
+        })
+        setLoader(false)
+        if (response?.data?.correct) {
+            setLoader(true)
+            setQuestions(response?.data?.questions)
+            setLoader(false)
+        }
+    }
     const [are_you_sure, set_are_you_sure] = useState(false)
     const handleChange = (panel) => (event, newExpanded) => {
         setQuiz(newExpanded ? panel : false);
@@ -87,10 +106,14 @@ export default function OrderingDisp(props) {
         <Grid item xs={10}>
             <Paper elevation={12}>
                 <List>
+                    {props.ordering.length === 0 && <ListItem> <Typography>
+                        {props.ordering.length === 0 && <>Sorry no questions being added</>}
+                    </Typography>
+                    </ListItem>}
                     {props.ordering.map(item => {
-                        return <ListItem>
+                        return <ListItem key={item.id}>
                             <ListItemIcon>
-                                <Avatar>{props.ordering.indexOf(item)+1}</Avatar>
+                                <Avatar>{props.ordering.indexOf(item) + 1}</Avatar>
                             </ListItemIcon>
                             <ListItemText>
                                 <FormControl fullWidth>
@@ -100,17 +123,18 @@ export default function OrderingDisp(props) {
                                         id="question-select"
                                         label="Question"
                                         disabled
+                                        defaultValue={item.question === null ? "NULL": questions?.answer}
                                     >
-                                        <MenuItem value={"Login"}>Login</MenuItem>
-                                        <MenuItem value={"Thiran"}>Thiran</MenuItem>
+                                        <MenuItem value={item.question === null ? "NULL": questions?.answer}>{item.question === null ? "NULL": questions?.answer}</MenuItem>
                                     </Select>
                                 </FormControl>
                             </ListItemText>
                             <ListItemSecondaryAction>
                                 <IconButton onClick={() => {
+                                    fetchQuestions()
                                     setEdit({
                                         allowed: true,
-                                        id: 1
+                                        id: item.id
                                     })
                                 }}>
                                     <EditRounded />
@@ -137,7 +161,7 @@ export default function OrderingDisp(props) {
                 boxShadow: 24,
                 p: 4,
             }}>
-                <OrderingModal id={edit.id} set_are_you_sure={set_are_you_sure} />
+                <OrderingModal id={edit.id} set_are_you_sure={set_are_you_sure} questions={questions} />
             </Paper>
         </Modal>
         <Backdrop open={are_you_sure}>
@@ -166,6 +190,9 @@ export default function OrderingDisp(props) {
                     </Button>
                 </Box>
             </Modal>
+        </Backdrop>
+        <Backdrop open={loader}>
+            <CircularProgress />
         </Backdrop>
     </Grid>)
 }

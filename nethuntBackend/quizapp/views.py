@@ -313,6 +313,12 @@ def fetchQuestions(req):
         return Response({"questions":questionSerializer,"correct":True})
     return Response({"correct":False}) 
 @api_view(["POST"])
+def fetchQuestionsForOrdering(req):
+    data = json.loads(req.body)
+    questions =  Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))
+    questionSerializer = QuestionSerializer(questions,many=True).data
+    return Response({"questions":questionSerializer,"correct":True}) 
+@api_view(["POST"])
 def deleteQuestion(req):
     data = json.loads(req.body)
     Question.objects.filter(id=data["questionId"]).delete()
