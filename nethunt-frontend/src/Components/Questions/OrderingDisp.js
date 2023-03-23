@@ -32,7 +32,7 @@ function OrderingModal(props) {
                                         type='number'
                                         fullWidth
                                         disabled
-                                        value={props.id === null?"":props.id}
+                                        value={props.id === null ? "" : props.id}
                                         startAdornment={
                                             <InputAdornment position="start">
                                                 <FormatListNumbered />
@@ -51,7 +51,7 @@ function OrderingModal(props) {
                                         <MenuItem value={"Thiran"}>Thiran</MenuItem>
                                     </Select>
                                 </FormControl>
-                                <Button startIcon={<EditRounded />} variant="outlined" onClick={()=>{props.set_are_you_sure(true)}}>
+                                <Button startIcon={<EditRounded />} variant="outlined" onClick={() => { props.set_are_you_sure(true) }}>
                                     Update
                                 </Button>
                             </Stack>
@@ -87,35 +87,37 @@ export default function OrderingDisp(props) {
         <Grid item xs={10}>
             <Paper elevation={12}>
                 <List>
-                    <ListItem>
-                        <ListItemIcon>
-                            <Avatar>1</Avatar>
-                        </ListItemIcon>
-                        <ListItemText>
-                            <FormControl fullWidth>
-                                <InputLabel id="question-select-label">Question</InputLabel>
-                                <Select
-                                    labelId="question-select-label"
-                                    id="question-select"
-                                    label="Question"
-                                    disabled
-                                >
-                                    <MenuItem value={"Login"}>Login</MenuItem>
-                                    <MenuItem value={"Thiran"}>Thiran</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </ListItemText>
-                        <ListItemSecondaryAction>
-                            <IconButton onClick={() => {
-                                setEdit({
-                                    allowed: true,
-                                    id: 1
-                                })
-                            }}>
-                                <EditRounded />
-                            </IconButton>
-                        </ListItemSecondaryAction>
-                    </ListItem>
+                    {props.ordering.map(item => {
+                        return <ListItem>
+                            <ListItemIcon>
+                                <Avatar>1</Avatar>
+                            </ListItemIcon>
+                            <ListItemText>
+                                <FormControl fullWidth>
+                                    <InputLabel id="question-select-label">Question</InputLabel>
+                                    <Select
+                                        labelId="question-select-label"
+                                        id="question-select"
+                                        label="Question"
+                                        disabled
+                                    >
+                                        <MenuItem value={"Login"}>Login</MenuItem>
+                                        <MenuItem value={"Thiran"}>Thiran</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </ListItemText>
+                            <ListItemSecondaryAction>
+                                <IconButton onClick={() => {
+                                    setEdit({
+                                        allowed: true,
+                                        id: 1
+                                    })
+                                }}>
+                                    <EditRounded />
+                                </IconButton>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    })}
                 </List>
             </Paper>
         </Grid>
@@ -135,7 +137,7 @@ export default function OrderingDisp(props) {
                 boxShadow: 24,
                 p: 4,
             }}>
-                <OrderingModal id={edit.id} set_are_you_sure={set_are_you_sure}/>
+                <OrderingModal id={edit.id} set_are_you_sure={set_are_you_sure} />
             </Paper>
         </Modal>
         <Backdrop open={are_you_sure}>

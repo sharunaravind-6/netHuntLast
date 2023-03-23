@@ -48,9 +48,14 @@ function a11yProps(index) {
 export default function OrderingQuestions() {
     const [value, setValue] = React.useState(0);
     const [loader, setLoader] = React.useState(false)
-    const [ordering,setOrdering] = React.useState([])
+    const [ordering, setOrdering] = React.useState([])
+    const [basicOrderingMain, setBasicOrderingMain] = React.useState([])
+    const [basicOrderingPractice, setBasicOrderingPractice] = React.useState([])
+    const [alumniOrderingMain, setAlumniOrderingMain] = React.useState([])
+    const [alumniOrderingPractice, setAlumniOrderingPractice] = React.useState([])
     const [displayQues, setDisplayQues] = React.useState(true)
     const [secretKey, setSecretKey] = React.useState("")
+    const [alumni, setAlumni] = React.useState(false)
     const api = useAxios()
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -63,6 +68,13 @@ export default function OrderingQuestions() {
         setLoader(false)
         console.log(response.data)
         if (response?.data?.correct) {
+            if (response?.data?.alumni) {
+                setAlumni(true)
+                setAlumniOrderingMain(response?.data?.alumniOrderingMain)
+                setAlumniOrderingPractice(response?.data?.alumniOrderingPractice)
+            }
+            setBasicOrderingMain(response?.data?.orderingMain)
+            setBasicOrderingPractice(response?.data?.orderingPractice)
             setDisplayQues(false)
             setLoader(true)
             console.log(response.data)
@@ -77,22 +89,23 @@ export default function OrderingQuestions() {
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="General main" {...a11yProps(0)} />
                     <Tab label="General practice" {...a11yProps(1)} />
-                    <Tab label="Alumni main" {...a11yProps(2)} />
-                    <Tab label="Alumni practice" {...a11yProps(3)} />
+                    {alumni && <><Tab label="Alumni main" {...a11yProps(2)} />
+                        <Tab label="Alumni practice" {...a11yProps(3)} /></>}
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <OrderingDisp />
+                <OrderingDisp ordering={basicOrderingMain} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <AddQuestion />
+                <OrderingDisp ordering={basicOrderingPractice} />
             </TabPanel>
-            <TabPanel value={value} index={2}>
-                <OrderingDisp />
+            {alumni && <><TabPanel value={value} index={2}>
+                <OrderingDisp ordering={alumniOrderingMain} />
             </TabPanel>
-            <TabPanel value={value} index={3}>
-                <AddQuestion />
-            </TabPanel>
+                <TabPanel value={value} index={3}>
+                    <OrderingDisp ordering={alumniOrderingPractice} />
+                </TabPanel>
+            </>}
             <Backdrop open={displayQues}>
                 <Modal
                     open={displayQues}
@@ -147,8 +160,8 @@ export default function OrderingQuestions() {
                     </Box>
                 </Modal>
             </Backdrop>
-            <Backdrop open={loader}> 
-                <CircularProgress/>
+            <Backdrop open={loader}>
+                <CircularProgress />
             </Backdrop>
         </Box>
     );
