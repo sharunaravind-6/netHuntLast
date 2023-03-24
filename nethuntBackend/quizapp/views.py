@@ -345,13 +345,34 @@ def get_ordering(req):
         if Info.objects.all()[0].event == "Thiran":
             print("At thiran")
             for quiz in ["Main","Practice"]:
+                if Question.objects.filter(quiz=Quiz.objects.get(name=quiz)).count() - Ordering.objects.filter(quiz=Quiz.objects.get(name=quiz)).count() < 0:
+                    for item in Ordering.objects.order_by('-id')[:Ordering.objects.filter(quiz=Quiz.objects.get(name=quiz)).count()-Question.objects.filter(quiz=Quiz.objects.get(name=quiz)).count()]: 
+                        item.delete()    
                 for i in range(Question.objects.filter(quiz=Quiz.objects.get(name=quiz)).count() - Ordering.objects.filter(quiz=Quiz.objects.get(name=quiz)).count()):
                     Ordering(quiz=Quiz.objects.get(name=quiz)).save()
             return Response({"correct":True,"alumni":False,"orderingMain":OrderingSerializer(Ordering.objects.filter(quiz=Quiz.objects.get(name="Main")),many=True).data,"orderingPractice":OrderingSerializer(Ordering.objects.filter(quiz=Quiz.objects.get(name="Practice")),many=True).data})
         if Info.objects.all()[0].event == "Login":
             for quiz in ["Main","Practice"]:
+                if Question.objects.filter(quiz=Quiz.objects.get(name=quiz)).count() - Ordering.objects.filter(quiz=Quiz.objects.get(name=quiz)).count() < 0:
+                    for item in Ordering.objects.order_by('-id')[:Ordering.objects.filter(quiz=Quiz.objects.get(name=quiz)).count()-Question.objects.filter(quiz=Quiz.objects.get(name=quiz)).count()]: 
+                        item.delete()
                 for i in range(Question.objects.filter(quiz=Quiz.objects.get(name=quiz)).count() - Ordering.objects.filter(quiz=Quiz.objects.get(name=quiz)).count()):
                     Ordering(quiz=Quiz.objects.get(name=quiz)).save()
                     Ordering(quiz=Quiz.objects.get(name=quiz),userType="ALUMNI").save()
             return Response({"correct":True,"alumni":False,"orderingMain":OrderingSerializer(Ordering.objects.filter(quiz=Quiz.objects.get(name="Main"),userType="BASIC"),many=True).data,"orderingPractice":OrderingSerializer(Ordering.objects.filter(quiz=Quiz.objects.get(name="Practice"),userType="BASIC"),many=True).data,"alumniOrderingMain":OrderingSerializer(Ordering.objects.filter(quiz=Quiz.objects.get(name="Main"),userType="ALUMNI"),many=True).data,"alumniOrderingPractice":OrderingSerializer(Ordering.objects.filter(quiz=Quiz.objects.get(name="Practice"),userType="ALUMNI"),many=True).data})
     return Response({"correct":False}) 
+
+@api_view(["POST"])
+def updateOrdering(req):
+    try:
+        data = json.loads(req.body)
+        order = Ordering.objects.get(id=data["id"]).update(question = Question.objects.get(id=data["questionId"]))
+        return Response({"updated":True})
+    except:
+        return Response({"updated":False})
+@api_view(["POST"])
+def get_ordering_specific(req):
+    data = json.loads(req.body)
+    orderings = Ordering.objects.filter(userType=data["userType"],quiz=Quiz.objects.get(name=data["quiz"]))
+    return Response({"ordering":OrderingSerializer(orderings,many=True).data})
+    

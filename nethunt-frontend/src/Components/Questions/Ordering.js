@@ -60,9 +60,34 @@ export default function OrderingQuestions() {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+    async function fetchSpecifiedQuestionsOrdering(quiz,userType) {
+        setLoader(true)
+        const response = await api.post("/game/question_ordering_specific", {
+            userType:userType,
+            quiz:quiz
+        })
+        setLoader(false)
+        console.log(response.data)
+        const data = response?.data
+        if(userType === "ALUMNI"){
+            if(quiz === "Main"){
+                setAlumniOrderingMain(data?.ordering)
+            }else{
+                setAlumniOrderingPractice(data?.ordering)
+            }
+        }else{
+            if(quiz === "Main"){
+                setBasicOrderingMain(data?.ordering)
+            }else{
+                setBasicOrderingPractice(data?.ordering)
+            }
+        }
+       
+    }
+
     async function fetchQuestionsOrdering() {
         setLoader(true)
-        const response = await api.post("/game/quetion_ordering", {
+        const response = await api.post("/game/question_ordering", {
             password: secretKey,
         })
         setLoader(false)
@@ -94,16 +119,16 @@ export default function OrderingQuestions() {
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <OrderingDisp ordering={basicOrderingMain} user="BASIC" quiz="Main"/>
+                <OrderingDisp ordering={basicOrderingMain} user="BASIC" quiz="Main" updateQuestions = {()=>{fetchSpecifiedQuestionsOrdering("Main","BASIC")}}/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <OrderingDisp ordering={basicOrderingPractice} user="BASIC" quiz="Practice"/>
+                <OrderingDisp ordering={basicOrderingPractice} user="BASIC" quiz="Practice" updateQuestions = {()=>{fetchSpecifiedQuestionsOrdering("Practice","BASIC")}}/>
             </TabPanel>
             {alumni && <><TabPanel value={value} index={2}>
-                <OrderingDisp ordering={alumniOrderingMain} user="ALUMNI" quiz="Main"/>
+                <OrderingDisp ordering={alumniOrderingMain} user="ALUMNI" quiz="Main" updateQuestions = {()=>{fetchSpecifiedQuestionsOrdering("Main","ALUMNI")}}/>
             </TabPanel>
                 <TabPanel value={value} index={3}>
-                    <OrderingDisp ordering={alumniOrderingPractice} user="ALUMNI" quiz="Practice"/>
+                    <OrderingDisp ordering={alumniOrderingPractice} user="ALUMNI" quiz="Practice" updateQuestions = {()=>{fetchSpecifiedQuestionsOrdering("Practice","ALUMNI")}}/>
                 </TabPanel>
             </>}
             <Backdrop open={displayQues}>

@@ -2,6 +2,7 @@ import { EditRounded, EmojiObjectsRounded, FormatListNumbered, Numbers } from "@
 import { Avatar, Backdrop, Box, Button, CircularProgress, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, MenuItem, Modal, Paper, Select, Stack, Toolbar, Typography, } from "@mui/material";
 import { useEffect, useState } from "react";
 import useAxios from "../../utils/useAxios";
+import SuccessSnackbar from "../Parts/SuccessSnackbar";
 import { Accordion } from "./../Parts/Accordion";
 import { AccordionDetails } from "./../Parts/AccordionDetails";
 import { AccordionSummary } from "./../Parts/AccordionSummary";
@@ -48,14 +49,19 @@ function OrderingModal(props) {
                                         id="ques-select"
                                         label="Question"
                                         defaultValue={"NULL"}
+                                        onChange={(event) => {
+                                            props.setQuestion(prevData => {
+                                                return { ...prevData, assignQuestion: event.target.value }
+                                            })
+                                        }}
                                     >
                                         <MenuItem defaultChecked value={"NULL"}>NULL</MenuItem>
                                         {props.questions.map(item => {
-                                            return <MenuItem key={item.id} value={item.answer}>{item.answer}</MenuItem>
+                                            return <MenuItem key={item.id} value={item.id}>{item.answer}</MenuItem>
                                         })}
                                     </Select>
                                 </FormControl>
-                                <Button startIcon={<EditRounded />} variant="outlined" onClick={() => { props.set_are_you_sure(true) }}>
+                                <Button startIcon={<EditRounded />} variant="outlined" onClick={() => { props.set_are_you_sure(true) }} disabled={props.edit.assignQuestion === "NULL" || props.edit.assignQuestion === null}>
                                     Update
                                 </Button>
                             </Stack>
@@ -72,6 +78,7 @@ export default function OrderingDisp(props) {
     const [quiz, setQuiz] = useState("")
     const [questions, setQuestions] = useState([])
     const [loader, setLoader] = useState(false)
+    const [success,setSuccess] = useState(false)
     const [edit, setEdit] = useState({
         allowed: false,
         id: null,
@@ -79,8 +86,26 @@ export default function OrderingDisp(props) {
         assignQuestion: null
     })
     const api = useAxios()
-    const updateQuestionOrdering = ()=>{
-
+    const updateQuestionOrdering = async () => {
+        console.log(edit)
+        setLoader(true)
+        setEdit({
+            allowed: false,
+            id: null,
+            questionNo: 0,
+            assignQuestion: null
+        })
+        set_are_you_sure(false)
+        const response = await api.post("/game/update_ordering",{
+            id:edit.id,
+            questionId:edit.assignQuestion
+        })
+        if(response?.data?.updated){
+            props.updateQuestions()
+            setSuccess(true)
+        }
+        // fetchQuestions()
+        setLoader(false)
     }
     async function fetchQuestions() {
         setLoader(true)
@@ -128,9 +153,11 @@ export default function OrderingDisp(props) {
                                         id="question-select"
                                         label="Question"
                                         disabled
-                                        defaultValue={item.question === null ? "NULL" : questions?.answer}
+                                        value={item?.question?.answer === null || item?.question?.answer === undefined? "NULL" : item?.question?.answer }
+                                        onChange = {()=>{}}
+                                        defaultValue={item?.question?.answer === null || item?.question?.answer === undefined? "NULL" : item?.question?.answer}
                                     >
-                                        <MenuItem value={item.question === null ? "NULL" : questions?.answer}>{item.question === null ? "NULL" : questions?.answer}</MenuItem>
+                                        <MenuItem value={item?.question?.answer === null || item?.question?.answer === undefined? "NULL" : item?.question?.answer}>{item?.question?.answer === null || item?.question?.answer === undefined ? "NULL" : item?.question?.answer+"   -   "+item?.question?.difficulty}</MenuItem>
                                     </Select>
                                 </FormControl>
                             </ListItemText>
@@ -155,7 +182,7 @@ export default function OrderingDisp(props) {
         <Grid item xs={1} />
         <Modal keepMounted open={edit.allowed}
             closeAfterTransition
-            onClose={() => { setEdit(prevData => { return { ...prevData,allowed: false, id: null } }) }}
+            onClose={() => { setEdit(prevData => { return { ...prevData, allowed: false, id: null } }) }}
         >
             <Paper sx={{
                 position: 'absolute',
@@ -168,7 +195,7 @@ export default function OrderingDisp(props) {
                 boxShadow: 24,
                 p: 4,
             }}>
-                <OrderingModal id={edit.id} set_are_you_sure={set_are_you_sure} questions={questions} questionNo={edit.questionNo} setQuestion={setEdit} />
+                <OrderingModal id={edit.id} set_are_you_sure={set_are_you_sure} questions={questions} questionNo={edit.questionNo} setQuestion={setEdit} edit={edit}/>
             </Paper>
         </Modal>
         <Backdrop open={are_you_sure}>
@@ -192,9 +219,10 @@ export default function OrderingDisp(props) {
                     <Typography id="keep-mounted-modal-title" variant="h6" component="h2" sx={{ textAlign: "center" }}>
                         Are you sure ?
                     </Typography>
-                    <Button variant="contained" fullWidth onClick={
-                        updateQuestionOrdering
-                    }>
+                    <Button variant="contained" fullWidth
+                        onClick={
+                            updateQuestionOrdering
+                        }>
                         UPDATE
                     </Button>
                 </Box>
@@ -203,5 +231,6 @@ export default function OrderingDisp(props) {
         <Backdrop open={loader}>
             <CircularProgress />
         </Backdrop>
+        <SuccessSnackbar open={success} onClose={()=>{setSuccess(false)}} message = {"Successfully updated the ordering"}/>
     </Grid>)
 }
