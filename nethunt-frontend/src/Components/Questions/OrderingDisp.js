@@ -33,7 +33,7 @@ function OrderingModal(props) {
                                         type='number'
                                         fullWidth
                                         disabled
-                                        value={props.id === null ? "" : props.id}
+                                        value={props.questionNo === null ? "" : props.questionNo}
                                         startAdornment={
                                             <InputAdornment position="start">
                                                 <FormatListNumbered />
@@ -75,8 +75,13 @@ export default function OrderingDisp(props) {
     const [edit, setEdit] = useState({
         allowed: false,
         id: null,
+        questionNo: 0,
+        assignQuestion: null
     })
     const api = useAxios()
+    const updateQuestionOrdering = ()=>{
+
+    }
     async function fetchQuestions() {
         setLoader(true)
         const response = await api.post("/game/questions_for_ordering", {
@@ -123,9 +128,9 @@ export default function OrderingDisp(props) {
                                         id="question-select"
                                         label="Question"
                                         disabled
-                                        defaultValue={item.question === null ? "NULL": questions?.answer}
+                                        defaultValue={item.question === null ? "NULL" : questions?.answer}
                                     >
-                                        <MenuItem value={item.question === null ? "NULL": questions?.answer}>{item.question === null ? "NULL": questions?.answer}</MenuItem>
+                                        <MenuItem value={item.question === null ? "NULL" : questions?.answer}>{item.question === null ? "NULL" : questions?.answer}</MenuItem>
                                     </Select>
                                 </FormControl>
                             </ListItemText>
@@ -134,7 +139,9 @@ export default function OrderingDisp(props) {
                                     fetchQuestions()
                                     setEdit({
                                         allowed: true,
-                                        id: item.id
+                                        questionNo: props.ordering.indexOf(item) + 1,
+                                        id: item.id,
+                                        assignQuestion: null,
                                     })
                                 }}>
                                     <EditRounded />
@@ -148,7 +155,7 @@ export default function OrderingDisp(props) {
         <Grid item xs={1} />
         <Modal keepMounted open={edit.allowed}
             closeAfterTransition
-            onClose={() => { setEdit({ allowed: false, id: null }) }}
+            onClose={() => { setEdit(prevData => { return { ...prevData,allowed: false, id: null } }) }}
         >
             <Paper sx={{
                 position: 'absolute',
@@ -161,7 +168,7 @@ export default function OrderingDisp(props) {
                 boxShadow: 24,
                 p: 4,
             }}>
-                <OrderingModal id={edit.id} set_are_you_sure={set_are_you_sure} questions={questions} />
+                <OrderingModal id={edit.id} set_are_you_sure={set_are_you_sure} questions={questions} questionNo={edit.questionNo} setQuestion={setEdit} />
             </Paper>
         </Modal>
         <Backdrop open={are_you_sure}>
@@ -185,7 +192,9 @@ export default function OrderingDisp(props) {
                     <Typography id="keep-mounted-modal-title" variant="h6" component="h2" sx={{ textAlign: "center" }}>
                         Are you sure ?
                     </Typography>
-                    <Button variant="contained" fullWidth onClick={() => { }}>
+                    <Button variant="contained" fullWidth onClick={
+                        updateQuestionOrdering
+                    }>
                         UPDATE
                     </Button>
                 </Box>
