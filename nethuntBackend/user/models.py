@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import (AbstractUser, BaseUserManager)
+import datetime
 # Create your models here.
 
 
@@ -71,6 +72,11 @@ class Candidate(models.Model):
     current_level = models.IntegerField(default=1)
     status = models.CharField(default="offline", max_length=10)
     phone = models.CharField(max_length=10, validators=[validPhone])
+    class CandidateType(models.TextChoices):
+        BASIC = "Basic", "BASIC"
+        ALUMNI = "Alumni", "ALUMNI"
+    userType = models.CharField(max_length=50,choices=CandidateType.choices,default=CandidateType.BASIC)
+    batch = models.IntegerField(default=datetime.datetime.now().year -2)
     def update(self, **kwargs):
         for field, value in kwargs.items():
             setattr(self, field, value)
