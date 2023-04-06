@@ -85,3 +85,5 @@ class Ordering(models.Model):
         for field, value in kwargs.items():
             setattr(self, field, value)
         self.save()
+    def filter(self, **kwargs):
+        return self.filter(**kwargs)

@@ -85,8 +85,8 @@ def get_quiz_info(req):
         statusSerializer = CurrentStatusSerializer(status).data
         
         noOfQuestion = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count()
-        
-        question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[statusSerializer["level"]]
+        # print(Ordering.objects.all())
+        question = Ordering.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]),userType="BASIC",)[statusSerializer["level"]].question
         questionSerializer = QuestionSerializer(question,).data
         questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
 
@@ -116,7 +116,8 @@ def get_quiz_info(req):
                 status = CurrentStatus.objects.get(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]))
                 statusSerializer = CurrentStatusSerializer(status).data
                 noOfQuestion = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count()
-                question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[statusSerializer["level"]]
+                # print(Ordering.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]),userType="BASIC",)[0].question,statusSerializer["level"])
+                question = Ordering.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]),userType="BASIC",)[statusSerializer["level"]].question
                 questionSerializer = QuestionSerializer(question,).data
                 questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
 
@@ -136,7 +137,7 @@ def check_answer(req):
     data = json.loads(req.body)
     current_status = CurrentStatus.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]))
     progress = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
-    question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[current_status[0].level]
+    question = Ordering.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]),userType="BASIC",)[current_status[0].level].question
     send_log_data(".\n\nUser : "+req.user.email + "\nCorrent Answer : "+ question.answer + "\nGuessed One : "+data["try"] + "\n Time "+str(timezone.now())+"\n")
     # print(question)
     if question.answer == data["try"]:
