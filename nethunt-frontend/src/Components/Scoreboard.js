@@ -9,6 +9,10 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Typography,Box, Stack } from '@mui/material';
 import ScoreImg from "./../Images/Scoreboard.svg";
+import useAxios from '../utils/useAxios';
+import { useState } from 'react';
+import { useEffect } from 'react';
+
 const scoreboardColumns = [
     { id: "sno", label: "S.No.", minWidth: 100 },
     { id: "name", label: "Name.", minWidth: 200 },
@@ -27,6 +31,32 @@ for (let i = 0; i < 20; i++) {
 }
 // console.log(scoreboard)
 export default function ScoreBoardX() {
+
+    const api = useAxios()
+    const [loading, setLoader] = useState(true)
+    const [scores,setScores] = useState([])
+    async function fetchScores()  {
+        setLoader(true)
+        const response = await api.get("/game/scorecard")
+        setLoader(false)
+        if (response?.data?.scores) {
+            setLoader(true)
+            setScores(scores=>{
+                return response?.data?.scores;
+            })
+            console.log(response?.data?.scores)
+            setLoader(false)
+        }
+    }
+    useEffect(
+        () => {
+            if (loading) {
+                fetchScores();
+            }
+            setLoader(false);
+        },
+        [loading]
+    )
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 

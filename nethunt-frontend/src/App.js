@@ -87,7 +87,7 @@ function App() {
               </Route>
               <Route path="q" element={<Outlet/>}>
                 <Route path="practice" element={<PracticeQuestions />}></Route>
-                <Route path="main" element={<Question />}></Route>
+                <Route path="main" element={<PracticeQuestions />}></Route>
               </Route>
             </>
           )}

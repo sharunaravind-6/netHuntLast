@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from user.models import (Coordinator,NethuntUser,Candidate)
 from user.serializers import (CoordinatorSerializer)
-from user.serializers import NethuntUserSerializer
+from user.serializers import NethuntUserSerializer,CandidateSerializer
 from quizapp.models import Info,Question,Progress,CurrentStatus
 from .serializers import QuestionSerializer,QuizSerializer,ProgressSerializer,CurrentStatusSerializer,OrderingSerializer
 import json
@@ -24,7 +24,10 @@ def get_startDate(req):
 
 @api_view(["GET"])
 def get_endDate(req):
-    return Response({"configured": True,"endDateTime":Info.objects.all()[0].endBy})
+    if Info.objects.all().count() > 0:
+        return Response({"configured": True,"endDateTime":Info.objects.all()[0].endBy})
+    else:
+        return Response({"configured": False})
 
 
 
@@ -76,6 +79,7 @@ def get_quiz_info(req):
     data = json.loads(req.body)
     Candidate.objects.get(user=req.user).update(status="online")
     current_status = CurrentStatus.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]))
+    # print(current_status[0])
     if current_status.count() == 0:
         #the user is a freash one starting the quiz, who doeesn't have the current status to track his progress
         CurrentStatus(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"])).save()
@@ -117,6 +121,8 @@ def get_quiz_info(req):
                 statusSerializer = CurrentStatusSerializer(status).data
                 noOfQuestion = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count()
                 # print(Ordering.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]),userType="BASIC",)[0].question,statusSerializer["level"])
+                if Ordering.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]),userType="BASIC",).count() < statusSerializer["level"]+1:
+                    return Response({"problem":True,})
                 question = Ordering.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]),userType="BASIC",)[statusSerializer["level"]].question
                 questionSerializer = QuestionSerializer(question,).data
                 questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
@@ -140,16 +146,53 @@ def check_answer(req):
     question = Ordering.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]),userType="BASIC",)[current_status[0].level].question
     send_log_data(".\n\nUser : "+req.user.email + "\nCorrent Answer : "+ question.answer + "\nGuessed One : "+data["try"] + "\n Time "+str(timezone.now())+"\n")
     # print(question)
+    infoObj = Info.objects.all()[0]
+    print(infoObj.easyScore,infoObj.moderateScore,infoObj.hardScore)
+    
+    
+    
+    
+    
     if question.answer == data["try"]:
         Progress(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level+1).save()
-
+        # score for that question
+        score = 0
+        print(question.difficulty)
+        if question.difficulty == "Easy":
+            score = infoObj.easyScore
+        elif question.difficulty == "Moderate":
+            score = infoObj.moderateScore
+        elif question.difficulty == "Hard":
+            score = infoObj.hardScore
         #update score
+        # Quiz obj for getting the hit count for hint revial
+        quiz = Quiz.objects.get(name=data["quiz"])
+        if progress[0].hits == 0:
+            progress.update(points=score)
+            current_status.update(score=current_status[0].score+ score)
+        # till hint 1 reveal
+        print(int(score - progress[0].hits*(((20/100)*score)/quiz.hint1_revealed)))
+        if progress[0].hits >= 1 and progress[0].hits < quiz.hint1_revealed:
+            progress.update(points = int(score - progress[0].hits*(((20/100)*score)/quiz.hint1_revealed)) )
+            current_status.update(score= current_status[0].score + int(score - progress[0].hits*(((20/100)*score)/quiz.hint1_revealed)))
+        # after hint 1
+        elif progress[0].hits >= quiz.hint1_revealed and progress[0].hits < quiz.hint2_revealed:
+            progress.update(points = int(score - progress[0].hits*(((40/100)*score)/quiz.hint1_revealed)) )
+            current_status.update(score= current_status[0].score + int(score - progress[0].hits*(((40/100)*score)/quiz.hint1_revealed)))
+        # after hint 2
+        elif progress[0].hits >= quiz.hint2_revealed:
+            if progress[0].hits >= quiz.hint1_revealed*3:
+                progress.update(points = int((5/100)*score) )
+                current_status.update(score= current_status[0].score + int(((5/100)*score)))
+            else:
+                progress.update(points = int(score - progress[0].hits*(((40/100)*score)/quiz.hint1_revealed)) )
+                current_status.update(score= current_status[0].score + int(score - progress[0].hits*(((40/100)*score)/quiz.hint1_revealed)))
         # scoring strategy upto first hint user gets a penalty of 1 point deduction and after that with a penalty of 2 for easy
         # scoring strategy upto first hint user gets a penalty of 2 point deduction and after that with a penalty of 3 for moderate
 
         current_status.update(level=current_status[0].level+1)
         if current_status[0].level +1 > Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count():
-            return Response({"passed":True,"end":True})
+            return Response({"passed":True,"end":True,"score":current_status[0].score})
         else:
             progressX = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
             progressSerializer = ProgressSerializer(progressX[0],).data
@@ -161,7 +204,7 @@ def check_answer(req):
                 questionSerializer["hint2"] = "DISABLED"
             if progressSerializer["hits"] <= progressSerializer["quiz"]["hint2_revealed"]:
                 questionSerializer["hint2"] = "DISABLED"
-            return Response({"passed" : True,"end":False,"question":questionSerializer,"progress":progressSerializer})
+            return Response({"passed" : True,"end":False,"question":questionSerializer,"progress":progressSerializer,"score":current_status[0].score})
     else:
         #Wrong answer
         progress.update(hits=progress[0].hits+1)  
@@ -174,7 +217,7 @@ def check_answer(req):
             questionSerializer["hint2"] = "DISABLED"
         if progressSerializer["hits"] <= progressSerializer["quiz"]["hint2_revealed"]:
             questionSerializer["hint2"] = "DISABLED"
-        return Response({"passed":False,"progress":progressSerializer,"question":questionSerializer})
+        return Response({"passed":False,"progress":progressSerializer,"question":questionSerializer,"score":current_status[0].score})
 # @api_view(["POST"])
 # def get_quiz_status(req):
 #     data = json.loads(req.body)
@@ -275,10 +318,10 @@ def add_config(req):
             moderateScore = int(scorings["medium"])
             hardScore = int(scorings["hard"])
             
-            practiceQuiz = Quiz(name="practice")
+            practiceQuiz = Quiz(name="Practice")
             practiceQuiz.save()
             practice = Quiz.objects.get(name="Practice")
-            mainQuiz = Quiz(name="main")
+            mainQuiz = Quiz(name="Main")
             mainQuiz.save()
             main = Quiz.objects.get(name="Main")
             print(main,practice)
@@ -290,6 +333,7 @@ def add_config(req):
             Quiz.objects.all().delete()
             return Response({"configured": False}) 
     except:
+        print("Failed")
         NethuntUser.objects.fetch(role="Coordinator").delete()
         Quiz.objects.all().delete()
     return Response({"configured": False})
@@ -376,4 +420,15 @@ def get_ordering_specific(req):
     data = json.loads(req.body)
     orderings = Ordering.objects.filter(userType=data["userType"],quiz=Quiz.objects.get(name=data["quiz"]))
     return Response({"ordering":OrderingSerializer(orderings,many=True).data})
-    
+
+@api_view(["GET"])
+def get_scorecard(req):
+    current_status = CurrentStatus.objects.filter(quiz=Quiz.objects.get(name="Main"))
+    print(current_status)
+    current_status = CurrentStatusSerializer(current_status,many=True).data
+    scores = []
+    for candidate in current_status:
+        scores.append({"usr":CandidateSerializer(Candidate.objects.get(user=NethuntUser.objects.get(email= candidate["usr"]["email"]))).data,"scores":candidate["score"]})
+        print(CandidateSerializer(Candidate.objects.get(user=NethuntUser.objects.get(email= candidate["usr"]["email"]))).data)
+
+    return Response({"scores":scores})

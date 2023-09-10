@@ -21,5 +21,6 @@ urlpatterns = [
     path("question_ordering",views.get_ordering),
     path("questions_for_ordering",views.fetchQuestionsForOrdering),
     path("update_ordering",views.updateOrdering),
-    path("question_ordering_specific",views.get_ordering_specific)
+    path("question_ordering_specific",views.get_ordering_specific),
+    path("scorecard",views.get_scorecard),
 ]

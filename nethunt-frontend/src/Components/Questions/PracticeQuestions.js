@@ -68,6 +68,9 @@ export default function PracticeQuestions(props) {
             try: answer
         })
         console.log(response.data)
+        setScore(score=>{
+            return response.data.score;
+        })
         if (response.data.passed) {
             if (response.data.end) {
                 //navigate to scoreboard
