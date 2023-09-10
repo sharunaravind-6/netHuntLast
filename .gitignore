@@ -1,0 +1,8 @@
+.venv
+
+nethuntBackend/nethuntBackend/__pycache__
+nethuntBackend/quizapp/__pycache__
+nethuntBackend/quizapp/migrations
+nethuntBackend/user/migrations
+nethuntBackend/user/__pycache__
+nethunt-frontend/package-lock.json
