@@ -34,7 +34,7 @@ class NethuntUserManager(BaseUserManager):
 class NethuntUser(AbstractUser):
     email = models.EmailField(unique=True)
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = []
     username = None
     role = models.CharField(max_length=50, choices=Role.choices)
     objects = NethuntUserManager()
