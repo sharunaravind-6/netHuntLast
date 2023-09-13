@@ -15,20 +15,11 @@ import { useEffect } from 'react';
 
 const scoreboardColumns = [
     { id: "sno", label: "S.No.", minWidth: 100 },
-    { id: "name", label: "Name.", minWidth: 200 },
+    { id: "name", label: "Name", minWidth: 200 },
     { id: "cname", label: "College", minWidth: 300 },
     { id: "status", label: "Status.", minWidth: 100 },
-    { id: "score", label: "Score.", minWidth: 100, align: "right" },
+    { id: "score", label: "Score", minWidth: 100, align: "right" },
 ]
-var scoreboard = []
-for (let i = 0; i < 20; i++) {
-    let sno = i + 1;
-    let name = "Sanjay";
-    let cname = "PSG TECH";
-    let score = 1000
-    let status = "offline"
-    scoreboard.push({ sno, name, cname, status, score })
-}
 // console.log(scoreboard)
 export default function ScoreBoardX() {
 
@@ -40,14 +31,11 @@ export default function ScoreBoardX() {
         const response = await api.get("/game/scorecard")
         setLoader(false)
         if (response?.data?.scores) {
-            setLoader(true)
-            setScores(scores=>{
-                return response?.data?.scores;
-            })
-            console.log(response?.data?.scores)
-            setLoader(false)
+            const sortedScores = response.data.scores.sort((a, b) => b.scores - a.scores);
+            setScores(sortedScores);
         }
     }
+      
     useEffect(
         () => {
             if (loading) {
@@ -68,6 +56,7 @@ export default function ScoreBoardX() {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
+    // console.log(scores[0].usr.user.email)
 
     return (
         <Paper sx={{ width: '100%', marginTop: 3 }}>
@@ -95,33 +84,24 @@ export default function ScoreBoardX() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {scoreboard
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => {
-                                // console.log(row)
-                                return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.sno} sx={{ backgroundColor: row.sno === 1 ? "#ab00a7" : row.sno=== 2 ? "#22008a" : (theme) => { return theme.palette.background }, }}>
-                                        {scoreboardColumns.map((column) => {
-                                            const value = row[column.id];
-                                            //   console.log(row.sno);
-                                            return (
-                                                <TableCell key={column.id} align={column.align}>
-                                                    {column.format && typeof value === 'number'
-                                                        ? column.format(value)
-                                                        : value}
-                                                </TableCell>
-                                            );
-                                        })}
-                                    </TableRow>
-                                );
-                            })}
+                        {scores.map((score,index)=>(
+                            <TableRow hover role="checkbox" tabIndex={-1} key={index} sx={{ backgroundColor: index=== 1 ? "#ab00a7" : index=== 2 ? "#22008a" : (theme) => { return theme.palette.background }, }}>
+                                <TableCell>{index+1}</TableCell>
+                                <TableCell>{score.usr.user.first_name} {scores[index].usr.user.last_name}</TableCell>
+                                <TableCell>{score.usr.college.collegeName}</TableCell>
+                                <TableCell>{score.usr.status}</TableCell>
+                                <TableCell align='right'>{score.scores}</TableCell>
+                            </TableRow>
+                        ))
+                        }
+                        
                     </TableBody>
                 </Table>
             </TableContainer>
             <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={scoreboard.length}
+                count={scores.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
