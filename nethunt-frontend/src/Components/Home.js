@@ -82,7 +82,7 @@ export default function Home(props) {
                         <List>
                             <ListItemButton>
                                 <ListItemIcon>
-                                    <CircularProgressWithLabel value={30} />
+                                    {/* <CircularProgressWithLabel value={30} /> */}
                                 </ListItemIcon>
                                 <ListItemText>Practice</ListItemText>
                                 <IconButton onClick={()=>{
@@ -93,7 +93,7 @@ export default function Home(props) {
                             </ListItemButton>
                             <ListItemButton>
                                 <ListItemIcon>
-                                    <CircularProgressWithLabel value={45} />
+                                    {/* <CircularProgressWithLabel value={45} /> */}
                                 </ListItemIcon>
                                 <ListItemText>Main</ListItemText>
                                 <IconButton onClick={()=>{
@@ -107,7 +107,7 @@ export default function Home(props) {
 
 
                 </Grid>
-                <Grid item xs={12} sm={6} p={2}>
+                {/* <Grid item xs={12} sm={6} p={2}>
                     <Paper sx={{ padding: 2 }} elevation={4}>
                         <Toolbar>
                             <Typography flexGrow={1}>Leaderboard</Typography>
@@ -151,7 +151,7 @@ export default function Home(props) {
                             </ListItemButton>
                         </List>
                     </Paper>
-                </Grid>
+                </Grid> */}
             </Grid>
         </Paper>
     </ThemeProvider>)
