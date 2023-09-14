@@ -3,7 +3,9 @@ import dayjs from "dayjs";
 import jwtDecode from "jwt-decode";
 import { useContext } from "react";
 import { userContext } from "../Store/user";
-const baseUrl = "https://apicandidatenethunt.psglogin.in/api"
+// const baseUrl = "https://apicandidatenethunt.psglogin.in/api"
+const baseUrl = "http://127.0.0.1:8000/api"
+
 
 const useAxios = ()=>{
     const {token,setUserDetails,setToken} = useContext(userContext)
