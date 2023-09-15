@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -24,7 +25,9 @@ export default function SignUp() {
   const { setTokenReuse, logout, token } = React.useContext(userContext)
   const [openBackdrop, setOpenBackdrop] = React.useState(false)
   const navigate = useNavigate()
+  const [error, setError] = useState('');
   const [loading, setLoading] = React.useState(true)
+  const formElement = document.querySelector('form');
   React.useEffect(() => {
     if (loading) {
       if (token != null) {
@@ -65,7 +68,8 @@ export default function SignUp() {
       }
       return { token: data, data: jwt_decode(data.access) }
     } else {
-      logout()
+      setError("Invalid Credentials")
+      formElement.reset();
     }
 
 
@@ -75,10 +79,10 @@ export default function SignUp() {
       <CssBaseline />
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
-          <Box sx={{ display: "flex", width: "100%", alignItems: "center" }}>
-            <Typography variant="h5" component="p" sx={{ marginLeft: 5 }} flexGrow={1}>
-              N E T H U N T
-            </Typography>
+          <Box sx={{ display: "flex", width: "100%", alignItems: "center",cursor: "pointer" }}>
+              <Typography variant="h5" component="p" sx={{ marginLeft: 5 }} flexGrow={1}>
+                N E T H U N T
+              </Typography>
           </Box>
         </Toolbar>
       </AppBar>
@@ -104,6 +108,11 @@ export default function SignUp() {
             <Typography component="h1" variant="h5">
               Login
             </Typography>
+            {error &&
+              <Typography variant="h6" style={{color:"red"}}>
+                {error}
+              </Typography>
+            }
             <Box component="form" noValidate onSubmit={async (event) => {
               setOpenBackdrop(true);
               await handleSubmit(event);
@@ -132,10 +141,10 @@ export default function SignUp() {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormControlLabel
+                  {/* <FormControlLabel
                     control={<Checkbox value="allowExtraEmails" color="primary" />}
                     label="Remember me"
-                  />
+                  /> */}
                 </Grid>
               </Grid>
               <Button
@@ -146,13 +155,13 @@ export default function SignUp() {
               >
                 Login
               </Button>
-              <Grid container justifyContent="flex-end">
+              {/* <Grid container justifyContent="flex-end">
                 <Grid item>
                   <Link href="#" variant="body2">
                     Forgot Password ?
                   </Link>
                 </Grid>
-              </Grid>
+              </Grid> */}
             </Box>
           </Box>
         </Paper>

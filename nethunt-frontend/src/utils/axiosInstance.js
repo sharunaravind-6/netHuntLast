@@ -2,7 +2,7 @@ import jwtDecode from "jwt-decode";
 import dayjs from "dayjs"
 import axios from "axios"
 
-// const baseUrl = "https://apicandidatenethunt.psglogin.in/api"
+// const baseUrl = "https://api.nethunt.candidate.psglogin.in/api"
 const baseUrl = "http://127.0.0.1:8000/api"
 let authToken = localStorage.getItem("authToken") ? JSON.parse(localStorage.getItem("authToken")) : null
 const apiInstance = axios.create({

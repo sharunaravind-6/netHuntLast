@@ -59,7 +59,7 @@ export default function ScoreBoardX() {
     // console.log(scores[0].usr.user.email)
 
     return (
-        <Paper sx={{ width: '100%', marginTop: 3 }}>
+        <Paper sx={{ width: '100%', marginTop: 3, padding:"30px" }}>
             <Stack sx={{display:"flex",alignItems:"center",flexDirection:"row",justifyContent:"center",width:"100%"}}>
                 <Box>
                     <img src={ScoreImg} width="100%"/>
@@ -68,7 +68,7 @@ export default function ScoreBoardX() {
                     Scoreboard
                 </Typography>
             </Stack>
-            <TableContainer sx={{ maxHeight: "100vh" }}>
+            <TableContainer sx={{ maxHeight: "100vh"}}>
                 <Table >
                     <TableHead sx={{ backgroundColor: "black" }}>
                         <TableRow>

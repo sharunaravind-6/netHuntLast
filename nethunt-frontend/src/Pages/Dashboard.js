@@ -19,11 +19,11 @@ export default function DashboardX(props) {
             <CssBaseline />
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <Toolbar>
-                    <Box sx={{ display: "flex", width: "100%", alignItems: "center" }}>
+                    <Box sx={{ display: "flex", width: "100%", alignItems: "center"}}>
                         <IconButton color="inherit" onClick={() => setOpenDrawer(openDrawer ? false : true)}>
                             {openDrawer ? <ArrowBackIosRounded /> : <MenuRounded />}
                         </IconButton>
-                        <Typography variant="h5" component="p" sx={{ marginLeft: 5 }} flexGrow={1}>
+                        <Typography variant="h5" component="p" sx={{ marginLeft: 5,cursor: "pointer" }} flexGrow={1}>
                             N E T H U N T
                         </Typography>
                         <IconButton onClick={(event) => { anchorEl == null ? setAnchorEl(event.currentTarget) : setAnchorEl(null) }}>
@@ -62,7 +62,7 @@ export default function DashboardX(props) {
                                 }}
                                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
-                                <MenuItem>
+                                {/* <MenuItem>
                                     <Avatar />
                                     <Typography ml={2} pr={3}>Profile</Typography>
                                 </MenuItem>
@@ -78,11 +78,11 @@ export default function DashboardX(props) {
                                     <ListItemText>
                                         Settings
                                     </ListItemText>
-                                </MenuItem>
+                                </MenuItem> */}
                                 <MenuItem onClick={logout}>
-                                    <ListItemIcon>
+                                    {/* <ListItemIcon>
                                         <LogoutOutlined />
-                                    </ListItemIcon>
+                                    </ListItemIcon> */}
                                     <ListItemText>
                                         Logout
                                     </ListItemText>

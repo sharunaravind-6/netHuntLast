@@ -66,7 +66,7 @@ export default function CoordinatorsDashboard(props) {
                                 }}
                                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
-                                <MenuItem>
+                                {/* <MenuItem>
                                     <Avatar />
                                     <Typography ml={2} pr={3}>Profile</Typography>
                                 </MenuItem>
@@ -82,11 +82,11 @@ export default function CoordinatorsDashboard(props) {
                                     <ListItemText>
                                         Settings
                                     </ListItemText>
-                                </MenuItem>
+                                </MenuItem> */}
                                 <MenuItem onClick={logout}>
-                                    <ListItemIcon>
+                                    {/* <ListItemIcon>
                                         <LogoutOutlined />
-                                    </ListItemIcon>
+                                    </ListItemIcon> */}
                                     <ListItemText>
                                         Logout
                                     </ListItemText>
