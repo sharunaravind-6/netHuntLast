@@ -30,7 +30,7 @@ export default function PracticeQuestion() {
             quiz: pathname[pathname.length - 1] === "main" ? "Main" : "Practice",
             try:answer
         })
-        console.log(response.data)
+        // console.log(response.data)
         if(response.data.passed){
             if(response.data.end){
                 //navigate to scoreboard
@@ -46,10 +46,10 @@ export default function PracticeQuestion() {
         setAnswer("")
       }
     const handleOpenQuestion = async () => {
-        console.log({
-            email: userDetails?.user.email,
-            quiz: "Practice"
-        })
+        // console.log({
+        //     email: userDetails?.user.email,
+        //     quiz: "Practice"
+        // })
         const response = await api.post("/game/progress", {
             email: userDetails.user.email,
             quiz: "Practice"
@@ -61,9 +61,9 @@ export default function PracticeQuestion() {
             if (loading) {
                 handleOpenQuestion().then(
                     res => {
-                        console.log(res)
+                        // console.log(res)
                         if (res?.problem === false) {
-                            console.log(res)
+                            // console.log(res)
                             setHits(res?.progress?.hits)
                             setQuestion(res?.question)
                         }

@@ -69,7 +69,7 @@ export default function AddCandidate(props) {
         }
       )
     }
-    console.log(response.data)
+    // console.log(response.data)
   };
 
   return (

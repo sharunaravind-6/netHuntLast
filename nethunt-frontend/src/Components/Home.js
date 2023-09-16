@@ -33,7 +33,7 @@ export default function Home(props) {
             if (loading) {
                 const response = axios.get(serverHost + "/game/endBy").then(
                     (res) => {
-                        console.log(res.data)
+                        // console.log(res.data)
                         if (res.data?.configured) {
                             setEndBy(res.data?.endDateTime)
                         }

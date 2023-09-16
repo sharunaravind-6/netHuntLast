@@ -30,7 +30,7 @@ export default function CoordinatorsAdmin(props) {
         if (loading) {
             const response = api.get("/user/get_coordinators").then(res => {
                 setCoordinators(res.data)
-                console.log(res.data)
+                // console.log(res.data)
             })
         }
         setLoading(false)

@@ -32,9 +32,9 @@ export default function EditQuestion() {
                 data[key] = question[key]
             }
         }
-        console.log(data)
+        // console.log(data)
         const response = await api.post("/game/update_ques", { ...data })
-        console.log(response?.data)
+        // console.log(response?.data)
         setLoader(false)
         set_are_you_sure(false)
         if(response?.data?.updated){
@@ -45,7 +45,7 @@ export default function EditQuestion() {
     const deleteQuestion = async () => {
         setLoader(true)
         const response = await api.post("/game/delete_ques", { questionId: question.ques })
-        console.log(response?.data)
+        // console.log(response?.data)
         if(response?.data?.deleted){
             setMessage("Question successfully deleted")
             setSuccess(true)

@@ -20,7 +20,7 @@ const useAxios = ()=>{
         async (req) => {
             const usr = jwtDecode(token?.access)
             const isExpired = dayjs.unix(usr.exp).diff(dayjs()) < 1
-            console.log(`Expired ${isExpired}`)
+            // console.log(`Expired ${isExpired}`)
             if(!isExpired){
                 return req
             }else{

@@ -41,7 +41,7 @@ export default function AddCollege(props) {
       ...dataX
     })
     const feedback = response.data;
-    console.log(feedback)
+    // console.log(feedback)
     if (feedback.added) {
       props.onAddCollegeSuccess(true)
       setCollege({

@@ -73,7 +73,7 @@ export default function QuizSettings() {
     }
   }
   const previewCoordinatorImageFile = (event, type) => {
-    console.log("testy")
+    // console.log("testy")
     if (type === "c1") {
       setData(
         (data) => {
@@ -114,7 +114,7 @@ export default function QuizSettings() {
                   setData((data) => {
                     return { ...data, eventInfo: { ...data["eventInfo"], event: event.target.value } }
                   });
-                  console.log(event.target.value);
+                  // console.log(event.target.value);
                 }}
               >
                 <MenuItem value={"Login"}>Login</MenuItem>
@@ -682,7 +682,7 @@ export default function QuizSettings() {
       data.coordinators[0].coordinatorImg,
       data.coordinators[1].coordinatorImg,
     ]
-    console.log(data)
+    // console.log(data)
     form.append("event", files[0])
     form.append("nethunt", files[1])
     form.append("coordinator1", files[2])

@@ -87,7 +87,7 @@ export default function OrderingDisp(props) {
     })
     const api = useAxios()
     const updateQuestionOrdering = async () => {
-        console.log(edit)
+        // console.log(edit)
         setLoader(true)
         setEdit({
             allowed: false,

@@ -52,7 +52,7 @@ function App() {
       if(event.key === "F11"){
         event.preventDefault()
       }
-      console.log(event.key)
+      // console.log(event.key)
     })
   }
   function preventRightClick() {

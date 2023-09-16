@@ -14,14 +14,14 @@ const apiInstance = axios.create({
 apiInstance.interceptors.request.use(
     async (req) => {
         if (!authToken) {
-            console.log("Intercetors")
+            // console.log("Intercetors")
             authToken = localStorage.getItem("authToken") ? JSON.parse(localStorage.getItem("authToken")) : null
             req.headers.Authorization = `Bearer ${String(authToken?.access)}`
             return req
         }
         const usr = jwtDecode(authToken.access)
         const isExpired = dayjs.unix(usr.exp).diff(dayjs()) < 1
-        console.log(`Expired ${isExpired}`)
+        // console.log(`Expired ${isExpired}`)
         if(!isExpired){
             return req
         }else{

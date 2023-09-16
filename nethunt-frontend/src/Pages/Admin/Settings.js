@@ -55,7 +55,7 @@ export default function Settings() {
             setData((data) => { return { ...data, eventLogos: { ...data["eventLogos"], nethunt: URL.createObjectURL(event.target.files[0]) } } });
     }
     const previewCoordinatorImageFile = (event, type) => {
-        console.log("testy")
+        // console.log("testy")
         if (type === "c1")
             setData(
                 (data) => {
@@ -91,7 +91,9 @@ export default function Settings() {
                                 id="event-select"
                                 value={data.eventInfo.event}
                                 label="Event"
-                                onChange={(event) => { setData((data) => { return { ...data, eventInfo: { ...data["eventInfo"], event: event.target.value } } }); console.log(event.target.value); }}
+                                onChange={(event) => { setData((data) => { return { ...data, eventInfo: { ...data["eventInfo"], event: event.target.value } } }); 
+                                // console.log(event.target.value); 
+                            }}
                             >
                                 <MenuItem value={"Login"}>Login</MenuItem>
                                 <MenuItem value={"Thiran"}>Thiran</MenuItem>
@@ -104,7 +106,9 @@ export default function Settings() {
                                 id="year-select"
                                 value={data.eventInfo.year}
                                 label="Year"
-                                onChange={(event) => { setData((data) => { return { ...data, eventInfo: { ...data["eventInfo"], year: event.target.value } } }); console.log(event.target.value); }}
+                                onChange={(event) => { setData((data) => { return { ...data, eventInfo: { ...data["eventInfo"], year: event.target.value } } }); 
+                                // console.log(event.target.value); 
+                            }}
                             >
                                 <MenuItem value={new Date().getFullYear()}>{new Date().getFullYear()}</MenuItem>
                                 <MenuItem value={new Date().getFullYear() + 1}>{new Date().getFullYear() + 1}</MenuItem>

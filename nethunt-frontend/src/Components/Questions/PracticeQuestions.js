@@ -67,7 +67,7 @@ export default function PracticeQuestions(props) {
             quiz: pathname[pathname.length - 1] === "main" ? "Main" : "Practice",
             try: answer
         })
-        console.log(response.data)
+        // console.log(response.data)
         setScore(score=>{
             return response.data.score;
         })
@@ -119,7 +119,7 @@ export default function PracticeQuestions(props) {
                     setHits(data?.progress?.hits)
                     setQuestion(data?.current_question)
                     set_current_question(data?.status?.level)
-                    console.log(res.data)
+                    // console.log(res.data)
                 } else {
                     if (data?.end) {
                         setFinished(true)
