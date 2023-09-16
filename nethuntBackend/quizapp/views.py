@@ -88,7 +88,7 @@ def get_quiz_info(req):
         status = CurrentStatus.objects.get(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]))
         statusSerializer = CurrentStatusSerializer(status).data
         
-        noOfQuestion = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count()
+        noOfQuestion = Ordering.objects.filter(quiz=Quiz.objects.get(name=data["quiz"])).count()
         # print(Ordering.objects.all())
         question = Ordering.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]),userType="BASIC",)[statusSerializer["level"]].question
         questionSerializer = QuestionSerializer(question,).data
@@ -196,7 +196,7 @@ def check_answer(req):
         else:
             progressX = Progress.objects.filter(usr=req.user,quiz=Quiz.objects.get(name=data["quiz"]),level=current_status[0].level)
             progressSerializer = ProgressSerializer(progressX[0],).data
-            question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[current_status[0].level]
+            question = Ordering.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[current_status[0].level].question
             questionSerializer = QuestionSerializer(question,).data
             questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
             if progressSerializer["hits"] <= progressSerializer["quiz"]["hint1_revealed"]:
@@ -209,7 +209,7 @@ def check_answer(req):
         #Wrong answer
         progress.update(hits=progress[0].hits+1)  
         progressSerializer = ProgressSerializer(progress[0],).data
-        question = Question.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[current_status[0].level]
+        question = Ordering.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[current_status[0].level].question
         questionSerializer = QuestionSerializer(question,).data
         questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
         if progressSerializer["hits"] <= progressSerializer["quiz"]["hint1_revealed"]:
