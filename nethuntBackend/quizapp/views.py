@@ -125,7 +125,7 @@ def get_quiz_info(req):
                     return Response({"problem":True,})
                 question = Ordering.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]),userType="BASIC",)[statusSerializer["level"]].question
                 if question is None:
-                    return Response({"problem":True,"ordering":False})
+                    return Response({"problem":True,"ordering":False,"end":True})
                 questionSerializer = QuestionSerializer(question,).data
                 questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
 
