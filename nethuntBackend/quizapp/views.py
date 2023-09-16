@@ -124,6 +124,8 @@ def get_quiz_info(req):
                 if Ordering.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]),userType="BASIC",).count() < statusSerializer["level"]+1:
                     return Response({"problem":True,})
                 question = Ordering.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]),userType="BASIC",)[statusSerializer["level"]].question
+                if question is None:
+                    return Response({"problem":True,"ordering":False})
                 questionSerializer = QuestionSerializer(question,).data
                 questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
 
@@ -198,6 +200,8 @@ def check_answer(req):
             progressSerializer = ProgressSerializer(progressX[0],).data
             question = Ordering.objects.filter(quiz=Quiz.objects.get(name=data["quiz"]))[current_status[0].level].question
             questionSerializer = QuestionSerializer(question,).data
+            if question is None:
+                return Response({"passed" : True,"end":True,"ordering":False ,"question":questionSerializer,"progress":progressSerializer,"score":current_status[0].score})
             questionSerializer["image"] = base64.b64encode(question.image.read()).decode('utf-8')
             if progressSerializer["hits"] <= progressSerializer["quiz"]["hint1_revealed"]:
                 questionSerializer["hint1"] = "DISABLED"
@@ -403,7 +407,7 @@ def get_ordering(req):
                         item.delete()
                 for i in range(Question.objects.filter(quiz=Quiz.objects.get(name=quiz)).count() - Ordering.objects.filter(quiz=Quiz.objects.get(name=quiz)).count()):
                     Ordering(quiz=Quiz.objects.get(name=quiz)).save()
-                    Ordering(quiz=Quiz.objects.get(name=quiz),userType="ALUMNI").save()
+                    # Ordering(quiz=Quiz.objects.get(name=quiz),userType="ALUMNI").save()
             return Response({"correct":True,"alumni":False,"orderingMain":OrderingSerializer(Ordering.objects.filter(quiz=Quiz.objects.get(name="Main"),userType="BASIC"),many=True).data,"orderingPractice":OrderingSerializer(Ordering.objects.filter(quiz=Quiz.objects.get(name="Practice"),userType="BASIC"),many=True).data,"alumniOrderingMain":OrderingSerializer(Ordering.objects.filter(quiz=Quiz.objects.get(name="Main"),userType="ALUMNI"),many=True).data,"alumniOrderingPractice":OrderingSerializer(Ordering.objects.filter(quiz=Quiz.objects.get(name="Practice"),userType="ALUMNI"),many=True).data})
     return Response({"correct":False}) 
 
