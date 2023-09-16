@@ -103,6 +103,7 @@ function App() {
                 <Route path='practice' element = {<QuestionAdmin/>}></Route>
                 <Route path='main' element = {<QuestionAdmin/>}></Route>
                 <Route path='ordering' element = {<OrderingQuestions/>}></Route>
+                <Route path="score" element={<ScoreBoardX />}></Route>
               </Route>
             </>
           )}
