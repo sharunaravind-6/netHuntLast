@@ -165,7 +165,8 @@ export default function AdminMain(props) {
                                     {/* Choose based on boy or girl */}
                                     <SchoolRounded />
                                 </ListItemIcon>
-                                <ListItemText primary={"College"} />
+                                {/* <ListItemText primary={"College"} /> */}
+                                <ListItemText primary={"Batch"} /> 
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
@@ -178,7 +179,8 @@ export default function AdminMain(props) {
                                 <ListItemIcon>
                                     <FaceRounded />
                                 </ListItemIcon>
-                                <ListItemText primary={"Candidates"} />
+                                {/* <ListItemText primary={"Candidates"} /> */}
+                                <ListItemText primary={"Alumni"} />
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
