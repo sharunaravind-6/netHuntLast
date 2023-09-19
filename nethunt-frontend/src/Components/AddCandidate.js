@@ -221,8 +221,8 @@ export default function AddCandidate(props) {
                 }
               />
               <FormControl fullWidth>
-                {/* <InputLabel id="demo-simple-select-label">College</InputLabel> */}
-                <InputLabel id="demo-simple-select-label">Batch</InputLabel>
+                <InputLabel id="demo-simple-select-label">College</InputLabel>
+                {/* <InputLabel id="demo-simple-select-label">Batch</InputLabel> */}
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"

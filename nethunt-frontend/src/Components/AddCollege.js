@@ -92,8 +92,8 @@ export default function AddCollege(props) {
                 }}
                 fullWidth
                 id="collegeName"
-                // label="College Name"
-                label="Batch"
+                label="College Name"
+                // label="Batch"
                 name="collegeName"
                 autoComplete="collegeName"
                 autoFocus

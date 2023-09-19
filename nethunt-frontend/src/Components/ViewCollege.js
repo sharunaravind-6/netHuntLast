@@ -26,12 +26,12 @@ export default function ViewCollege() {
             <Paper elevation={5} sx={{ marginTop: 3 }}>
                 <Box sx={{display:"flex",alignContent:"center",alignItems:"center",justifyContent:"center",flexDirection:{"md":"row","xs":"column"}}}>
                     <img src={CollegeSVG} width="250px"/>
-                    {/* <Typography sx={{fontFamily: "'Tourney', cursive;",fontSize:"3rem"}}>
-                        College List
-                    </Typography> */}
                     <Typography sx={{fontFamily: "'Tourney', cursive;",fontSize:"3rem"}}>
-                        Batch List
+                        College List
                     </Typography>
+                    {/* <Typography sx={{fontFamily: "'Tourney', cursive;",fontSize:"3rem"}}>
+                        Batch List
+                    </Typography> */}
                 </Box>
                 <List dense>
                     {colleges.map(item => {
