@@ -4,8 +4,8 @@ import jwtDecode from "jwt-decode";
 import { useContext } from "react";
 import { userContext } from "../Store/user";
 // const baseUrl = "https://api.nethunt.candidate.psglogin.in/api"
-// const baseUrl = "https://api.nethunt.alumni.psglogin.in/api"
-const baseUrl = "http://127.0.0.1:8000/api"
+const baseUrl = "https://api.nethunt.alumni.psglogin.in/api"
+// const baseUrl = "http://127.0.0.1:8000/api"
 
 
 const useAxios = ()=>{

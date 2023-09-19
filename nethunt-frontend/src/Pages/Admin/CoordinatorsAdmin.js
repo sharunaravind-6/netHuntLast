@@ -65,7 +65,7 @@ export default function CoordinatorsAdmin(props) {
                                                 <Paper elevation={4} sx={{ padding: 2 }}>
                                                     <Stack sx={{ display: "flex", alignItems: "center", }}>
                                                         <Avatar sx={{ width: { xs: "100px", sm: "200px" }, height: { xs: "100px", sm: "200px" } }} >
-                                                            <img src={serverHost.split("/")[0]+"//"+serverHost.split("/")[2] +item.image}/>
+                                                            <img src={serverHost.split("/")[0]+"//"+serverHost.split("/")[2] +item.image} style={{ width: "100%", height: "100%", objectFit: "cover" }}/>
                                                         </Avatar>
                                                         <Typography>
                                                             {item.user.first_name + " " + item.user.last_name}
