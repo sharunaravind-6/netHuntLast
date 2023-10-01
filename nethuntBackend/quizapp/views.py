@@ -114,6 +114,7 @@ def get_quiz_info(req):
             questionSerializer["hint2"] = "DISABLED"
         if progressSerializer["hits"] <= progressSerializer["quiz"]["hint2_revealed"]:
             questionSerializer["hint2"] = "DISABLED"
+        questionSerializer["answer"]="DISABLED"
         return Response({"problem":False,"status":statusSerializer,"total_ques":noOfQuestion,"current_question":questionSerializer,"progress":progressSerializer})
     elif current_status.count() == 1:
         #person who already played the quiz with the current level stored in the current status
@@ -148,6 +149,7 @@ def get_quiz_info(req):
                     questionSerializer["hint2"] = "DISABLED"
                 if progressSerializer["hits"] <= progressSerializer["quiz"]["hint2_revealed"]:
                     questionSerializer["hint2"] = "DISABLED"
+                questionSerializer["answer"]="DISABLED"
                 return Response({"problem":False,"status":statusSerializer,"total_ques":noOfQuestion,"current_question":questionSerializer,"progress":progressSerializer})
         else:
             return Response({"problem":True,})
@@ -219,6 +221,7 @@ def check_answer(req):
                 questionSerializer["hint2"] = "DISABLED"
             if progressSerializer["hits"] <= progressSerializer["quiz"]["hint2_revealed"]:
                 questionSerializer["hint2"] = "DISABLED"
+            questionSerializer["answer"]="DISABLED"
             return Response({"passed" : True,"end":False,"question":questionSerializer,"progress":progressSerializer,"score":current_status[0].score})
     else:
         #Wrong answer
@@ -232,6 +235,7 @@ def check_answer(req):
             questionSerializer["hint2"] = "DISABLED"
         if progressSerializer["hits"] <= progressSerializer["quiz"]["hint2_revealed"]:
             questionSerializer["hint2"] = "DISABLED"
+        questionSerializer["answer"]="DISABLED"
         return Response({"passed":False,"progress":progressSerializer,"question":questionSerializer,"score":current_status[0].score})
 # @api_view(["POST"])
 # def get_quiz_status(req):
