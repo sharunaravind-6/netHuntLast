@@ -221,6 +221,7 @@ def check_answer(req):
             questionSerializer["hint2"] = "DISABLED"
         if progressSerializer["hits"] <= progressSerializer["quiz"]["hint2_revealed"]:
             questionSerializer["hint2"] = "DISABLED"
+        print(questionSerializer)
         return Response({"passed":False,"progress":progressSerializer,"question":questionSerializer,"score":current_status[0].score})
 # @api_view(["POST"])
 # def get_quiz_status(req):
