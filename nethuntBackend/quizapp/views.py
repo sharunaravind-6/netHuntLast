@@ -32,7 +32,10 @@ def get_endDate(req):
 
 
 def send_log_data(msg):
-    url = "https://discord.com/api/webhooks/1077878410271019008/vwKfxy-5NL8az1_Xwlf6zwpWQ0B18hAzUj03wqJU9t8mjs5H3RZ7ZVTo7DUQTQOLB9jA" # Replace with your own webhook URL
+    # url = "https://discord.com/api/webhooks/1077878410271019008/vwKfxy-5NL8az1_Xwlf6zwpWQ0B18hAzUj03wqJU9t8mjs5H3RZ7ZVTo7DUQTQOLB9jA" # Replace with your own webhook URL
+    # url = "https://discord.com/api/webhooks/1152821477939368066/VPJ7nXZGxhJxzPJS_Zok7Cx53bgOHDAJIdbHRHNxyPnBWE6Fanrz-z6YqqiYTcR7Z6pS" # For Nethunt Alumni
+    url = "https://discord.com/api/webhooks/1152881749857140736/tynau5QnCUvMWwhn7p3bfOOs3LT5YnyOWeEUBl4eZ6biejoJOeO1XlNT4uHnFPL77Dwy" # For Nethunt Candidate
+
 
     payload = {
         "content": msg 
@@ -56,8 +59,16 @@ def play_goes_offline(req):
 # @permission_classes([IsAdminUser])
 @api_view(["GET"])
 def adminHome(req):
-    token = "MTA3NzQ4MzcwNDg4MjA1NzIzNg.GTKikQ.YddsExwFt2lgjSDb9CMKN8KwZ49yOEyPBI_7s8"
-    channel_id = "1077512613132521563"
+    # token = "MTA3NzQ4MzcwNDg4MjA1NzIzNg.GTKikQ.YddsExwFt2lgjSDb9CMKN8KwZ49yOEyPBI_7s8"
+    # channel_id = "1077512613132521563"
+    
+    # token = "MTE1Mjg3NDEzMTE1OTc4OTYwOA.GfKkuX.nEsDtJsvmQjh5BnEYEvFm4B7xjHNuns-DTb804" #Nethunt Alumni
+    # channel_id = "1152874131159789608" #Nethunt Alumni
+    
+    token = "MTE1Mjg4MDMzMjUyNjMyNTkwMA.GnAhka.cECryU-F5dF9vIIp-xB5JP4gsb6hN_rrJgLdV4" #Nethunt Candidate
+    channel_id = "1152880332526325900" #Nethunt Candidate
+    
+    
 
     # Construct the API endpoint URL for fetching channel messages
     endpoint_url = f"https://discord.com/api/channels/{channel_id}/messages"
@@ -103,6 +114,7 @@ def get_quiz_info(req):
             questionSerializer["hint2"] = "DISABLED"
         if progressSerializer["hits"] <= progressSerializer["quiz"]["hint2_revealed"]:
             questionSerializer["hint2"] = "DISABLED"
+        questionSerializer["answer"]="DISABLED"
         return Response({"problem":False,"status":statusSerializer,"total_ques":noOfQuestion,"current_question":questionSerializer,"progress":progressSerializer})
     elif current_status.count() == 1:
         #person who already played the quiz with the current level stored in the current status
@@ -137,6 +149,7 @@ def get_quiz_info(req):
                     questionSerializer["hint2"] = "DISABLED"
                 if progressSerializer["hits"] <= progressSerializer["quiz"]["hint2_revealed"]:
                     questionSerializer["hint2"] = "DISABLED"
+                questionSerializer["answer"]="DISABLED"
                 return Response({"problem":False,"status":statusSerializer,"total_ques":noOfQuestion,"current_question":questionSerializer,"progress":progressSerializer})
         else:
             return Response({"problem":True,})
@@ -208,6 +221,7 @@ def check_answer(req):
                 questionSerializer["hint2"] = "DISABLED"
             if progressSerializer["hits"] <= progressSerializer["quiz"]["hint2_revealed"]:
                 questionSerializer["hint2"] = "DISABLED"
+            questionSerializer["answer"]="DISABLED"
             return Response({"passed" : True,"end":False,"question":questionSerializer,"progress":progressSerializer,"score":current_status[0].score})
     else:
         #Wrong answer
@@ -221,7 +235,11 @@ def check_answer(req):
             questionSerializer["hint2"] = "DISABLED"
         if progressSerializer["hits"] <= progressSerializer["quiz"]["hint2_revealed"]:
             questionSerializer["hint2"] = "DISABLED"
+<<<<<<< HEAD
         print(questionSerializer)
+=======
+        questionSerializer["answer"]="DISABLED"
+>>>>>>> 5a068266fa6e782c246d10fe78444d6c8f006cca
         return Response({"passed":False,"progress":progressSerializer,"question":questionSerializer,"score":current_status[0].score})
 # @api_view(["POST"])
 # def get_quiz_status(req):

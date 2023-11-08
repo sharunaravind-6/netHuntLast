@@ -16,8 +16,9 @@ import { useEffect } from 'react';
 const scoreboardColumns = [
     { id: "sno", label: "S.No.", minWidth: 100 },
     { id: "name", label: "Name", minWidth: 200 },
-    { id: "cname", label: "College", minWidth: 300 },
-    { id: "status", label: "Status.", minWidth: 100 },
+    { id: "bname", label: "College", minWidth: 300 },
+    // { id: "bname", label: "Batch", minWidth: 300 },
+    { id: "status", label: "Status", minWidth: 100 },
     { id: "score", label: "Score", minWidth: 100, align: "right" },
 ]
 // console.log(scoreboard)

@@ -29,6 +29,9 @@ export default function ViewCollege() {
                     <Typography sx={{fontFamily: "'Tourney', cursive;",fontSize:"3rem"}}>
                         College List
                     </Typography>
+                    {/* <Typography sx={{fontFamily: "'Tourney', cursive;",fontSize:"3rem"}}>
+                        Batch List
+                    </Typography> */}
                 </Box>
                 <List dense>
                     {colleges.map(item => {

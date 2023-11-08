@@ -10,7 +10,7 @@ export default function AdminProvider({children}){
         let response = await api.get( "/user/college")
         if (response.data) {
             let collegeZ = await response.data
-            console.log(collegeZ)
+            // console.log(collegeZ)
             setColleges(() => { return collegeZ })
             return collegeZ
         }
@@ -20,7 +20,7 @@ export default function AdminProvider({children}){
         let response = await api.get( "/user/view")
         if (response.data) {
             let users = await response.data
-            console.log(users)
+            // console.log(users)
             setUsers(() => { return users })
             return users
         }

@@ -41,7 +41,7 @@ export default function AddCollege(props) {
       ...dataX
     })
     const feedback = response.data;
-    console.log(feedback)
+    // console.log(feedback)
     if (feedback.added) {
       props.onAddCollegeSuccess(true)
       setCollege({
@@ -93,6 +93,7 @@ export default function AddCollege(props) {
                 fullWidth
                 id="collegeName"
                 label="College Name"
+                // label="Batch"
                 name="collegeName"
                 autoComplete="collegeName"
                 autoFocus

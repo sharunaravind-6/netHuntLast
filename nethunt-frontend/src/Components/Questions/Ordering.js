@@ -67,7 +67,7 @@ export default function OrderingQuestions() {
             quiz:quiz
         })
         setLoader(false)
-        console.log(response.data)
+        // console.log(response.data)
         const data = response?.data
         if(userType === "ALUMNI"){
             if(quiz === "Main"){
@@ -91,7 +91,7 @@ export default function OrderingQuestions() {
             password: secretKey,
         })
         setLoader(false)
-        console.log(response.data)
+        // console.log(response.data)
         if (response?.data?.correct) {
             if (response?.data?.alumni) {
                 setAlumni(true)
@@ -102,7 +102,7 @@ export default function OrderingQuestions() {
             setBasicOrderingPractice(response?.data?.orderingPractice)
             setDisplayQues(false)
             setLoader(true)
-            console.log(response.data)
+            // console.log(response.data)
             setOrdering(response?.data?.questions)
             setLoader(false)
         }

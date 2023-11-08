@@ -14,7 +14,7 @@ export default function LandingPage(props) {
             if (loading) {
                 const response = axios.get(serverHost + "/game/startBy").then(
                     (res) => {
-                        console.log(res.data)
+                        // console.log(res.data)
                         if (res.data?.configured) {
                             setStartBy(res.data?.startDateTime)
                         }

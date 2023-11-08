@@ -69,7 +69,7 @@ export default function AddCandidate(props) {
         }
       )
     }
-    console.log(response.data)
+    // console.log(response.data)
   };
 
   return (
@@ -222,6 +222,7 @@ export default function AddCandidate(props) {
               />
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">College</InputLabel>
+                {/* <InputLabel id="demo-simple-select-label">Batch</InputLabel> */}
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"

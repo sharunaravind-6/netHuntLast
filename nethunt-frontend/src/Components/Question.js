@@ -12,15 +12,15 @@ export default function Question() {
     const  {userDetails} = useContext(userContext)
     const api = useAxios()
     const handleOpenQuestion =async (quiz) => {
-        console.log({
-            email:userDetails.user.email,
-            quiz:"Main"
-        })
+        // console.log({
+        //     email:userDetails.user.email,
+        //     quiz:"Main"
+        // })
         const response =await api.post("/game/progress",{
             email:userDetails.user.email,
             quiz:quiz
         })
-        console.log(response.data)
+        // console.log(response.data)
         if(response.data?.problem !== false){
             
         }

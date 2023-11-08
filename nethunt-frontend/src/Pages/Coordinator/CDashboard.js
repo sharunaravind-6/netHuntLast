@@ -161,6 +161,7 @@ export default function CoordinatorsDashboard(props) {
                                     <SchoolRounded />
                                 </ListItemIcon>
                                 <ListItemText primary={"College"} />
+                                {/* <ListItemText primary={"Batch"} /> */}
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
@@ -173,7 +174,8 @@ export default function CoordinatorsDashboard(props) {
                                 <ListItemIcon>
                                     <FaceRounded />
                                 </ListItemIcon>
-                                <ListItemText primary={"Candidates"} />
+                                {/* <ListItemText primary={"Candidates"} /> */}
+                                <ListItemText primary={"Alumni's"} />
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>

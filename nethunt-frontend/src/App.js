@@ -52,7 +52,10 @@ function App() {
       if(event.key === "F11"){
         event.preventDefault()
       }
-      console.log(event.key)
+      if(event.key === "F12"){
+        event.preventDefault()
+      }
+      // console.log(event.key)
     })
   }
   function preventRightClick() {
@@ -62,12 +65,12 @@ function App() {
   }
   useEffect(
     () => {
-      // preventConsoleOpening()
-      // preventRightClick()
-      // return ()=>{
-      //   document.removeEventListener('keydown',preventConsoleOpening);
-      //   document.removeEventListener('contextmenu',preventRightClick)
-      // }
+      preventConsoleOpening()
+      preventRightClick()
+      return ()=>{
+        document.removeEventListener('keydown',preventConsoleOpening);
+        document.removeEventListener('contextmenu',preventRightClick)
+      }
     },[]
   )
   const { token } = useContext(userContext)

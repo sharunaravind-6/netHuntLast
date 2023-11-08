@@ -32,7 +32,7 @@ export default function QuestionAdmin(props) {
     }
     useEffect(
         ()=>{
-            console.log("Updated questions",questions)
+            // console.log("Updated questions",questions)
         },[questions]
     )
     return (
