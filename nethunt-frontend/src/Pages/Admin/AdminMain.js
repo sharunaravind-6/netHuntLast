@@ -180,7 +180,7 @@ export default function AdminMain(props) {
                                     <FaceRounded />
                                 </ListItemIcon>
                                 {/* <ListItemText primary={"Candidates"} /> */}
-                                <ListItemText primary={"Alumni"} />
+                                <ListItemText primary={"Candidate/Alumni"} />
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>

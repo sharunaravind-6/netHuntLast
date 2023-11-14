@@ -75,7 +75,7 @@ class Candidate(models.Model):
     class CandidateType(models.TextChoices):
         BASIC = "Basic", "BASIC"
         ALUMNI = "Alumni", "ALUMNI"
-    userType = models.CharField(max_length=50,choices=CandidateType.choices,default=CandidateType.BASIC)
+    userType = models.CharField(max_length=50,choices=CandidateType.choices)
     batch = models.IntegerField(default=datetime.datetime.now().year -2)
     def update(self, **kwargs):
         for field, value in kwargs.items():
