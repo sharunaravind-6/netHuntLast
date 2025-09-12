@@ -195,3 +195,18 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_ROOT = BASE_DIR / "uploads"
 MEDIA_URL = "/resrc/"
+
+# Google Cloud Storage Settings (Single Public Bucket)
+# Based on django-storages 1.14.6 and Django 4.2+
+# ------------------------------------------------------------------------------
+GS_BUCKET_NAME = config('GCS_BUCKET_NAME')
+GS_DEFAULT_ACL = 'publicRead'
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+    },
+}
