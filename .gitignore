@@ -1,5 +1,6 @@
 .venv
-
+.env
+nethuntBackend/myenv
 nethuntBackend/nethuntBackend/__pycache__
 nethuntBackend/quizapp/__pycache__
 nethuntBackend/quizapp/migrations
