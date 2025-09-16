@@ -11,7 +11,7 @@ import HelpImg6 from "./../Images/Help_6.svg";
 import HelpImg7 from "./../Images/Help_7.svg";
 import { useEffect, useState } from "react";
 import useAxios from "./../utils/useAxios";
-import { serverHost } from "../utils/server";
+import { server,serverHost } from "../utils/server";
 
 export default function Help(props) {
     const helpImg = [
@@ -78,7 +78,8 @@ export default function Help(props) {
                                                 <Paper elevation={4} sx={{ padding: 2 }}>
                                                     <Stack sx={{ display: "flex", alignItems: "center", }}>
                                                         <Avatar sx={{ width: { xs: "100px", sm: "200px" }, height: { xs: "100px", sm: "200px" } }} >
-                                                            <img src={serverHost.split("/")[0] + "//" + serverHost.split("/")[2] + item.image} />
+                                                            //<img src={serverHost.split("/")[0] + "//" + serverHost.split("/")[2] + item.image} />
+	  						    {item.image && <img src={item.image} alt="Help section visual" />}
                                                         </Avatar>
                                                         <Typography>
                                                             {item.user.first_name + " " + item.user.last_name}

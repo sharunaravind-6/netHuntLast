@@ -30,9 +30,9 @@ JWT_AUTH = {
 SECRET_KEY = "django-insecure-nq+os#rz94q%yed=d#=8_6dh(xo!=a9*b9$324+i3g49#mc)^l"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['nethunt.ezqueue.in', '34.100.148.21']
 
 
 # Application definition
@@ -207,6 +207,8 @@ STORAGES = {
         "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
     },
     "staticfiles": {
-        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",   
     },
 }
+# Add this line to define the location for media files
+MEDIA_URL = f'/media/'

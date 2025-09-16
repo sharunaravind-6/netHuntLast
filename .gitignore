@@ -7,3 +7,182 @@ nethuntBackend/quizapp/migrations
 nethuntBackend/user/migrations
 nethuntBackend/user/__pycache__
 nethunt-frontend/package-lock.json
+# -------------------------
+# PYTHON / DJANGO
+# -------------------------
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Django specific
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/  # collected static files
+.env
+.env.*        # dotenv variations
+
+# If using Django storages
+*.bak
+*.swp
+
+# Pytest / coverage / test artifacts
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+*.hypothesis/
+.pytest_cache/
+
+# Django migrations (optional — only if you want to exclude auto-generated)
+# */migrations/*.py
+# !*/migrations/__init__.py
+
+# -------------------------
+# NODE / REACT FRONTEND
+# -------------------------
+
+# Dependencies
+node_modules/
+jspm_packages/
+
+# Build outputs
+build/
+dist/
+.next/       # if using Next.js
+out/
+*.bundle.js
+*.map
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Cache
+.cache/
+.parcel-cache/
+.eslintcache
+
+# dotenv envs
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor state for package managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+# (optional: keep lockfile if you want deterministic builds!)
+
+# -------------------------
+# GENERAL OS / IDE CRUFT
+# -------------------------
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# JetBrains IDEs
+*.iml
+*.ipr
+*.iws
+out/
+
+# -------------------------
+# DOCKER
+# -------------------------
+
+*.pid
+*.seed
+*.pid.lock
+
+# Docker-related
+*.log
+docker-compose.override.yml
+.docker/
+
+# -------------------------
+# VENV / POETRY
+# -------------------------
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+env.bak/
+venv.bak/
+
+# Poetry
+poetry.lock
+.cache/pypoetry/
+
+# -------------------------
+# OTHER POSSIBLE TOOLS
+# -------------------------
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# VSCode settings
+.history/
+
+# PyCharm
+*.idea/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Pytype
+.pytype/
+
+# Translations
+*.mo
+*.pot
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Local virtualenv
+Pipfile.lock
+
+# -------------------------
+# END
+# -------------------------

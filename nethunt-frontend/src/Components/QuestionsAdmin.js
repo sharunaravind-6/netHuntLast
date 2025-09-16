@@ -64,7 +64,7 @@ export default function QuestionAdmin(props) {
                                 <Grid container padding={3}>
                                     <Grid item xs={12} sm={6}>
                                         <Box sx={{ position: "relative" }}>
-                                            <img src={server+ item.image} width="100%" />
+                                            <img src={item.image} width="100%" />
                                         </Box>
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
